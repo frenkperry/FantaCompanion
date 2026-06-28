@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>War Room · FantaMondiale 2026 (V5.11)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a1410;--bg2:#0e1c16;--panel:#11231b;--panel2:#16302450;--line:#1f3a2c;--line2:#2a4d39;--green:#27e07a;--green-dim:#1aa358;--gold:#f2c14e;--red:#ff5d57;--amber:#ff9a3c;--blue:#5db0ff;--text:#e8f3ec;--muted:#7fa593;--muted2:#5c7d6d;--tS:#27e07a;--tA:#7fe06a;--tB:#f2c14e;--tC:#ff9a3c;--tD:#ff5d57}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 80% -10%,#14352340,transparent),radial-gradient(900px 500px at -10% 110%,#0c2b1c40,transparent),var(--bg);color:var(--text);font-family:"IBM Plex Mono",monospace;line-height:1.5;min-height:100vh;padding-bottom:60px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1220px;margin:0 auto;padding:0 18px}
+header{border-bottom:1px solid var(--line);padding:24px 0 16px}
+.kick{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--green);font-weight:600}
+h1{font-family:"Archivo";font-weight:900;font-size:clamp(28px,6vw,50px);line-height:.92;letter-spacing:-.02em;margin:6px 0 4px;text-transform:uppercase}
+h1 span{color:var(--green)}
+.sub{color:var(--muted);font-size:13px;max-width:720px}
+.dash{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#0b170fF2,#0b170fE6);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:11px 0}
+.dash-grid{display:flex;gap:9px;flex-wrap:wrap;align-items:stretch}
+.stat{flex:1;min-width:84px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+.stat .lab{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2)}
+.stat .val{font-family:"Archivo";font-weight:800;font-size:22px;line-height:1.1;margin-top:2px}
+.val.green{color:var(--green)}.val.gold{color:var(--gold)}.val.red{color:var(--red)}
+.slots{display:flex;gap:6px;flex-wrap:wrap}
+.slot{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-width:56px;text-align:center}
+.slot .r{font-size:9px;letter-spacing:.1em;color:var(--muted2);text-transform:uppercase}
+.slot .c{font-family:"Archivo";font-weight:800;font-size:18px;margin-top:1px}
+.slot.full{border-color:var(--green-dim);background:#0f2a1c}.slot.full .c{color:var(--green)}
+.slot.over{border-color:var(--red);background:#2a1010}.slot.over .c{color:var(--red)}
+.nextmove{background:linear-gradient(90deg,#13301f,#11231b);border:1px solid var(--green-dim);border-radius:12px;padding:11px 15px;margin:14px 0;display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.nextmove .nm-lab{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.nextmove .nm-name{font-family:"Archivo";font-weight:900;font-size:19px}
+.nextmove .nm-meta{font-size:11px;color:var(--muted)}
+.nextmove .nm-bid{margin-left:auto;font-family:"Archivo";font-weight:800;color:var(--gold);font-size:15px}
+.nextmove.call{background:linear-gradient(90deg,#13243a,#11231b);border-color:var(--blue)}
+.nextmove.call .nm-bid{color:var(--blue)}
+.nm-cap{font-size:9.5px;color:var(--muted2);margin:-8px 2px 12px;letter-spacing:.03em;line-height:1.4}
+.oracolo{border-radius:12px;padding:12px 15px;margin:0 0 14px;border:1px solid}
+.oracolo .or-lab{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+.oracolo .or-msg{font-size:13px;margin-top:4px;line-height:1.45}
+.oracolo .or-msg b{color:var(--text)}
+.oracolo .or-names{font-family:"Archivo";font-weight:800;font-size:13.5px;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.oracolo .or-names .onm{background:#ffffff10;border:1px solid #ffffff22;border-radius:7px;padding:3px 8px}
+.oracolo .or-names .onm b{color:var(--gold)}
+.oracolo .or-plan{font-size:10.5px;color:var(--muted);margin-top:9px;border-top:1px solid #ffffff14;padding-top:7px;letter-spacing:.02em;display:flex;gap:12px;flex-wrap:wrap}
+.oracolo .or-plan b{color:var(--text);font-family:"Archivo";font-weight:800}
+.oracolo.ok{background:#0f2419;border-color:var(--green-dim)}.oracolo.ok .or-lab{color:var(--green)}
+.oracolo.warn{background:#2a230f;border-color:var(--gold)}.oracolo.warn .or-lab{color:var(--gold)}
+.oracolo.tight{background:#2a1a0c;border-color:var(--amber)}.oracolo.tight .or-lab{color:var(--amber)}
+.oracolo.crisis{background:#2a0f0f;border-color:var(--red)}.oracolo.crisis .or-lab{color:var(--red)}.oracolo.crisis .or-msg{color:#ffd9d7}
+.oracolo.done{background:#11231b;border-color:var(--line2)}.oracolo.done .or-lab{color:var(--muted)}
+.v58{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;margin:0 0 14px}
+.v58-card{background:#0d1e16;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.v58-card h3{font-family:"Archivo";font-size:13px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px}
+.v58-card.main{border-color:var(--green-dim);background:#0f2419}
+.v58-kpis{display:flex;gap:7px;flex-wrap:wrap}
+.v58-kpi{border:1px solid var(--line2);border-radius:8px;padding:6px 8px;font-size:10px;color:var(--muted)}
+.v58-kpi b{display:block;font-family:"Archivo";font-size:18px;color:var(--text);line-height:1.05}
+.v58-list{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.v58-row{display:flex;justify-content:space-between;gap:8px;border-top:1px solid #ffffff10;padding-top:5px;font-size:11px}
+.v58-row:first-child{border-top:0;padding-top:0}
+.v58-row b{color:var(--text)}.v58-row .mut{color:var(--muted2)}.v58-row .why{color:#cfe3d6}
+.v58-badge{font-size:8px;font-weight:700;border:1px solid;border-radius:20px;padding:1px 6px;white-space:nowrap}
+.v58-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.v58-actions input{background:var(--bg);border:1px solid var(--line2);color:var(--text);border-radius:7px;padding:6px 8px;font-family:"IBM Plex Mono";font-size:11px;min-width:170px}
+.v58-actions button,.v58-btn{border:1px solid var(--line2);background:var(--panel);color:var(--text);border-radius:7px;padding:6px 9px;font-size:10px;font-family:"IBM Plex Mono";cursor:pointer}
+.v58-actions button:hover,.v58-btn:hover{border-color:var(--green);color:var(--green)}
+.dq-real{color:var(--green)}.dq-legacy{color:var(--gold)}.dq-low{color:var(--amber)}
+@media(max-width:860px){.v58{grid-template-columns:1fr}}
+.sortsel{background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:8px 10px;font-family:"IBM Plex Mono";font-size:12px}
+.sortsel:focus{outline:none;border-color:var(--green-dim)}
+details.box{background:var(--panel2);border:1px solid var(--line);border-radius:13px;margin:14px 0;overflow:hidden}
+details.box>summary{cursor:pointer;padding:14px 18px;font-family:"Archivo";font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.03em;list-style:none;display:flex;align-items:center;gap:10px}
+details.box>summary::-webkit-details-marker{display:none}
+details.box>summary::before{content:"▸";color:var(--green);transition:.2s}details.box[open]>summary::before{transform:rotate(90deg)}
+.box-body{padding:0 18px 18px;font-size:12.5px;color:#cfe3d6}
+.box-body h4{color:var(--green);font-family:"Archivo";font-weight:800;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;margin:14px 0 6px}
+.box-body p{margin-bottom:8px}.box-body ul{margin:0 0 8px 18px}.box-body li{margin-bottom:5px}.box-body b{color:var(--text)}.box-body code{background:#0b1812;border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--green);font-size:11.5px}
+.settings-grid{display:flex;gap:18px;flex-wrap:wrap}.settings-col{flex:1;min-width:240px}
+.toggle{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid #14271c;font-size:12.5px;cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--green);width:16px;height:16px;flex-shrink:0}.toggle .tdesc{font-size:10.5px;color:var(--muted2)}
+.phase{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:4px;margin:8px 0}
+.phase button{flex:1;border:none;background:transparent;color:var(--muted);font-family:"IBM Plex Mono";font-size:11px;font-weight:600;padding:7px 6px;border-radius:7px;cursor:pointer}
+.phase button.on{background:var(--green);color:#06150d}
+.num-in{width:60px;background:var(--bg);border:1px solid var(--line2);color:var(--green);border-radius:7px;padding:5px 7px;font-family:"IBM Plex Mono";font-weight:600;text-align:center}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0 10px}
+.tabs{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:4px}
+.tab{border:none;background:transparent;color:var(--muted);font-family:"IBM Plex Mono";font-size:12px;font-weight:600;padding:7px 12px;border-radius:8px;cursor:pointer}
+.tab:hover{color:var(--text)}.tab.active{background:var(--green);color:#06150d}
+.search{flex:1;min-width:130px;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:9px 12px;font-family:"IBM Plex Mono";font-size:13px}
+.search:focus{outline:none;border-color:var(--green-dim)}
+.chk{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:11px;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 11px;user-select:none}
+.chk input{accent-color:var(--green);width:14px;height:14px}
+.btn-reset{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:10px;padding:8px 11px;font-size:11px;cursor:pointer;font-family:"IBM Plex Mono"}
+.btn-reset:hover{border-color:var(--red);color:var(--red)}
+.role-block{margin-bottom:24px}
+.role-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:16px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--line2)}
+.role-h h2{font-family:"Archivo";font-weight:900;font-size:20px;text-transform:uppercase}
+.role-h .need{font-size:11px;color:var(--muted)}.role-h .bud{margin-left:auto;font-size:11px;color:var(--gold)}.role-h .bud.over{color:var(--red)}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);text-align:left;padding:6px 7px;font-weight:500;border-bottom:1px solid var(--line)}
+thead th.n{text-align:center}
+tbody tr{border-bottom:1px solid #14271c}tbody tr:hover{background:#10241936}
+td{padding:7px;vertical-align:middle;font-size:13px}td.n{text-align:center;font-variant-numeric:tabular-nums}
+.pr{color:var(--muted2);font-size:11px;width:22px}
+.pname{font-family:"Archivo";font-weight:700;font-size:14px}
+.avb{display:inline-block;font-size:8px;font-weight:600;letter-spacing:.06em;border:1px solid;border-radius:4px;padding:1px 4px;vertical-align:middle}
+.pnote{font-size:10px;color:var(--muted);line-height:1.3;margin-top:1px;max-width:330px}
+.nat{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:#0e211880;border:1px solid var(--line);border-radius:5px;padding:2px 5px}
+.nat.stack{border-color:var(--amber);color:var(--amber)}
+.tier{display:inline-block;width:20px;text-align:center;font-family:"Archivo";font-weight:900;font-size:12px;border-radius:5px;padding:2px 0}
+.tier.S{color:#06150d;background:var(--tS)}.tier.A{color:#06150d;background:var(--tA)}.tier.B{color:#06150d;background:var(--tB)}.tier.C{color:#06150d;background:var(--tC)}.tier.D{color:#fff;background:var(--tD)}
+.q{color:var(--muted)}.rt{font-size:11px;color:var(--blue)}
+.fair{font-family:"Archivo";font-weight:800;font-size:15px}.delta{font-size:9px;letter-spacing:.04em}
+.max{font-family:"Archivo";font-weight:800;color:var(--gold);font-size:15px}
+.cls{font-size:8.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:20px;white-space:nowrap}
+.cls.premium{color:#06150d;background:var(--green)}.cls.value{color:var(--tA);background:#16281340;border:1px solid #2f4d2a}.cls.filler{color:var(--muted);background:#161f1b;border:1px solid var(--line)}.cls.trap{color:var(--red);background:#2a1010;border:1px solid #4d2020}
+.stars{letter-spacing:1.5px;font-size:13px;white-space:nowrap}.stars.s3{color:var(--gold)}.stars.s2{color:var(--green)}.stars.s1{color:var(--muted)}.stars.sk{color:var(--muted2);font-size:12px}
+.cls.full2{color:var(--red);background:#2a1010;border:1px solid #4d2020}
+tr.done td{opacity:.42}
+.qgap td{background:#0c1813;color:var(--muted2);font-size:9.5px;text-align:center;padding:3px 0;letter-spacing:.08em;font-style:italic}
+.ab.skip{border-color:var(--line);color:var(--muted2)}.ab.skip:hover{border-color:var(--muted);color:var(--muted)}
+.cn{font-size:9px;color:var(--muted2);text-align:right;white-space:nowrap}
+.exbox{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}.exbox .lab{font-size:9.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.exf{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.exf select,.exf input{background:var(--bg);border:1px solid var(--line2);color:var(--text);border-radius:7px;padding:5px 7px;font-family:"IBM Plex Mono";font-size:11px}.exf input{width:70px;color:var(--gold);text-align:center}
+.exf .add{border:1px solid var(--line2);background:var(--panel);color:var(--text);border-radius:7px;padding:5px 10px;font-size:10px;font-family:"IBM Plex Mono";cursor:pointer}.exf .add:hover{background:var(--gold);color:#06150d;border-color:var(--gold)}
+.exlist{margin-top:6px;display:flex;flex-direction:column;gap:3px}.exitem{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--muted);background:#0c1813;padding:3px 8px;border-radius:5px}.exitem button{background:none;border:none;color:var(--red);cursor:pointer;font-size:13px;line-height:1}
+.acts{display:flex;gap:5px;justify-content:flex-end}
+.ab{border:1px solid var(--line2);background:var(--panel);color:var(--text);border-radius:7px;padding:6px 9px;font-size:10px;font-family:"IBM Plex Mono";cursor:pointer;white-space:nowrap}
+.ab.mine:hover{background:var(--green);color:#06150d;border-color:var(--green)}.ab.other:hover{background:#2a1010;color:var(--red);border-color:var(--red)}.ab.undo:hover{border-color:var(--text);color:var(--text)}
+tr.mine{background:#0f2a1c66}tr.mine td:first-child{box-shadow:inset 3px 0 0 var(--green)}
+tr.other{opacity:.32}tr.other .pname{text-decoration:line-through}
+tr.rec td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.recflag{font-size:8px;color:var(--gold);font-weight:600;letter-spacing:.1em;display:block;margin-top:2px}
+.paid{font-family:"Archivo";font-weight:800;font-size:14px}
+.roster{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:8px}
+.roster h3{font-family:"Archivo";font-weight:900;font-size:17px;text-transform:uppercase;margin-bottom:4px}
+.roster .rsub{font-size:11px;color:var(--muted);margin-bottom:12px}
+.expo{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.expo .ec{font-size:10px;border:1px solid var(--line);border-radius:6px;padding:3px 7px;color:var(--muted)}
+.expo .ec.warn{border-color:var(--amber);color:var(--amber)}.expo .ec.bad{border-color:var(--red);color:var(--red)}
+.ind{background:#0c1c14;border:1px solid var(--line2);border-radius:9px;padding:9px 11px;margin:6px 0 14px;font-size:11px}
+.ind-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:3px 0}
+.ind-lab{color:var(--muted);min-width:148px}
+.ind-badge{font-size:9px;font-weight:700;border:1px solid;border-radius:20px;padding:1px 8px}
+.ind-note{color:var(--muted2);font-size:10px}
+.ind-evs{font-family:"Archivo";font-weight:700;color:var(--text)}
+.ind-rr{font-size:10px;font-weight:600}
+.rrole{margin-bottom:11px}.rrole .rt2{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:5px;font-weight:600}
+.ritem{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #14271c;font-size:12.5px}
+.ritem .rp{font-family:"Archivo";font-weight:800;color:var(--green)}.empty{color:var(--muted2);font-size:11px;font-style:italic;padding:3px 0}
+.legend{display:flex;gap:13px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin-top:6px}.legend span{display:flex;align-items:center;gap:5px}.dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+footer{color:var(--muted2);font-size:10px;text-align:center;margin-top:28px;line-height:1.6}
+.opp-setup{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;font-size:11px;color:var(--muted)}
+.opp-name{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:7px;padding:5px 7px;font-family:"IBM Plex Mono";font-size:11px;width:90px}
+.opptbl{width:100%;border-collapse:collapse;margin-top:4px}.opptbl th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);text-align:left;padding:6px 7px;border-bottom:1px solid var(--line)}.opptbl th.n,.opptbl td.n{text-align:center}.opptbl td{padding:6px 7px;font-size:12px;border-bottom:1px solid #14271c}.opptbl tr.mine td{box-shadow:inset 3px 0 0 var(--green)}.opptbl tr.mine td:first-child{box-shadow:none}
+.qhead{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6}
+.overlay{position:fixed;inset:0;backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:200;background:rgba(4,16,10,.78)}
+.overlay.on{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:22px;width:min(380px,90vw)}
+.modal .mname{font-family:"Archivo";font-weight:900;font-size:22px;text-transform:uppercase}
+.modal .minfo{font-size:11px;color:var(--muted);margin:4px 0 14px}
+.m_repair{font-size:11px;line-height:1.5;margin:0 0 12px;padding:8px 10px;background:#0c1c14;border:1px solid var(--line2);border-radius:8px}
+.m_repair .rs-badge{font-size:9px;font-weight:700;border:1px solid;border-radius:20px;padding:1px 7px}
+.m_repair .rs-warn{color:var(--amber);font-size:10px;display:block;margin-top:4px}
+.modal label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:6px}
+.modal .price-in{width:100%;background:var(--bg);border:1px solid var(--line2);color:var(--green);border-radius:10px;padding:12px;font-family:"Archivo";font-weight:800;font-size:26px;text-align:center}
+.modal .mrow{display:flex;gap:9px;margin-top:14px}
+.modal .mbtn{flex:1;border:none;border-radius:10px;padding:12px;font-family:"Archivo";font-weight:800;font-size:13px;text-transform:uppercase;cursor:pointer}
+.modal .mbtn.go{background:var(--green);color:#06150d}.modal .mbtn.no{background:transparent;border:1px solid var(--line2);color:var(--muted)}
+.modal .hint{font-size:10.5px;color:var(--muted);margin-top:10px;text-align:center}
+.natgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;margin-top:10px}
+.natchip{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:7px 9px;cursor:pointer;user-select:none;overflow:hidden;transition:.12s}
+.natchip:hover{border-color:var(--green-dim)}
+.natchip .nrow{display:flex;align-items:center;gap:6px;position:relative;z-index:2}
+.natchip .nfl{font-size:15px;line-height:1}
+.natchip .nnm{font-size:11.5px;font-weight:600;color:var(--text)}
+.natchip .npc{margin-left:auto;font-family:"Archivo";font-weight:800;font-size:12px;color:var(--gold)}
+.natchip .nmeta{font-size:9px;color:var(--muted2);margin-top:2px;position:relative;z-index:2;letter-spacing:.04em}
+.natchip .heat{position:absolute;left:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--green-dim),var(--green));z-index:1}
+.natchip.dead{opacity:.45;border-color:var(--red);background:#1a0e0e}.natchip.dead .nnm{text-decoration:line-through;color:var(--muted)}.natchip.dead .npc{color:var(--red)}.natchip.dead .heat{background:var(--red);width:100%!important;opacity:.3}
+.girgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px;margin-top:10px}
+.gircard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 10px}
+.girhd{font-family:"Archivo";font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:6px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.girnat{display:flex;align-items:center;gap:6px;padding:4px 5px;border-radius:6px;cursor:pointer;user-select:none;font-size:11.5px;transition:.12s}
+.girnat:hover{background:#10241936}
+.girnat .nfl{font-size:14px;line-height:1}.girnat .nnm{font-weight:600;color:var(--text)}.girnat .npc{margin-left:auto;font-family:"Archivo";font-weight:800;font-size:11px;color:var(--gold)}
+.girnat.dead{opacity:.45}.girnat.dead .nnm{text-decoration:line-through;color:var(--muted)}.girnat.dead .npc{color:var(--red)}
+.session-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0 2px}
+.session-bar .sb-btn{border:1px solid var(--line2);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 12px;font-size:11px;font-family:"IBM Plex Mono";cursor:pointer}
+.session-bar .sb-btn:hover{border-color:var(--green);color:var(--green)}
+.session-bar .sb-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.session-bar .sb-info{font-size:10px;color:var(--muted2);margin-left:auto}
+.ab.free:hover{background:var(--amber);color:#06150d;border-color:var(--amber)}
+.ritem.dead{opacity:.5}.ritem.dead .rp{color:var(--red)}.ritem.dead span:first-child{text-decoration:line-through}
+.recbar{font-size:10.5px;color:var(--amber);margin:6px 0 2px;display:flex;align-items:center;gap:8px}
+.recbar .rfree{border:1px solid var(--amber);background:transparent;color:var(--amber);border-radius:6px;padding:3px 8px;font-size:9.5px;font-family:"IBM Plex Mono";cursor:pointer}.recbar .rfree:hover{background:var(--amber);color:#06150d}
+.oppdet{margin-top:4px;border-top:1px solid #14271c;padding-top:6px}
+.oppdet summary{cursor:pointer;font-size:10.5px;color:var(--muted);list-style:none;padding:3px 0}.oppdet summary::-webkit-details-marker{display:none}.oppdet summary::before{content:"▸ ";color:var(--green)}.oppdet[open] summary::before{content:"▾ "}
+.oppform{display:flex;flex-wrap:wrap;gap:4px;padding:4px 0 8px}
+.opc{font-size:9.5px;border:1px solid var(--line);border-radius:5px;padding:2px 6px;color:var(--muted)}
+.opc.dead{border-color:var(--red);color:var(--muted2);text-decoration:line-through;opacity:.6}
+.opc b{color:var(--gold);font-weight:600}
+.brbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.brbtn{background:var(--panel);border:1px solid var(--line2);color:var(--text);border-radius:8px;padding:6px 11px;font-family:"IBM Plex Mono",monospace;font-size:11px;cursor:pointer}
+.brbtn:hover{border-color:var(--green);color:var(--green)}
+.brbtn.seed{border-color:var(--green-dim);color:var(--green)}.brbtn.seed:hover{background:var(--green);color:#06150d}
+.brcount{font-size:10px;color:var(--muted2);margin-left:auto}
+.brnote{font-size:11px;color:var(--muted);line-height:1.5;margin:0 0 10px}
+.brcoll{font-size:11.5px;color:var(--red);background:#2a1010;border:1px solid #4d2020;border-radius:8px;padding:8px 11px;margin-bottom:12px}
+.brwrap{display:flex;gap:0;overflow-x:auto;padding:4px 0 12px}
+.brcol{min-width:160px;flex-shrink:0;display:flex;flex-direction:column;justify-content:space-around;gap:6px;padding:0 9px}
+.brcol:not(:last-child){border-right:1px dashed var(--line)}
+.brhd{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);text-align:center;margin-bottom:6px;font-weight:800}
+.brmatch{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:5px;display:flex;flex-direction:column;gap:2px;box-shadow:0 1px 0 #0006}
+.brmatch.win{border-color:var(--gold);background:linear-gradient(180deg,#1d1a0e,#141206)}
+.brvs{font-size:8px;color:var(--muted2);text-align:center;letter-spacing:.1em;line-height:1}
+.brrow{display:flex;align-items:center}
+.brsel{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line2);color:var(--muted);border-radius:6px;padding:4px 5px;font-family:"IBM Plex Mono",monospace;font-size:10px;cursor:pointer}
+.brsel:hover{border-color:var(--green-dim)}
+.brteam{flex:1;font-size:11px;padding:4px 6px;border-radius:6px;border:1px solid var(--line);background:#0e1c16;display:flex;align-items:center;gap:5px;cursor:pointer;white-space:nowrap;overflow:hidden}
+.brteam:hover{border-color:var(--green-dim)}
+.brteam .brnm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.brteam.own{border-color:var(--green);background:#0f2a1c;color:var(--green);font-weight:600}
+.brteam.dead{opacity:.4;text-decoration:line-through;cursor:default}
+.brteam.empty{color:var(--muted2);cursor:default;border:1px dashed var(--line);background:transparent;justify-content:center}
+.brteam.champ{border-color:var(--gold);color:var(--gold);font-weight:700;background:transparent;justify-content:center}
+.brteam .brc{background:var(--green);color:#06150d;border-radius:8px;padding:0 5px;font-size:9px;margin-left:4px;font-weight:800;flex-shrink:0}
+.brx{color:var(--muted2);font-style:normal;font-size:14px;padding:0 2px;cursor:pointer;line-height:1;margin-left:4px;flex-shrink:0}
+.brx:hover{color:var(--red)}
+.fwarn{font-size:11px;color:var(--amber);background:#2a1f0e;border:1px solid #4d3a20;border-radius:8px;padding:7px 10px;margin:8px 0}
+.fform{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.ffgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:5px;margin-top:6px}
+.ffrow{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:11px;color:var(--muted);background:#0c1813;padding:3px 7px;border-radius:6px}
+.ffrow span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ffrow input{width:54px;background:var(--bg);border:1px solid var(--line2);color:var(--green);border-radius:5px;padding:2px 4px;font-family:"IBM Plex Mono",monospace;font-size:11px;text-align:center;flex-shrink:0}
+.ffnote{font-size:10px;color:var(--muted2);margin-top:7px;line-height:1.5}
+.sedgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.sedhd{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:2px}
+.brwrap.tree{align-items:center;gap:0}
+.brwrap.tree .brcol{justify-content:space-around}
+.brcol.brcenter{min-width:170px;justify-content:center;gap:8px}
+.brcol.brcenter .brmatch{border-color:var(--gold)}
+.brchamp{display:flex;justify-content:center;margin-top:4px}
+.fmodbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 2px}
+.fmodbar label{font-size:12px;color:var(--muted)}
+.fmodbar select{background:var(--bg);border:1px solid var(--line2);color:var(--green);border-radius:7px;padding:5px 8px;font-family:"IBM Plex Mono",monospace;font-size:12px}
+.fmtot{font-size:12px;color:var(--muted);margin-left:auto}
+</style></head>
+<body>
+<header><div class="wrap">
+<div class="kick">FantaClub · Asta Live · Mondiale 2026</div>
+<h1>War <span>Room</span></h1>
+<div class="sub">V5.11 · Riparazione: target, max iniziali, chiamate-esca e nomi da lasciare agli altri.</div>
+</div></header>
+
+<div class="dash"><div class="wrap"><div class="dash-grid">
+<div class="stat"><div class="lab">Crediti rimasti</div><div class="val green" id="rem">300</div></div>
+<div class="stat"><div class="lab">Spesi</div><div class="val gold" id="spent">0</div></div>
+<div class="stat"><div class="lab">Rosa</div><div class="val" id="filled">0/31</div></div>
+<div class="stat"><div class="lab">Max / slot vuoto</div><div class="val" id="perslot">12</div></div>
+<div class="slots" id="slots"></div>
+</div></div></div>
+
+<div class="wrap">
+<div class="nextmove" id="nextmove"></div>
+<div class="nm-cap" id="nmCap" style="display:none">Pesa: valore × bisogno-di-ruolo × spazio-budget-del-ruolo. È la mossa che riempie meglio gli slot che ti restano.</div>
+<div class="nextmove call" id="callmove" style="display:none"></div>
+<div class="nm-cap" id="cmCap" style="display:none">Pesa: valore × bassa concorrenza ATTUALE (quanti rivali possono ancora rilanciarti). È chi conviene chiamare adesso (vale anche col banditore).</div>
+<div class="oracolo ok" id="oracolo"></div>
+<div id="v58Panel"></div>
+
+<details class="box" id="natBox" open><summary>🌍 Nazioni & turno — controllo set vivi</summary><div class="box-body">
+<p style="color:var(--muted);font-size:11.5px">Imposta il <b>turno</b> e clicca una nazione per marcarla <b>eliminata</b> (ri-clic = la riporti viva). I vivi vengono rinormalizzati col <b>field-thinning</b>: tolto un big, gli altri big salgono; un'eliminata va a equo 1. Le % NON sono quote reali, sono la rinormalizzazione per forza del nostro modello.</p>
+<div class="phase" id="turnoSel2" style="max-width:520px"></div>
+<div class="tabs" id="natViewToggle" style="margin:10px 0;display:inline-flex"><button class="tab active" data-nv="grid">Favorite (griglia)</button><button class="tab" data-nv="groups">Gironi</button><button class="tab" data-nv="sedicesimi">⚔ Sedicesimi</button><button class="tab" data-nv="bracket">🏆 Tabellone</button></div>
+<div id="natPanel"></div>
+</div></details>
+
+<div class="session-bar" id="sessionBar"></div>
+
+<details class="box" id="setBox"><summary>⚙ Impostazioni lega & regole</summary><div class="box-body">
+<p style="color:var(--muted)">Regole confermate dagli screenshot della tua lega: il motore è già tarato su di esse. Gli switch restano per simulare scenari, ma i default rispecchiano il regolamento reale.</p>
+<div class="phase" id="turnoSel"><button data-t="iniziale" class="on">Iniziale</button><button data-t="ottavi">Ottavi</button><button data-t="quarti">Quarti</button><button data-t="semi">Semifinali</button><button data-t="finale">Finale</button></div>
+<div class="settings-grid">
+<div class="settings-col">
+<label class="toggle"><input type="checkbox" id="t_credit"><span>Comprimi EG «recupero crediti» (legacy, OFF)<div class="tdesc">Nella tua lega lo svincolo rende 0 → la premessa "recuperi i crediti, la profondità conta meno" è FALSA. OFF (default) = profondità delle nazioni forti a pieno peso. ON = vecchia compressione, reversibile in un clic.</div></span></label>
+<label class="toggle"><input type="checkbox" id="t_repair" checked><span>Sessioni di mercato / riparazione<div class="tdesc">CONFERMATO: 1 finestra di riparazione post-gironi (+100 forfait permanente) → compressione EG residua leggera, non basata sul recupero crediti</div></span></label>
+<label class="toggle"><input type="checkbox" id="t_assist" checked><span>Assist +1<div class="tdesc">CONFERMATO: assist generoso → premia rifinitori e terzini offensivi</div></span></label>
+</div>
+<div class="settings-col">
+<label class="toggle"><input type="checkbox" id="t_cs" disabled><span>Porta imbattuta = 0 (disattivata)<div class="tdesc">CONFERMATO: nessun bonus clean sheet → i portieri valgono molto meno</div></span></label>
+<label class="toggle"><input type="checkbox" id="t_malus" checked><span>Malus −1 gol subito (portiere)<div class="tdesc">penalizza i portieri di difese deboli</div></span></label>
+<label class="toggle"><input type="checkbox" id="t_defmod" checked><span>Modificatore difesa (+1/+3/+6)<div class="tdesc">CONFERMATO: media portiere + 3 migliori difensori; SERVE la difesa a 4 → premia difensori da voto alto e costante</div></span></label>
+</div></div>
+<div style="margin-top:12px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">Budget totale: <input type="number" id="budget" class="num-in" value="300"> crediti · <span id="ruleSummary"></span></div>
+<div style="margin-top:10px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)">
+<label style="display:flex;align-items:center;gap:6px">Svincolo rende <select id="cfgSvincolo" class="num-in" style="width:auto"><option value="zero">0 crediti</option><option value="cost">il costo</option></select></label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="cfgForfaitOn" style="accent-color:var(--green)"> Forfait <input type="number" id="cfgForfait" class="num-in" value="100" style="width:54px"> cr a tutti (riparazione)</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="cfgLiberaAttivi" style="accent-color:var(--green)"> Permetti svincolo attivi (apre slot, 0 cr)</label>
+</div>
+</div></details>
+
+<details class="box"><summary>🧠 Come ragiona il motore (criteri della prossima pick)</summary><div class="box-body">
+<h4>Value Index (valore equo)</h4>
+<p><code>FairValue = Quota × Rating^ × EG^φ × Titolarità × Piazzati × Ruolo × Difesa × Coesione × Infortunio</code></p>
+<ul>
+<li><b>Rating</b>: media stagione 2025/26 (WhoScored/SofaScore) per la fascia decisionale — base di qualità indipendente dalla quota.</li>
+<li><b>EG (partite attese)</b>: da simulazioni Opta (10.000 sim). Pesa di più nelle fasi avanzate (φ sale da 1,5 a 2,3).</li>
+<li><b>Titolarità</b> 0-1, penalizzata in modo severo (esponente 1,25): chi non prende voto fa <b>0 punti</b> (SV), quindi i panchinari/subentranti (Endrick, Neymar-da-subentro, riserve) crollano e restano solo riempitivi.</li>
+</ul>
+<h4>Pesi tarati sul regolamento confermato</h4>
+<ul>
+<li><b>Portieri svalutati</b>: porta imbattuta = 0, malus −1 a gol subito → 1 portiere decente + 2 da 1 cr. Budget portieri ~12.</li>
+<li><b>Difensori da modificatore</b>: il +1/+3/+6 richiede la <b>difesa a 4</b> e 4 difensori a voto. Premiati i difensori da voto alto e costante di nazionali solide (non solo i terzini offensivi). Servono 5-6 difensori titolari affidabili.</li>
+<li><b>Svincolo = 0 crediti</b>: liberare un giocatore apre solo lo slot, non restituisce crediti → la profondità delle nazioni forti pesa a pieno. Il +100 forfait pre-riparazione è un upgrade piatto, uguale per tutti.</li>
+<li><b>Rigoristi</b>: rigore +3 / errore −3 → preferisci i rigoristi affidabili (Mbappé, Kane, B. Fernandes, Oyarzabal, Ronaldo).</li>
+</ul>
+<h4>Re-ranking dinamico (per OGNI ruolo)</h4>
+<ul>
+<li><b>Bisogno di classe</b>: consiglia prima la classe che ti serve (premium → valore → riempitivo). Dopo 1 portiere titolare scende ai portieri da 1 cr; dopo 2 difensori premium passa ai difensori-valore, ecc.</li>
+<li><b>Diversificazione nazione</b>: tetto morbido scalato sulla profondità (Spagna/Francia ~6, Ing/Arg/Por/Bra ~5, outsider ~3, deboli ~2). Oltre il tetto i giocatori di quella nazione scendono in lista a favore di pari-valore di altre nazioni.</li>
+</ul>
+<h4>Max-bid dinamico (quota del budget)</h4>
+<p><code>Max = Equo × (crediti rimasti / equo degli obiettivi che ti restano)</code>, tra 0,7× e 3,0×, mai oltre il <b>tetto assoluto</b> (crediti − slot ancora da riempire).</p>
+<p>All'inizio l'intera rosa ideale costa più di 300 → il Max sta <b>sotto</b> l'Equo (devi trovare valore, non strapagare al primo colpo). Man mano che riempi slot a poco prezzo, il Max per le star residue <b>sale</b>; se tieni i crediti per un'ultima star può salire molto. "–" se il ruolo è pieno (non ti serve). Piccola spinta in più se più avversari con cassa ti contendono il ruolo. Verde sul prezzo pagato = sotto l'Equo (buon affare).</p>
+<h4>Formato d'asta (banditore automatico)</h4>
+<p>I giocatori escono in <b>ordine alfabetico</b>, una passata sola, con rilanci (1 min, la quotazione non è minima). <b>Niente turni o "scelte"</b>: gestisci il budget su tutti i ruoli insieme seguendo l'alfabeto. Chi ha i target a fine alfabeto (Vinícius, Yamal, Vitinha) deve conservare crediti.</p>
+<div class="legend">
+<span><span class="dot" style="background:var(--tS)"></span>S: Spa/Fra</span><span><span class="dot" style="background:var(--tA)"></span>A: Ing/Bra/Arg/Por</span><span><span class="dot" style="background:var(--tB)"></span>B: Ger/Ola</span><span><span class="dot" style="background:var(--tC)"></span>C: outsider</span><span><span class="dot" style="background:var(--tD)"></span>D: rischio gironi</span>
+</div>
+</div></details>
+
+<details class="box" id="oppBox" open><summary>👥 Avversari & classifica live</summary><div class="box-body"><p style="color:var(--muted);font-size:11.5px">Imposta quanti avversari e i loro nomi. Quando un giocatore va a un altro, usa <b>Altri</b> sulla sua riga e scegli chi l'ha preso e a quanto: budget, slot e classifica si aggiornano.</p><div id="oppPanel"></div></div></details>
+<div class="controls">
+<div class="tabs" id="viewToggle"><button class="tab active" data-v="role">Per ruolo</button><button class="tab" data-v="queue">Coda asta (A→Z)</button><button class="tab" data-v="formazione">🎯 Formazione</button></div>
+<div class="tabs" id="tabs"><button class="tab active" data-r="ALL">Tutti</button><button class="tab" data-r="P">Portieri</button><button class="tab" data-r="D">Difensori</button><button class="tab" data-r="C">Centrocamp.</button><button class="tab" data-r="A">Attaccanti</button></div>
+<input class="search" id="search" placeholder="Cerca…">
+<select class="sortsel" id="sortSel" title="Ordina la lista per ruolo"><option value="rec">Ordina: Consigliato</option><option value="stars">Ordina: Stelle</option><option value="equo">Ordina: Equo</option><option value="max">Ordina: Max</option></select>
+<label class="chk"><input type="checkbox" id="onlyStars">Solo ★★/★★★</label>
+<label class="chk"><input type="checkbox" id="hideTaken">Nascondi presi</label>
+<button class="btn-reset" id="reset">Reset</button>
+</div>
+<div class="legend" style="margin:6px 0 14px"><span><b style="color:var(--gold)">Max</b> = tuo tetto consigliato (può superare l'Equo se hai surplus; "–" se ruolo pieno)</span><span><b style="color:var(--amber)">⚠</b> = infortunio/dubbio fisico</span><span><b style="color:var(--green)">★ CONSIGLIATO ORA</b> = mossa migliore adesso</span><span><b style="color:var(--gold)">★★★</b> priorità · <b style="color:var(--green)">★★</b> buona alternativa · <b style="color:var(--muted)">★</b> ripiego conveniente · <b style="color:var(--muted2)">☆☆☆</b> trappola / non conveniente · <b style="color:var(--red)">AL COMPLETO</b> ruolo già pieno</span><span>Quot. = base listone fantaclub (non è l'offerta minima)</span></div>
+<div id="board"></div>
+<div class="roster" id="roster"></div>
+<footer>Regole lega confermate: gol +3 (tutti i ruoli), assist +1, porta imbattuta 0, malus −1 gol subito portiere, rigore parato +3, rigore sbagliato −3. Modificatore difesa +1/+3/+6 (media portiere + 3 migliori difensori, SOLO con difesa a 4). Svincolo = 0 crediti (apre solo lo slot, nessun rimborso); +100 forfait permanente a tutti prima della riparazione. Asta a banditore automatico, ordine alfabetico, una passata, rilanci, quotazione non vincolante. Fonte voti: Redazione Mondiale Media (editoriale) · assist: Fantaclub. Quotazioni = listone fornito (Dumfries 17, Wesley rimosso). Rating = media 2025/26 WhoScored/SofaScore per la fascia decisionale (per alcuni big: consenso). Partite attese: Opta, inizio giugno 2026. Stima soggettiva, non garanzia. Salvataggio automatico in locale (per nome giocatore) + Esporta/Importa JSON: puoi ricaricare la pagina senza perdere l'asta. V3.9 (Blocco V4-B.2/V4-C+: sedicesimi separati + tabellone a due metà convergenti + import JSON dati-live + formazione con selettore modulo e 11/7) · V4-C: ottimizzatore formazione modificatore-aware + tabellone rifatto con dedup/semina) · svincolo=0 (non rimborsa, apre slot) + egMult ricalibrato (compressione legacy OFF, reversibile) + crediti affondati (sunk) + migrazione sicura · dataset lega completo (197 giocatori) + import rose · Oracolo salvavita (alert solvibilità) · caselle budget-aware + didascalie · piano rosa (stelle-e-gregari) · ordina/filtra per stelle · max trappole = "–" · modalità recupero (6 stadi) · pannello Gironi · consigliere chiamata · coda A→Z. · <b>V5.0</b>: baseline + etichetta panchina corretta. · <b>V5.1</b>: simulatore subentri/cameo-trap (Monte Carlo, usageType/subProfile, A/B lineup, panchina ottimizzata) nel pannello formazione; 204 test verdi; fairValue/maxBid invariati. · <b>V5.2</b>: normalizeSecur robusta (3 scale) + pannello sim usabile (profili scenario, swap manuale, quick test wildcard); 214 test verdi. · <b>V5.4</b>: leagueConfig chirurgico (roster/tiers/formation/knockout/market/budget estratti in config, alias derivati, scoring escluso) + helper ownership; 229 test verdi. · <b>V5.5</b>: applyLive esteso ai campi scenario (usageType/subProfile/startProbability/injury/suspension → simulatore; projectedMinutes/validScore memorizzati con provenienza, mai inventati) + badge disponibilità in board/coda (MIO/AVV-solo-scambio/ELIMINATA/SVINCOLABILE/SKIP) + schema JSON live lite; 242 test verdi. · <b>V5.6</b>: indicatori strutturali per la riparazione — copertura portieri (keeperCoverageRisk: basso/medio/alto/critico, caso Pickford) + titolari validi attesi per turno (expectedValidStarters: prox/Q/S/F + rischio-ruolo) + esposizione nazioni, con sopravvivenza-nazione euristica (Bradley-Terry vs avversario medio dei vivi, dichiarata stima del modello) + isEligibleForAuction (libero & nazione viva); readout compatto nel pannello rosa; 252 test verdi. · <b>V5.6.1</b>: expectedValidStarters ora espone raw (profondità, può superare 11) + playableXI (min 11) + xiShortfall (quanto manca a 11 = rischio di non comporre l'XI); readout rosa aggiornato (XI atteso + shortfall + profondità raw); raw resta SOLO titolari (i sub forti = V5.7); 255 test verdi. · <b>V5.7</b>: repairProfile — layer decisionale riparazione. Base = xPts × pStartCorr × availMul × partite-residue (sopravvivenza e availability ciascuna UNA volta; pStartCorr corregge solo la titolarità da override). needBoost ordinale additivo scalato per quanto il giocatore copre davvero lo slot (un cameo non riempie il buco). Status: auction_target / trade_only / keep / sell_candidate / release_candidate / avoid. maxRepairBid a FASCE (low/med/high/all-in) + solvencyCap, mai numero finto. fairValue NON usato come base (contiene già sopravvivenza). Readout nel modal d'acquisto. 267 test verdi (incl. RV13 availability non doppio-contata).</footer>
+</div>
+
+<div class="overlay" id="overlay"><div class="modal">
+<div class="mname" id="m_name"></div><div class="minfo" id="m_info"></div><div class="m_repair" id="m_repair"></div>
+<label>Acquirente</label><select class="price-in" id="m_buyer" style="font-size:16px;margin-bottom:12px"></select>
+<label>Prezzo pagato (crediti)</label><input type="number" class="price-in" id="m_price" min="0">
+<div class="mrow"><button class="mbtn no" id="m_cancel">Annulla</button><button class="mbtn go" id="m_confirm">Conferma</button></div>
+<div class="hint" id="m_hint"></div>
+</div></div>
+
+<div class="overlay" id="confirmOv"><div class="modal" style="width:min(420px,92vw)">
+<div class="mname" id="cf_title" style="font-size:18px">Conferma</div>
+<div class="minfo" id="cf_msg" style="margin:8px 0 16px"></div>
+<div class="mrow"><button class="mbtn no" id="cf_no">Annulla</button><button class="mbtn go" id="cf_yes">Conferma</button></div>
+</div></div>
+
+<script>
+const NAT={
+spa:["Spagna",6.1,.85,.90],fra:["Francia",5.8,.82,.60],ing:["Inghilterra",5.6,.78,.55],arg:["Argentina",5.5,.80,.85],
+por:["Portogallo",5.2,.72,.60],bra:["Brasile",5.1,.78,.60],ger:["Germania",4.9,.72,.60],ola:["Olanda",4.7,.72,.55],
+mar:["Marocco",4.5,.75,.70],col:["Colombia",4.5,.68,.60],cro:["Croazia",4.4,.68,.70],bel:["Belgio",4.4,.62,.50],
+uru:["Uruguay",4.3,.72,.60],svi:["Svizzera",4.2,.70,.60],gia:["Giappone",4.3,.65,.70],mes:["Messico",4.2,.60,.60],
+sta:["USA",4.0,.55,.55],sen:["Senegal",4.0,.68,.60],ecu:["Ecuador",4.0,.72,.60],cor:["Corea Sud",4.0,.58,.65],
+nor:["Norvegia",3.9,.55,.55],cec:["Cechia",3.8,.58,.60],unb:["Austria",3.8,.62,.65],cos:["Costa d'Avorio",3.7,.60,.55],
+can:["Canada",3.7,.55,.55],tur:["Turchia",3.7,.55,.50],sve:["Svezia",3.6,.58,.50],alg:["Algeria",3.6,.58,.50],
+aus:["Australia",3.5,.58,.60],gha:["Ghana",3.5,.52,.50],egi:["Egitto",3.5,.58,.55],irn:["Iran",3.5,.62,.60],
+sco:["Scozia",3.4,.58,.60],tun:["Tunisia",3.4,.62,.55],par:["Paraguay",3.4,.62,.55],sud:["Sudafrica",3.3,.55,.55],
+ara:["Arabia S.",3.2,.55,.55],qat:["Qatar",3.2,.55,.60],uzb:["Uzbekistan",3.2,.55,.55],bos:["Bosnia",3.2,.55,.55],
+con:["RD Congo",3.2,.55,.50],irq:["Iraq",3.0,.55,.50],gio:["Giordania",3.0,.52,.50],pan:["Panama",3.0,.52,.50],
+nuo:["Nuova Zelanda",3.0,.50,.50],hai:["Haiti",2.9,.45,.45],cap:["Capo Verde",2.9,.50,.50],cur:["Curaçao",2.8,.45,.50]
+};
+// rating medio stagione 2025/26 (WhoScored/SofaScore) dove reperito; null = neutro
+const RATING={"Yamal":8.0,"Pedri":7.4,"Mbappé":7.8,"Vinícius":7.4,"Bellingham":7.3,"Valverde":7.3,"Cubarsí":7.2,"Eric García":7.05,
+"B. Fernandes":7.6,"Van Dijk":7.4,"Rice":7.4,"Magalhães":7.4,"Haaland":7.6,"Semenyo":7.6,"Vitinha":7.5,"N. Mendes":7.45,
+"Hakimi":7.4,"Barcola":7.2,"Dembélé":7.4,"Doué":7.2,"Ferran Torres":7.2,"Olmo":7.2,"Ezzalzouli":7.3,"Raphinha":7.4,
+"Saka":7.3,"Olise":7.4,"Casemiro":7.0,"Fabián Ruiz":7.1,"Rodri":7.3,"Kane":7.5,"Lautaro":7.3,"J. Álvarez":7.2,
+"Gyökeres":7.4,"Isak":7.2,"Salah":7.4,"Gakpo":7.1,"Gvardiol":7.2,"Marquinhos":7.2,"Cucurella":7.1,"Kounde":7.1,
+"Mac Allister":7.1,"Wirtz":7.2,"Musiala":7.3,"Kimmich":7.2,"G. Ramos":6.7,"Cancelo":7.1,"Tagliafico":7.0};
+const RAW=[
+["Maignan","fra","P",18,1,0,1,0,"Francia n.1"],["Simón","spa","P",17,1,0,1,0,"Spagna n.1"],["E. Martínez","arg","P",16,1,0,1,0,"para rigori"],
+["D. Costa","por","P",16,1,0,1,0,"Portogallo n.1"],["Becker","bra","P",16,1,0,1,0,"Alisson, n.1"],["Pickford","ing","P",15,1,0,1,0,"Inghilterra n.1"],
+["Courtois","bel","P",15,1,0,1,0,"Belgio n.1"],["Kobel","svi","P",14,1,0,1,0,"Svizzera n.1"],["Bounou","mar","P",13,1,0,1,0,"Marocco, difesa solida"],
+["Verbruggen","ola","P",13,.9,0,1,0,"Olanda n.1"],["Livakovic","cro","P",12,1,0,1,0,"Croazia, para rigori"],["Neuer","ger","P",16,.8,0,1,0,"Germania, ma incerto"],
+["Raya","spa","P",1,.1,0,1,0,"Miglior portiere PL (19 CS) ma 2o della Spagna: NON gioca"],["Rulli","arg","P",1,.1,0,1,0,"Riserva Argentina"],["Sá","por","P",1,.1,0,1,0,"Riserva Portogallo"],
+["Hakimi","mar","D",16,1,1,1.12,0,"terzino top offensivo; Marocco profondo"],["N. Mendes","por","D",17,1,0,1.12,0,"terzino, 6 MOTM PSG, tanti assist"],
+["Dumfries","ola","D",17,1,0,1.12,0,"terzino bonus (quota corretta 7→17)"],["Van Dijk","ola","D",16,1,1,1,0,"leader, top-5 PL, gol su piazzati"],
+["Cancelo","por","D",16,.9,1,1.12,0,"terzino offensivo, piazzati"],["Gvardiol","cro","D",15,1,0,1,0,"difensore con gol"],["Marquinhos","bra","D",15,1,1,1,0,"leader; minuti finali PSG ridotti"],
+["Van de Ven","ola","D",15,.9,0,1,0,"veloce"],["Bremer","bra","D",14,1,0,1,0,"Brasile"],["Guéhi","ing","D",14,1,0,1,0,"titolare Inghilterra"],
+["Hernandez Th.","fra","D",14,.9,0,1.12,0,"Theo, sganciate"],["Schlotterbeck","ger","D",14,1,0,1,0,"titolare Germania"],["Kounde","fra","D",13,1,0,1.10,0,"terzino Francia"],
+["Saliba W.","fra","D",13,.7,0,1,1,"dubbio infortunio (tracker FIFA)"],["Dias","por","D",13,1,0,1,0,"Rúben Dias"],["Inácio","por","D",13,.9,0,1,0,"titolare Portogallo"],
+["Konsa","ing","D",13,.9,0,1,0,"affidabile"],["Magalhães","bra","D",13,1,1,1,0,"top-5 PL, gol su piazzati"],["Porro","spa","D",13,.7,0,1.10,0,"ballottaggio con Llorente"],
+["Rüdiger","ger","D",13,1,0,1,0,"Germania"],["Cucurella","spa","D",12,1,0,1.06,0,"titolare Spagna"],["Cubarsí","spa","D",12,1,0,1,0,"giovane titolare Spagna"],
+["Konaté","fra","D",12,.9,0,1,0,"Francia"],["Upamecano","fra","D",12,1,0,1,0,"Francia"],["Molina","arg","D",12,1,0,1.10,0,"terzino assist"],
+["Romero","arg","D",12,1,0,1,0,"Cuti"],["Tah","ger","D",12,.9,0,1,0,"Germania"],["Dalot","por","D",12,.9,0,1.08,0,"terzino"],
+["Llorente","spa","D",12,.8,0,1.06,0,"può fare il terzino dx Spagna"],["Laporte","spa","D",11,1,0,1,0,"leader difesa Spagna"],["Grimaldo","spa","D",11,.9,1,1.12,0,"assist e punizioni"],
+["Otamendi","arg","D",11,1,0,1,0,"esperienza"],["Tagliafico","arg","D",11,.9,0,1.08,0,"terzino Argentina"],["Akanji","svi","D",11,1,0,1,0,"Svizzera"],
+["Aké","ola","D",11,.8,0,1,0,"Olanda"],["Mazraoui","mar","D",11,.9,0,1.08,0,"terzino Marocco"],["Aguerd","mar","D",11,1,0,1,0,"Marocco"],
+["Danilo","bra","D",11,.8,0,1.05,0,"Brasile"],["Stones","ing","D",10,.9,0,1,0,"titolare"],["Eric García","spa","D",10,.7,0,1.05,0,"jolly Spagna"],
+["Robinson","sta","D",10,1,0,1.08,0,"USA host"],["R. James","ing","D",11,.7,1,1.12,1,"assist se in salute, fragile"],["Raum","ger","D",9,.9,1,1.12,0,"assist"],
+["Castagne","bel","D",10,.9,0,1.08,0,"terzino Belgio"],["Théate","bel","D",10,.9,0,1,0,"Belgio"],["Itakura","gia","D",10,1,0,1,0,"Giappone"],
+["Muñoz Da.","col","D",9,1,1,1.10,0,"terzino assist Colombia"],["Pubill","spa","D",9,.7,0,1.05,0,"jolly Spagna"],["Lucumí","col","D",8,.9,0,1,0,"Colombia"],
+["Olise","fra","C",35,.85,1,1.06,0,"Francia, fantasista, ottima stagione Bayern (caro)"],["Bellingham","ing","C",29,1,0,1.06,0,"9 gol 8 assist; macchina bonus"],
+["Pedri","spa","C",23,1,0,1.04,0,"motore Spagna, top key passes"],["B. Fernandes","por","C",24,1,2,1.08,0,"Miglior giocatore PL, RIGORISTA + assist"],
+["Olmo","spa","C",22,.9,0,1.06,0,"bonus ma fragile (vari stop)"],["Wirtz","ger","C",29,1,1,1.08,0,"creativo elite (Germania B)"],
+["Musiala","ger","C",29,1,0,1.08,0,"dribbling e gol (B)"],["Valverde","uru","C",22,1,1,1.06,0,"box-to-box, 7.3 rating"],
+["Rodri","spa","C",19,.9,0,.95,0,"Pallone d'Oro, regista; rientro infortunio"],["Rice","ing","C",22,1,0,.96,0,"top-5 PL ma bonus medi"],
+["B. Silva","por","C",20,1,0,1.06,0,"sempre titolare"],["Merino","spa","C",18,.85,0,1.06,0,"mediano che segna; dubbio fitness ok"],
+["Enzo Fernández","arg","C",18,1,1,1.05,0,"assist e gol, 5 legni PL"],["Mac Allister","arg","C",17,1,1,1.06,0,"bonus regolari"],
+["J. Neves","por","C",19,.9,0,1,0,"giovane titolare"],["Kimmich","ger","C",17,1,1,1.05,0,"leader, piazzati"],["Tchouaméni","fra","C",17,1,0,.95,0,"titolare, bonus bassi"],
+["Reijnders","ola","C",17,.9,0,1.06,0,"bonus, Olanda"],["De Jong","ola","C",17,1,0,1,0,"regista Olanda"],["Gravenberch","ola","C",18,1,0,1.04,0,"in forma"],
+["Guimarães","bra","C",16,1,0,1,0,"Bruno Guimarães"],["Fabián Ruiz","spa","C",16,.85,0,1.04,0,"titolare PSG/possibile Spagna"],["Vitinha","por","C",15,1,0,1,0,"miglior rating PSG, regista"],
+["Paquetá","bra","C",15,.9,0,1.06,0,"bonus offensivi"],["Zubimendi","spa","C",15,.85,0,.96,0,"titolare Arsenal/ballottaggio"],["Gavi","spa","C",15,.6,0,1.04,0,"RISCHIO ROTAZIONE (Pedri/Rodri/Fabián)"],
+["De Arrascaeta","uru","C",15,.9,1,1.06,0,"bonus Uruguay"],["Rabiot","fra","C",13,.9,0,1,0,"titolare, ogni tanto segna"],["Šulc","cec","C",13,.9,1,1.06,0,"11 gol Ligue1 col Lyon: mezzala da bonus"],
+["Mainoo","ing","C",13,.6,0,1,0,"rischio panchina"],["R. Neves","por","C",12,.8,0,.98,0,"Rúben Neves"],["De Paul","arg","C",12,1,0,1,0,"titolare Argentina"],
+["Modrić","cro","C",12,.9,1,1,0,"piazzati (età)"],["Casemiro","bra","C",11,.9,0,.95,0,"set-piece threat"],["Kovačić","cro","C",12,.8,0,1,0,"Croazia"],
+["Cherki","fra","C",20,.55,1,1.06,0,"talento ma FORTE rischio panchina"],["Sané","ger","C",28,.8,0,1.06,0,"alti e bassi"],
+["Pulisic","sta","C",27,1,2,1.08,0,"USA host, RIGORISTA, differenziale (EG basso)"],["Doku","bel","C",28,.85,0,1.06,0,"Belgio, caro"],
+["De Bruyne","bel","C",23,1,2,1.08,0,"rigori/assist ma Belgio C"],["De Ketelaere","bel","C",20,.9,0,1.06,0,"Belgio"],["Ødegaard","nor","C",22,1,1,1.06,0,"Norvegia volatile"],
+["Güler","tur","C",22,.9,1,1.06,0,"Turchia: caro per l'EG"],["Çalhanoğlu","tur","C",15,1,2,1.05,0,"RIGORISTA Turchia (EG basso)"],
+["Son","cor","C",29,1,1,1.06,0,"Corea: gioca avanti ma carissimo"],["McTominay","sco","C",19,1,0,1.06,0,"gol da mezzala; Scozia girone duro"],["Kramarić","cro","C",14,.85,1,1.06,0,"profilo da bonus"],
+["Mbappé","fra","A",45,1,2,1,0,"tetto assoluto + RIGORISTA Francia"],["Kane","ing","A",42,1,2,1,0,"RIGORISTA, gioca sempre"],
+["Yamal","spa","A",40,.8,1,1.06,1,"Miglior giocatore Liga (8.01) ma dubbio hamstring: forse spezzone all'esordio"],
+["Dembélé","fra","A",40,.9,0,1,0,"Pallone d'Oro, ma qualche stop"],["Lautaro","arg","A",37,1,0,1,0,"bomber Argentina"],
+["Vinícius","bra","A",35,1,0,1.06,0,"titolare sinistra Brasile"],["J. Álvarez","arg","A",35,1,1,1,0,"Julián, prolifico"],
+["Raphinha","bra","A",29,1,1,1.06,0,"titolare destra, bonus + piazzati"],["N. Williams","spa","A",29,.8,0,1.06,1,"dubbio hamstring"],
+["Doué","fra","A",31,.8,0,1.06,0,"ballottaggio esterni Francia, in ascesa"],["Barcola","fra","A",29,.85,0,1.06,0,"13 gol Ligue1, esterno Francia"],
+["Saka","ing","A",27,1,0,1.06,0,"bonus regolari"],["Ferran Torres","spa","A",28,.8,0,1,0,"16 gol Liga; ballottaggio 9 con Oyarzabal"],
+["Ronaldo","por","A",28,1,2,1,0,"RIGORISTA, gioca tutto, ultimo Mondiale"],["Oyarzabal","spa","A",23,.9,2,1,0,"favorito come 9 Spagna + RIGORISTA (gol finale Euro)"],
+["Leão","por","A",24,.9,0,1.06,0,"strappi e gol"],["Watkins","ing","A",24,.7,0,1,0,"alternativa a Kane: rischio panchina"],
+["Martinelli","bra","A",26,.7,0,1.06,0,"alternativa Vini: panchina"],["G. Ramos","por","A",20,.7,0,1,0,"9 Portogallo se non CR7; poco usato al PSG"],
+["Messi","arg","A",31,.9,2,1.06,0,"RIGORISTA, tetto alto, ma gestione/età"],["Gakpo","ola","A",33,1,1,1.06,0,"titolare Olanda, anche rigori"],
+["Depay","ola","A",28,.9,2,1,0,"RIGORISTA Olanda"],["Madueke","ing","A",27,.55,0,1.06,0,"forte rischio rotazione"],
+["Rashford","ing","A",29,.6,0,1.06,0,"rischio rotazione"],["Díaz Lu.","col","A",29,1,1,1.06,0,"Luis Díaz top ma Colombia C"],
+["Núñez","uru","A",21,.85,0,1,0,"Uruguay"],["S. Giménez","mes","A",21,.9,0,1,0,"host Messico"],["R. Jiménez","mes","A",20,.8,1,1,0,"punta Messico"],
+["Embolo","svi","A",17,.9,0,1,0,"Svizzera"],["El Kaabi","mar","A",13,1,0,1,0,"Marocco, molto prolifico, titolare"],
+["Endrick","bra","A",14,.45,0,1,0,"WILD CARD: super-sub Brasile, scommessa low-cost"],["Neymar","bra","A",21,.55,1,1.06,1,"convocato ma fitness/età: impatto a gara in corso"],
+["Conceição","por","A",15,.6,0,1.06,0,"Portogallo"],["Trincão","por","A",20,.6,0,1.06,0,"rischio panchina"],
+["Gyökeres","sve","A",28,1,1,1,0,"TRAPPOLA: gran rating ma Svezia esce presto"],["Isak","sve","A",30,1,0,1,0,"TRAPPOLA: Svezia"],
+["Haaland","nor","A",40,1,1,1,0,"TRAPPOLA: 27 gol PL ma Norvegia volatile e costo enorme"],["Salah","egi","A",33,1,2,1.06,0,"TRAPPOLA: Egitto esce presto; falla pagare agli altri"],
+["Yildiz","tur","A",24,.7,0,1.06,1,"Turchia + (I)"],
+["Z. Suzuki","gia","P",10,0.9,0,1,0,"Giappone, n.1"],
+["Turner","sta","P",8,0.7,0,1,0,"USA, ballottaggio porta"],
+["Khusanov","uzb","D",6,0.9,0,1,0,"Uzbekistan, CB"],
+["Kim Min-jae","cor","D",11,1,0,1,0,"Corea, leader difesa"],
+["Santos","bra","D",5,0.6,0,1,0,"Brasile, riserva difesa"],
+["Araújo","por","D",5,0.6,0,1,0,"Portogallo, difesa"],
+["Gusto","fra","D",8,0.6,0,1.08,0,"Francia, terzino"],
+["Ibañez","bra","D",7,0.7,0,1,0,"Brasile, CB"],
+["Nunes","por","D",6,0.6,0,1,0,"Portogallo, difesa"],
+["Lacroix","fra","D",8,0.7,0,1,0,"Francia, CB"],
+["Elliot","nuo","D",2,0.5,0,1,0,"Nuova Zelanda"],
+["Ryerson","nor","D",7,0.8,0,1.08,0,"Norvegia, terzino"],
+["Davies","can","D",11,0.9,1,1.12,0,"Canada, terzino offensivo"],
+["El Ouahdi","mar","D",6,0.7,0,1.06,0,"Marocco, terzino"],
+["Ajer","nor","D",6,0.8,0,1,0,"Norvegia, CB"],
+["Gudmundsson D.","sve","D",5,0.6,0,1,0,"Svezia, difesa"],
+["W. Pacho","ecu","D",9,0.9,0,1,0,"Ecuador, CB solido"],
+["Mendy De.","sen","D",7,0.8,0,1,0,"Senegal, difesa"],
+["Alex Sandro","bra","D",6,0.6,0,1.06,0,"Brasile, terzino esperto"],
+["Mojica","col","D",7,0.8,0,1.08,0,"Colombia, terzino"],
+["J. Giménez","uru","D",9,0.9,0,1,0,"Uruguay, CB (José M.)"],
+["Eze","ing","C",14,0.7,0,1.06,0,"Inghilterra, trequartista"],
+["Pavlović","ger","C",9,0.7,0,1,0,"Germania, mediano"],
+["Diallo Am.","cos","C",10,0.8,0,1.06,0,"Costa d'Avorio, esterno"],
+["Kessié","cos","C",9,0.8,0,1,0,"Costa d'Avorio, mediano"],
+["De la Cruz","uru","C",9,0.7,0,1.06,0,"Uruguay, mezzala"],
+["N. González","arg","C",12,0.7,0,1.06,0,"Argentina, esterno"],
+["Zaïre-Emery","fra","C",10,0.6,0,1,0,"Francia, mediano giovane"],
+["Bentancur","uru","C",10,0.9,0,1,0,"Uruguay, regista"],
+["Palacios","arg","C",9,0.6,0,1,0,"Argentina, mediano"],
+["Caicedo","ecu","C",12,1,0,1,0,"Ecuador, mediano top"],
+["Danilo Ol.","bra","C",8,0.7,0,1,0,"Brasile, mediano (≠ Danilo dif.)"],
+["Kanté","fra","C",12,0.8,0,1,0,"Francia, mediano"],
+["M. Koné","fra","C",9,0.8,0,1,0,"Francia, mediano"],
+["J. Rodríguez","col","C",12,0.8,1,1.06,0,"Colombia, rifinitore + piazzati"],
+["L. Camara","sen","C",9,0.8,0,1,0,"Senegal, mediano"],
+["Bergvall","sve","C",6,0.6,0,1,0,"Svezia, giovane"],
+["Paz","arg","C",9,0.5,0,1.06,0,"Argentina, trequartista (rotazione)"],
+["Mané","sen","A",16,0.9,0,1.06,0,"Senegal, esterno"],
+["Malen","ola","A",13,0.7,0,1.06,0,"Olanda, esterno"],
+["Iglesias","spa","A",9,0.6,0,1,0,"Spagna, punta (rotazione)"],
+["Cunha","bra","A",14,0.8,0,1.06,0,"Brasile, seconda punta"],
+["Havertz","ger","A",15,0.8,0,1,0,"Germania, punta/mezzala"],
+["Lukaku","bel","A",14,0.9,0,1,0,"Belgio, centravanti"],
+["Jackson","sen","A",12,0.8,0,1,0,"Senegal, centravanti"],
+["Rayan","bra","A",6,0.5,0,1.06,0,"Brasile, giovane esterno"],
+["Arnautović","unb","A",8,0.7,0,1,0,"Austria, punta"]
+];
+// ===== V5.4 — leagueConfig: fonte di verità centralizzata. Le costanti sotto sono ALIAS derivati (valori identici → comportamento invariato). Scoring NON ancora estratto (step dedicato). =====
+const leagueConfig={
+  budget:300,
+  managers:6,
+  roster:{P:{name:"Portieri",need:3,bud:12},D:{name:"Difensori",need:10,bud:90},C:{name:"Centrocampisti",need:10,bud:145},A:{name:"Attaccanti",need:8,bud:145}},
+  tiers:{premThr:{P:7,D:12,C:16,A:20},valThr:{P:3,D:7,C:9,A:11},premSlots:{P:1,D:2,C:2,A:2},valSlots:{P:0,D:3,C:3,A:2}},
+  formation:{modules:{"3-4-3":[3,4,3],"3-5-2":[3,5,2],"4-3-3":[4,3,3],"4-4-2":[4,4,2],"4-5-1":[4,5,1],"5-3-2":[5,3,2],"5-4-1":[5,4,1],"3-6-1":[3,6,1]},starters:11,bench:7,voteThresholdMin:15,maxSubs:3,sameRoleFirst:true,fallbackAcrossRoles:true,gkFirst:true,staticFormation:true,substituteFullPoints:true},
+  knockout:{TURNI:["iniziale","sedicesimi","ottavi","quarti","semi","finale"],LAMBDA:{iniziale:0,sedicesimi:0.15,ottavi:0.25,quarti:0.45,semi:0.70,finale:1.00},PHI:{iniziale:1.5,sedicesimi:1.65,ottavi:1.8,quarti:2.0,semi:2.2,finale:2.3},egFloorAlive:2.6},
+  market:{auctionMode:"alphabetical_auto",repairCreditGrant:100,releaseRefund:0,eliminatedValue:0,freedReentersIfAlive:true,assignedStaysUnlessFreed:true}
+};
+const ROLES=leagueConfig.roster;
+function rosterSlots(){return Object.values(ROLES).reduce((s,r)=>s+r.need,0);}
+// ===== V5.4 — ownership / availability sanity (codifica un invariante GIÀ rispettato dal motore) =====
+function isAvailableForAuction(p){ return p.status===0 && !p.owner; }
+function isTradeTarget(p){ return p.status===2 || p.owner!=null; }
+function playerAvailability(p){ // free | mine | opponent | eliminated | releasable | skipped
+  if(elim[p.nat]) return p.status===0?'eliminated':'releasable';
+  if(p.status===1) return 'mine';
+  if(p.status===2) return 'opponent';
+  if(p.status===3) return 'skipped';
+  return 'free';
+}
+function availBadge(p){ // pill UI: vuoto per i liberi (default), marcato per posseduti/eliminati/skip
+  const a=playerAvailability(p);
+  const M={mine:['MIO','var(--green)'],opponent:['AVV · solo scambio','var(--red)'],eliminated:['ELIMINATA','var(--muted2)'],releasable:['SVINCOLABILE','var(--amber)'],skipped:['SKIP','var(--muted2)']}[a];
+  return M?` <span class="avb" style="border-color:${M[1]};color:${M[1]}">${M[0]}</span>`:'';
+}
+const PREM_THR=leagueConfig.tiers.premThr,VAL_THR=leagueConfig.tiers.valThr,PREM_SLOTS=leagueConfig.tiers.premSlots,VAL_SLOTS=leagueConfig.tiers.valSlots;
+const CLASS_RANK={premium:3,value:2,filler:1,trap:0};
+const TIER_BY_EG=eg=>eg>=5.7?"S":eg>=5.0?"A":eg>=4.6?"B":eg>=3.85?"C":"D";
+const CALLNUM={"Maignan":689,"Simón":1058,"E. Martínez":705,"D. Costa":284,"Becker":168,"Pickford":891,"Courtois":287,"Kobel":615,"Bounou":209,"Verbruggen":1181,"Livakovic":665,"Neuer":811,"Raya":942,"Rulli":983,"Sá":986,"Hakimi":497,"N. Mendes":744,"Dumfries":358,"Van Dijk":1167,"Cancelo":240,"Gvardiol":486,"Marquinhos":702,"Van de Ven":1166,"Bremer":213,"Guéhi":473,"Hernandez Th.":518,"Schlotterbeck":1024,"Kounde":628,"Saliba W.":1002,"Dias":333,"Inácio":538,"Konsa":623,"Magalhães":685,"Porro":908,"Rüdiger":980,"Cucurella":294,"Cubarsí":291,"Konaté":619,"Upamecano":1156,"Molina":765,"Romero":975,"Tah":1109,"Dalot":300,"Llorente":668,"Laporte":645,"Grimaldo":469,"Otamendi":856,"Tagliafico":1107,"Akanji":37,"Aké":39,"Mazraoui":724,"Aguerd":32,"Danilo":301,"Stones":1086,"Eric García":439,"Robinson":959,"R. James":558,"Raum":941,"Castagne":246,"Théate":1119,"Itakura":548,"Muñoz Da.":787,"Pubill":916,"Lucumí":675,"Olise":842,"Bellingham":178,"Pedri":881,"B. Fernandes":413,"Olmo":845,"Wirtz":1212,"Musiala":791,"Valverde":1165,"Rodri":962,"Rice":953,"B. Silva":1054,"Merino":750,"Enzo Fernández":414,"Mac Allister":680,"J. Neves":812,"Kimmich":613,"Tchouaméni":1118,"Reijnders":947,"De Jong":311,"Gravenberch":466,"Guimarães":478,"Fabián Ruiz":982,"Vitinha":1187,"Paquetá":867,"Zubimendi":1251,"Gavi":441,"De Arrascaeta":307,"Rabiot":926,"Šulc":1094,"Mainoo":690,"R. Neves":813,"De Paul":314,"Modrić":759,"Casemiro":244,"Kovačić":629,"Cherki":261,"Sané":1010,"Pulisic":918,"Doku":349,"De Bruyne":308,"De Ketelaere":312,"Ødegaard":834,"Güler":480,"Çalhanoğlu":235,"Son":1069,"McTominay":737,"Kramarić":631,"Mbappé":725,"Kane":587,"Yamal":1224,"Dembélé":323,"Lautaro":709,"Vinícius":1184,"J. Álvarez":96,"Raphinha":936,"N. Williams":1208,"Doué":355,"Barcola":154,"Saka":998,"Ferran Torres":1139,"Ronaldo":977,"Oyarzabal":859,"Leão":651,"Watkins":1199,"Martinelli":704,"G. Ramos":933,"Messi":751,"Gakpo":433,"Depay":326,"Madueke":683,"Rashford":937,"Díaz Lu.":338,"Núñez":825,"S. Giménez":450,"R. Jiménez":565,"Embolo":380,"El Kaabi":368,"Endrick":383,"Neymar":814,"Conceição":278,"Trincão":1146,"Gyökeres":487,"Isak":544,"Haaland":488,"Salah":999,"Yildiz":1230};
+const LISTONE_N=1251;
+const FORM={"Kimmich":1.08,"Paquetá":0.92};
+/* V4.0 produzione FootyStats 2025/26: gn=golNP90(non-rigore), np=npxG90, xa=xA90 reale(assente=>as), c=coef, pen=rigorista naz */
+const PROD={"B. Fernandes":{gn:0.143,np:0.21,as:0.62,c:1.0,pen:1},"B. Silva":{gn:0.06,np:0.1,xa:0.27,as:0.112,c:1.0,pen:0},"Barcola":{gn:0.57,np:0.63,xa:0.18,as:0.051,c:1.0,pen:0},"Bellingham":{gn:0.28,np:0.37,xa:0.27,as:0.19,c:1.0,pen:0},"Caicedo":{gn:0.1,np:0.12,as:0.03,c:1.0,pen:0},"Casemiro":{gn:0.31,np:0.34,as:0.07,c:1.0,pen:0},"Cherki":{gn:0.2,np:0.34,as:0.61,c:1.0,pen:0},"Conceição":{gn:0.13,np:0.33,as:0.21,c:1.0,pen:0},"Cunha":{gn:0.36,np:0.47,as:0.07,c:1.0,pen:0},"De Arrascaeta":{gn:0.36,np:0.36,as:0.12,c:0.62,pen:0},"De Bruyne":{gn:0.149,np:0.23,xa:0.24,as:0.154,c:1.0,pen:1},"De Jong":{gn:0.06,np:0.06,as:0.28,c:1.0,pen:0},"Dembélé":{gn:0.68,np:0.62,as:0.59,c:1.0,pen:0},"Depay":{gn:0.245,np:0.3,xa:0.2,as:0.2,c:0.62,pen:1},"Doku":{gn:0.25,np:0.34,xa:0.33,as:0.252,c:1.0,pen:0},"Doué":{gn:0.46,np:0.5,xa:0.34,as:0.266,c:1.0,pen:0},"Díaz Lu.":{gn:0.606,np:0.565,xa:0.275,as:0.466,c:1.0,pen:0},"El Kaabi":{gn:0.642,np:0.64,as:0.085,c:0.55,pen:0},"Embolo":{gn:0.43,np:0.42,as:0.14,c:1.0,pen:0},"Enzo Fernández":{gn:0.29,np:0.3,as:0.12,c:1.0,pen:0},"Fabián Ruiz":{gn:0.08,np:0.13,xa:0.45,as:0.32,c:1.0,pen:0},"Ferran Torres":{gn:0.73,np:0.71,as:0.09,c:1.0,pen:0},"G. Ramos":{gn:0.41,np:0.48,as:0.07,c:1.0,pen:0},"Gakpo":{gn:0.23,np:0.33,xa:0.21,as:0.16,c:1.0,pen:0},"Gravenberch":{gn:0.13,np:0.16,as:0.1,c:1.0,pen:0},"Guimarães":{gn:0.33,np:0.29,xa:0.28,as:0.183,c:1.0,pen:0},"Gyökeres":{gn:0.444,np:0.43,as:0.04,c:1.0,pen:0},"Güler":{gn:0.18,np:0.29,xa:0.46,as:0.399,c:1.0,pen:0},"Haaland":{gn:0.729,np:0.72,xa:0.19,as:0.24,c:1.0,pen:0},"Isak":{gn:0.38,np:0.39,xa:0.1,as:0.128,c:1.0,pen:0},"J. Neves":{gn:0.35,np:0.33,as:0.07,c:1.0,pen:0},"J. Álvarez":{gn:0.333,np:0.34,as:0.19,c:1.0,pen:0},"Kane":{gn:1.02,np:0.93,as:0.19,c:1.0,pen:1},"Kimmich":{gn:0.08,np:0.13,xa:0.45,as:0.36,c:1.0,pen:0},"Kramarić":{gn:0.448,np:0.42,as:0.28,c:1.0,pen:0},"Lautaro":{gn:0.71,np:0.73,as:0.25,c:1.0,pen:0},"Leão":{gn:0.44,np:0.42,xa:0.17,as:0.145,c:1.0,pen:0},"Mac Allister":{gn:0.07,np:0.17,as:0.14,c:1.0,pen:0},"Madueke":{gn:0.22,np:0.25,as:0.07,c:1.0,pen:0},"Mané":{gn:0.378,np:0.45,as:0.25,c:0.55,pen:0},"Martinelli":{gn:0.08,np:0.28,as:0.34,c:1.0,pen:0},"Mbappé":{gn:0.584,np:0.71,as:0.17,c:1.0,pen:1},"Merino":{gn:0.35,np:0.36,xa:0.24,as:0.26,c:1.0,pen:0},"Messi":{gn:0.969,np:0.75,xa:0.52,as:0.58,c:0.7,pen:1},"Modrić":{gn:0.06,np:0.09,as:0.1,c:1.0,pen:0},"Musiala":{gn:0.4,np:0.42,xa:0.45,as:0.529,c:1.0,pen:0},"N. González":{gn:0.31,np:0.4,as:0.0,c:1.0,pen:0},"N. Williams":{gn:0.32,np:0.3,xa:0.25,as:0.214,c:1.0,pen:0},"Núñez":{gn:0.43,np:0.55,xa:0.25,as:0.287,c:0.55,pen:0},"Olise":{gn:0.58,np:0.69,xa:0.64,as:0.74,c:1.0,pen:0},"Olmo":{gn:0.3,np:0.4,xa:0.37,as:0.347,c:1.0,pen:0},"Oyarzabal":{gn:0.334,np:0.35,as:0.13,c:1.0,pen:1},"Pedri":{gn:0.09,np:0.13,xa:0.49,as:0.38,c:1.0,pen:0},"Pickford":{gn:0.0,np:0.0,as:0.0,c:1.0,pen:0},"Pulisic":{gn:0.45,np:0.48,as:0.22,c:1.0,pen:1},"R. Jiménez":{gn:0.206,np:0.3,as:0.12,c:1.0,pen:0},"Raphinha":{gn:0.775,np:0.69,as:0.19,c:1.0,pen:0},"Rashford":{gn:0.41,np:0.54,as:0.41,c:1.0,pen:0},"Reijnders":{gn:0.28,np:0.36,as:0.11,c:1.0,pen:0},"Rice":{gn:0.12,np:0.15,xa:0.18,as:0.145,c:1.0,pen:0},"Rodri":{gn:0.06,np:0.11,as:0.0,c:1.0,pen:0},"Ronaldo":{gn:0.753,np:0.81,as:0.069,c:0.55,pen:1},"Saka":{gn:0.24,np:0.37,as:0.24,c:1.0,pen:0},"Salah":{gn:0.248,np:0.34,as:0.29,c:1.0,pen:1},"Sané":{gn:0.28,np:0.33,as:0.197,c:0.65,pen:0},"Son":{gn:0.39,np:0.34,xa:0.5,as:0.47,c:0.7,pen:0},"Tchouaméni":{gn:0.03,np:0.13,as:0.0,c:1.0,pen:0},"Valverde":{gn:0.16,np:0.24,xa:0.32,as:0.26,c:1.0,pen:0},"Vinícius":{gn:0.414,np:0.45,as:0.16,c:1.0,pen:0},"Vitinha":{gn:0.04,np:0.15,xa:0.46,as:0.3,c:1.0,pen:0},"Watkins":{gn:0.5,np:0.56,xa:0.11,as:0.095,c:1.0,pen:0},"Wirtz":{gn:0.19,np:0.29,xa:0.27,as:0.11,c:1.0,pen:0},"Yamal":{gn:0.63,np:0.6,xa:0.44,as:0.44,c:1.0,pen:0},"Yildiz":{gn:0.32,np:0.4,as:0.19,c:1.0,pen:0},"Zubimendi":{gn:0.15,np:0.15,as:0.03,c:1.0,pen:0},"Çalhanoğlu":{gn:0.272,np:0.3,as:0.22,c:1.0,pen:1},"Ødegaard":{gn:0.07,np:0.14,xa:0.42,as:0.39,c:1.0,pen:0}};
+let players=RAW.map((p,i)=>({id:i,name:p[0],nat:p[1],role:p[2],q:p[3],secur:p[4],sp:p[5],roleAdv:p[6],inj:p[7],note:p[8],rating:RATING[p[0]]||null,callNum:CALLNUM[p[0]]??null,form:FORM[p[0]]??1,status:0,price:0,owner:null}));
+let BUDGET=leagueConfig.budget,curRole="ALL",hideTaken=false,query="",view="role",natView="grid",sortMode="rec",onlyStars=false,sunk=0;
+let opps=Array.from({length:leagueConfig.managers-1},(_,i)=>({id:i+1,name:"Avv "+(i+1)}));
+let MYT_FAIR=1,RANK={};
+let extras=[],EXID=1;
+const cfg={credit:false,repair:true,assist:true,cs:false,malus:true,defmod:true,svincolo:'zero',forfait:leagueConfig.market.repairCreditGrant,forfaitOn:true,liberaAttivi:false};
+const favNames=new Set(["Oyarzabal","Kounde","Upamecano","Cubarsí","Stones"]);
+
+/* ===== V5.8 — layer decisionale: riparazione, qualità dato, preferiti, scambi portieri ===== */
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function dataQuality(p){
+  const hasProd=!!PROD[p.name], br=bonusReale(p);
+  if((p.role==="A"||p.role==="C")&&br!=null)return {level:"real",label:"dato reale",cls:"dq-real",note:"produzione bonus letta da dati reali"};
+  if(p.role==="D")return {level:"legacy",label:"stima modello",cls:"dq-legacy",note:"valore stimato da quota, rating e solidità: usalo con prudenza"};
+  if(p.role==="P")return {level:hasProd?"hybrid":"legacy",label:"stima modello",cls:"dq-legacy",note:"portieri stimati: in questa lega valgono soprattutto per non prendere 0"};
+  return {level:"proxy",label:"dato debole",cls:"dq-low",note:"mancano dati bonus completi: il valore è una stima larga"};
+}
+function specialMaxBid(p){
+  if(!p||p.status!==0||elim[p.nat])return 0;
+  const rem=effBudget()-spent();
+  const needAfter={};for(const r of["P","D","C","A"])needAfter[r]=Math.max(0,ROLES[r].need-ownedInRole(r).length-(p.role===r?1:0));
+  let reserve=0;
+  for(const r of["P","D","C","A"]){
+    const pool=players.filter(x=>x.status===0&&x.id!==p.id&&x.role===r&&!elim[x.nat]&&classOf(x)!=="trap").sort((a,b)=>fairValue(a)-fairValue(b));
+    const take=pool.slice(0,needAfter[r]);
+    reserve+=take.reduce((s,x)=>s+Math.max(1,Math.min(fairValue(x),maxAffordable())),0);
+    if(take.length<needAfter[r])reserve+=needAfter[r]-take.length;
+  }
+  return Math.max(0,Math.floor(rem-reserve));
+}
+function roleNeedWeight(role){
+  const ev=expectedValidStarters("me");
+  const r=ev.roleRisks[role];
+  return {critical:2.0,high:1.6,medium:1.25,low:1.0}[r]||1;
+}
+function koStarterValue(p){
+  const sc=scenarioOf(p), start=sc.availability*sc.pStart;
+  const qf=koProb(p.nat,"quarti"), sf=koProb(p.nat,"semi"), fin=koProb(p.nat,"finale");
+  const survivalCore=0.7*qf+1.15*sf+1.45*fin;
+  const bonus=Math.max(0,bonusExp90(p));
+  const base=start*(6.0+bonus)*survivalCore;
+  const need=roleNeedWeight(p.role);
+  const falseKeeper=(p.role==="P"&&players.some(q=>q.status===1&&q.role==="P"&&q.nat===p.nat));
+  const sameNatCrowd=players.filter(q=>q.status===1&&q.nat===p.nat).length;
+  const natPenalty=falseKeeper?0.15:(sameNatCrowd>=softCap(p.nat)?0.72:1);
+  const hedge=pathHedgeMultiplier(p.nat);
+  return {score:Math.round(base*need*natPenalty*hedge.mul*10)/10,qf,sf,fin,start,bonus,need,natPenalty,hedge:falseKeeper?{mul:1,label:""}:hedge,falseKeeper,source:koProbSource()};
+}
+function repairNeedSummary(){
+  const rows=["P","D","C","A"].map(r=>({r,need:Math.max(0,ROLES[r].need-ownedInRole(r).length)}));
+  const open=rows.filter(x=>x.need>0);
+  return {rows,open,label:open.length?open.map(x=>`${x.need}${x.r}`).join(" + "):"rosa completa"};
+}
+function v58TopTargets(role,limit=5){
+  return players.filter(p=>p.status===0&&(!role||p.role===role)&&!elim[p.nat]&&classOf(p)!=="trap")
+    .map(p=>({p,rp:repairProfile(p),dq:dataQuality(p),ko:koStarterValue(p)}))
+    .sort((a,b)=>{const ar=a.rp.status==="auction_target"?1:0,br=b.rp.status==="auction_target"?1:0;if(ar!==br)return br-ar;if(a.ko.score!==b.ko.score)return b.ko.score-a.ko.score;return fairValue(b.p)-fairValue(a.p);})
+    .slice(0,limit);
+}
+function tradeTargets(limit=6){
+  return players.filter(p=>p.status===2&&!elim[p.nat]).map(p=>({p,rp:repairProfile(p),dq:dataQuality(p),ko:koStarterValue(p),owner:opps.find(o=>o.id===p.owner)}))
+    .filter(x=>x.ko.score>0)
+    .sort((a,b)=>b.ko.score-a.ko.score)
+    .slice(0,limit);
+}
+function normalizeRole(r){const x=String(r||"").trim().toUpperCase();if(["P","D","C","A"].includes(x))return x;return {PORTIERE:"P",PORTIERI:"P",GOALKEEPER:"P",GK:"P",DIFENSORE:"D",DIFENSORI:"D",DEF:"D",CENTROCAMPISTA:"C",CENTROCAMPISTI:"C",MID:"C",ATTACCANTE:"A",ATTACCANTI:"A",FWD:"A"}[x]||null;}
+function normalizeFreePlayer(it){
+  const name=String(it.name||it.giocatore||it.player||"").trim();
+  const role=normalizeRole(it.role||it.ruolo);
+  const nat=String(it.nat||it.nazione||it.team||"").trim().toLowerCase();
+  if(!name||!role||!NAT[nat])return null;
+  const q=Number(it.q??it.quotazione??it.price??0);
+  const marker=String(it.marker||it.status||it.titolarita||"").trim().toUpperCase();
+  const source=it.source||"free-list";
+  const confidence=it.confidence||"bassa";
+  return {name,role,nat,q:Number.isFinite(q)?q:0,marker,source,confidence,note:it.note||"",focus:!!it.focus};
+}
+function freePlayerStart(fp){
+  if(fp.marker==="T")return 1;
+  if(fp.marker==="S")return 0.35;
+  if(fp.marker==="I")return 0;
+  return 0.55;
+}
+function externalFreeTargets(limit=10){
+  const seen=new Set();
+  return (liveData.freePlayers||[]).map(normalizeFreePlayer).filter(Boolean)
+    .filter(fp=>!elim[fp.nat])
+    .filter(fp=>{const k=fp.name.toLowerCase()+"|"+fp.role+"|"+fp.nat;if(seen.has(k))return false;seen.add(k);return true;})
+    .filter(fp=>{
+      const p=players.find(x=>x.name.toLowerCase()===fp.name.toLowerCase());
+      return !p || p.status===0;
+    })
+    .map(fp=>{
+      const p=players.find(x=>x.name.toLowerCase()===fp.name.toLowerCase());
+      if(p){const dq=dataQuality(p),ko=koStarterValue(p);if(fp.focus)ko.score=Math.round(ko.score*1.12*10)/10;return {fp,p,matched:true,dq,ko,engine:true};}
+      const qf=koProb(fp.nat,"quarti"),sf=koProb(fp.nat,"semi"),fin=koProb(fp.nat,"finale");
+      const survivalCore=0.7*qf+1.15*sf+1.45*fin;
+      const start=freePlayerStart(fp);
+      const need=roleNeedWeight(fp.role);
+      const falseKeeper=(fp.role==="P"&&players.some(q=>q.status===1&&q.role==="P"&&q.nat===fp.nat));
+      const qSignal=Math.max(3,Math.min(24,fp.q||6))/10;
+      const natPenalty=falseKeeper?0.15:1;
+      const hedge=pathHedgeMultiplier(fp.nat);
+      const focusMul=fp.focus?1.12:1;
+      const score=Math.round(start*survivalCore*need*qSignal*natPenalty*hedge.mul*focusMul*10)/10;
+      return {fp,p:null,matched:false,engine:false,dq:{label:"dati incompleti",note:"preso da lista liberi: mancano dati bonus reali nel motore"},ko:{score,qf,sf,fin,start,need,natPenalty,hedge:falseKeeper?{mul:1,label:""}:hedge,falseKeeper,source:koProbSource()}};
+    })
+    .sort((a,b)=>{if(a.ko.falseKeeper!==b.ko.falseKeeper)return a.ko.falseKeeper?1:-1;if(a.ko.score!==b.ko.score)return b.ko.score-a.ko.score;return (b.fp.q||0)-(a.fp.q||0);})
+    .slice(0,limit);
+}
+function roleAuctionField(role){
+  const rows=[];
+  if(liveNeed(role)>0)rows.push({id:"me",name:"Borrcellona",need:liveNeed(role),rem:effBudget()-spent(),me:true});
+  opps.forEach(o=>{const need=Math.max(0,ROLES[role].need-oppRole(o.id,role));if(need>0)rows.push({id:o.id,name:o.name,need,rem:oppRem(o.id),me:false});});
+  return rows.sort((a,b)=>b.need-a.need||b.rem-a.rem);
+}
+function strategicFreePool(role=null){
+  return externalFreeTargets(500).filter(t=>(!role||t.fp.role===role)&&!elim[t.fp.nat]);
+}
+function openingBidBand(t,rank=0){
+  const role=t.p?t.p.role:t.fp.role,hard=Math.max(0,effBudget()-spent()-(rosterSlots()-totalOwned()-1));
+  const q=t.p?t.p.q:t.fp.q||0,score=t.ko.score||0;
+  let lo=1,hi=3;
+  if(role==="P"){lo=score>=0.55?3:1;hi=score>=0.55?8:4;}
+  else if(role==="D"){lo=score>=0.7?6:3;hi=score>=0.9?18:10;}
+  else if(role==="C"){lo=score>=1.1?10:5;hi=score>=1.4?28:16;}
+  else {lo=score>=1.1?10:5;hi=score>=1.4?32:18;}
+  if(t.fp.focus){lo=Math.max(lo,Math.round(q*0.6));hi=Math.max(hi,Math.round(q*1.1));}
+  if(rank>=2)hi=Math.min(hi,Math.max(lo,q||hi));
+  hi=Math.min(hi,hard);lo=Math.min(lo,hi);
+  return {lo,hi,label:hi<=0?"non solvibile":lo===hi?`${hi}`:`${lo}-${hi}`};
+}
+function targetLadder(role,limit=4){
+  return strategicFreePool(role).filter(t=>!t.ko.falseKeeper).sort((a,b)=>{
+    if(!!b.fp.focus!==!!a.fp.focus)return b.fp.focus?1:-1;
+    if(b.ko.score!==a.ko.score)return b.ko.score-a.ko.score;
+    return (b.fp.q||0)-(a.fp.q||0);
+  }).slice(0,limit).map((t,i)=>({...t,bid:openingBidBand(t,i),rank:i+1}));
+}
+function opponentDemandFor(t){
+  const role=t.p?t.p.role:t.fp.role;
+  return roleAuctionField(role).filter(x=>!x.me&&x.rem>=Math.max(1,Math.min(12,t.fp.q||1)));
+}
+function baitCalls(role=null,limit=8){
+  return strategicFreePool(role).map(t=>{
+    const demand=opponentDemandFor(t),myNeed=liveNeed(t.fp.role),q=t.fp.q||0;
+    const ownBad=(myNeed<=0?1.0:0)+(t.ko.falseKeeper?1.0:0)+(t.ko.score<0.45?0.7:0)+(t.fp.focus?-1.2:0);
+    const hype=Math.min(2.5,q/10)+(t.engine?0.4:0);
+    const score=demand.length*1.5+hype+ownBad;
+    return {...t,demand,baitScore:Math.round(score*10)/10};
+  }).filter(t=>t.demand.length>=2&&t.baitScore>=3.2&&!t.fp.focus)
+    .sort((a,b)=>b.baitScore-a.baitScore||(b.fp.q||0)-(a.fp.q||0))
+    .slice(0,limit);
+}
+function avoidList(limit=10){
+  return strategicFreePool(null).map(t=>{
+    const role=t.fp.role,q=t.fp.q||0,myNeed=liveNeed(role),sameNat=players.filter(p=>p.status===1&&p.nat===t.fp.nat).length;
+    const reason=[];
+    if(myNeed<=0)reason.push("ruolo gia' coperto");
+    if(t.ko.falseKeeper)reason.push("falsa copertura portiere");
+    if(sameNat>=softCap(t.fp.nat))reason.push("troppa esposizione "+t.fp.nat);
+    if(t.ko.score<0.45)reason.push("poco valore KO per noi");
+    if(q>=18&&!t.fp.focus)reason.push("nome caro senza bisogno strategico");
+    const avoidScore=reason.length*2+q/10-(t.fp.focus?3:0);
+    return {...t,avoidScore:Math.round(avoidScore*10)/10,reason};
+  }).filter(t=>t.reason.length&&t.avoidScore>=2.5)
+    .sort((a,b)=>b.avoidScore-a.avoidScore||(b.fp.q||0)-(a.fp.q||0))
+    .slice(0,limit);
+}
+function callPlan(role){
+  const field=roleAuctionField(role),ladder=targetLadder(role,4),bait=baitCalls(role,4);
+  const pickForPos=pos=>ladder[Math.min(pos-1,ladder.length-1)]||null;
+  return {role,field,ladder,bait,ifCall:{first:pickForPos(1),second:pickForPos(2),third:pickForPos(3)}};
+}
+function keeperTradeRows(){
+  return opps.map(o=>{
+    const ps=players.filter(p=>p.status===2&&p.owner===o.id&&p.role==="P").sort((a,b)=>fairValue(b)-fairValue(a));
+    return {opp:o,ps};
+  }).filter(x=>x.ps.length>=2).sort((a,b)=>b.ps.length-a.ps.length);
+}
+function livePreview(obj){
+  const known=["meta","eliminate","classifiche","risultati","prossime","sedicesimi","infortuni","forma","players","freePlayers","pathConflicts","koOdds","survival"];
+  const unknown=Object.keys(obj||{}).filter(k=>!known.includes(k));
+  const parts=[];
+  if(obj.meta)parts.push(`meta ${obj.meta.updatedAt||obj.meta.aggiornato||obj.meta.source||"ok"}`);
+  if(Array.isArray(obj.eliminate))parts.push(`${obj.eliminate.filter(c=>NAT[c]).length}/${obj.eliminate.length} eliminate valide`);
+  if(Array.isArray(obj.prossime))parts.push(`${obj.prossime.length} prossime`);
+  if(Array.isArray(obj.risultati))parts.push(`${obj.risultati.length} risultati`);
+  if(Array.isArray(obj.sedicesimi))parts.push(`${obj.sedicesimi.length} sedicesimi`);
+  if(Array.isArray(obj.infortuni))parts.push(`${obj.infortuni.length} infortuni`);
+  if(Array.isArray(obj.forma))parts.push(`${obj.forma.length} forma`);
+  if(Array.isArray(obj.players)){
+    const found=obj.players.filter(it=>players.some(p=>p.name===(it.name||it.giocatore))).length;
+    parts.push(`${found}/${obj.players.length} scenari giocatore riconosciuti`);
+  }
+  if(Array.isArray(obj.freePlayers)){
+    const valid=obj.freePlayers.map(normalizeFreePlayer).filter(Boolean);
+    const alive=valid.filter(fp=>!elim[fp.nat]);
+    parts.push(`${valid.length}/${obj.freePlayers.length} liberi validi (${alive.length} vivi prima dell'import)`);
+  }
+  if(Array.isArray(obj.pathConflicts))parts.push(`${obj.pathConflicts.filter(x=>x&&NAT[x.a]&&NAT[x.b]).length}/${obj.pathConflicts.length} collisioni tabellone valide`);
+  const ko=obj.koOdds||obj.survival;
+  if(ko&&typeof ko==="object")parts.push(`${Object.keys(ko).filter(c=>NAT[c]).length} nazioni con probabilità KO`);
+  if(unknown.length)parts.push(`campi ignorati: ${unknown.join(", ")}`);
+  return parts.join(" · ")||"nessuna sezione riconosciuta";
+}
+function renderV58Panel(){
+  const el=document.getElementById("v58Panel");if(!el)return;
+  const need=repairNeedSummary(), rem=effBudget()-spent();
+  const pT=v58TopTargets("P",3),dT=v58TopTargets("D",5),allT=v58TopTargets(null,5);
+  const swT=tradeTargets(5);
+  const freeT=externalFreeTargets(8);
+  const plans=["P","D","C","A"].map(callPlan),avoid=avoidList(8);
+  const dqMine=players.filter(p=>p.status===1).reduce((a,p)=>{const q=dataQuality(p).level;a[q]=(a[q]||0)+1;return a;},{});
+  const fav=[...favNames].map(n=>players.find(p=>p.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
+  const tr=keeperTradeRows();
+  const roleTxt={P:"portiere",D:"difensore",C:"centrocampista",A:"attaccante"};
+  const bandTxt=b=>({low:"bassa",medium:"media",high:"alta","all-in candidate":"molto alta"}[b]||b||"—");
+  const actionTxt=t=>t.p.role==="P"?"compra solo se titolare o prendi via scambio":t.p.role==="D"?"priorità vera: titolare vivo e affidabile":t.p.role==="A"||t.p.role==="C"?"valuta solo se alza bonus o copre un buco":"valuta";
+  const row=t=>`<div class="v58-row"><span><b>${t.p.name}</b> <span class="nat">${t.p.nat}</span><br><span class="why">${t.ko.falseKeeper?"falsa copertura: stesso portiere/nazione":actionTxt(t)}</span><br><span class="mut">${roleTxt[t.p.role]} · QF ${Math.round(t.ko.qf*100)}% · SF ${Math.round(t.ko.sf*100)}% · KO value ${t.ko.score} · ${t.dq.label}</span></span><span class="v58-badge" style="border-color:var(--gold);color:var(--gold)">${bandTxt(t.rp.maxRepairBid.band)}</span></div>`;
+  const freeRow=t=>{
+    const name=t.p?t.p.name:t.fp.name,role=t.p?t.p.role:t.fp.role,nat=t.p?t.p.nat:t.fp.nat;
+    const q=t.p?t.p.q:t.fp.q,marker=t.fp.marker||"?",src=t.fp.source||"free-list";
+    const badge=t.engine?"nel motore":"solo lista";
+    const hedge=t.ko.hedge&&t.ko.hedge.label?` · ${t.ko.hedge.label}`:"";
+    const why=t.ko.falseKeeper?"falsa copertura: stesso portiere/nazione":(marker==="T"?"indicato titolare nella lista":"titolarità non piena o non verificata")+hedge;
+    return `<div class="v58-row"><span><b>${name}</b> <span class="nat">${nat}</span><br><span class="why">${why}</span><br><span class="mut">${roleTxt[role]} · q ${q||"?"} · ${marker||"?"} · QF ${Math.round(t.ko.qf*100)}% · SF ${Math.round(t.ko.sf*100)}% · KO value ${t.ko.score} · ${t.dq.label} · fonte ${esc(src)}</span></span><span class="v58-badge" style="border-color:${t.engine?"var(--green)":"var(--amber)"};color:${t.engine?"var(--green)":"var(--amber)"}">${badge}</span></div>`;
+  };
+  const tinyTarget=t=>t?`<b>${t.fp.name}</b> <span class="nat">${t.fp.nat}</span> <span class="mut">max ${t.bid.label} · KO ${t.ko.score}</span>`:`<span class="mut">nessun nome pulito</span>`;
+  const planRow=p=>{
+    const field=p.field.map(x=>`${x.me?"tu":x.name}: ${x.need}`).join(" · ")||"nessun chiamante";
+    const baitTxt=p.bait.length?p.bait.map(t=>`${t.fp.name} ${t.fp.nat}`).join(", "):"nessuna esca pulita";
+    return `<div class="v58-row"><span><b>${roleTxt[p.role]}</b><br><span class="mut">chiamanti: ${field}</span><br><span class="why">se chiami 1°: ${tinyTarget(p.ifCall.first)}</span><br><span class="why">se chiami 2°: ${tinyTarget(p.ifCall.second)}</span><br><span class="why">se chiami 3°: ${tinyTarget(p.ifCall.third)}</span><br><span class="mut">esche: ${baitTxt}</span></span></div>`;
+  };
+  const avoidRow=t=>`<div class="v58-row"><span><b>${t.fp.name}</b> <span class="nat">${t.fp.nat}</span><br><span class="why">Non entrare: ${t.reason.join(" · ")}</span><br><span class="mut">${roleTxt[t.fp.role]} · q ${t.fp.q||"?"} · KO ${t.ko.score} · se lo chiamano altri, lascia correre salvo prezzo ridicolo.</span></span><span class="v58-badge" style="border-color:var(--red);color:var(--red)">skip</span></div>`;
+  const keeperPlan=tr.length?tr.map(x=>`${x.opp.name}: ${x.ps.map(p=>p.name).join(", ")}`).join(" · "):"nessun surplus evidente nei dati caricati";
+  const mainAction=need.open.length?`Completa ${need.label}. Priorità dinamica: ruolo scoperto + nazionale viva + titolarità + copertura ai quarti/semi.`:"Rosa completa: usa la riparazione solo per upgrade reali.";
+  let h=`<div class="v58">`;
+  h+=`<div class="v58-card main"><h3>Cosa fare adesso</h3><div class="v58-kpis"><span class="v58-kpi"><b>${need.label}</b>slot da riempire</span><span class="v58-kpi"><b>${rem}</b>crediti disponibili</span><span class="v58-kpi"><b>${cfg.forfaitOn?"attivo":"spento"}</b>+${cfg.forfait} riparazione</span><span class="v58-kpi"><b>${koProbSource()}</b>probabilità KO</span></div><div class="v58-list"><div class="v58-row"><span><b>${mainAction}</b><br><span class="mut">Dai quarti in poi lo zero da buco può valere più di un bonus. Il ranking qui pesa titolarità, QF/SF e bisogno ruolo.</span></span></div><div class="v58-row"><span><b>Piano portiere</b><br><span class="mut">Il secondo portiere della stessa nazionale non è copertura. Se non trovi un titolare libero, guarda surplus avversari: ${keeperPlan}.</span></span></div></div>`;
+  if(!cfg.forfaitOn)h+=`<div class="v58-actions"><button data-v58-forfait="1">Attiva +${cfg.forfait} riparazione</button><span class="mut">Da usare prima della riparazione: aggiorna budget e tetti.</span></div>`;
+  h+=`</div>`;
+  h+=`<div class="v58-card"><h3>Compra alla riparazione</h3><div class="v58-list">${allT.map(row).join("")||'<div class="v58-row"><span class="mut">Nessun target libero vivo nel dataset curato.</span></div>'}</div><div class="v58-row"><span class="mut">Nota: la lista non è il listone completo Fantaclub. È il dataset curato dell'app; per vedere tutti i liberi serve importare/integrare la free-list post-gironi.</span></div></div>`;
+  h+=`<div class="v58-card"><h3>Liberi da screenshot</h3><div class="v58-list">${freeT.map(freeRow).join("")||'<div class="v58-row"><span class="mut">Nessuna free-list importata. Carica un JSON con campo freePlayers per far comparire qui i liberi fotografati.</span></div>'}</div><div class="v58-row"><span class="mut">Questa sezione non inventa gol/assist: se il nome non esiste nel motore, usa solo ruolo, quotazione, T/S/I, nazione viva e probabilità KO. Serve a trovare coperture, non a stimare il valore tecnico fine.</span></div></div>`;
+  h+=`<div class="v58-card main"><h3>Piano chiamate</h3><div class="v58-list">${plans.map(planRow).join("")}</div><div class="v58-row"><span class="mut">Se il turno è casuale, ragiona come ultimo. Se chiami prima, usa la prima scelta; se è già andata, scendi alla seconda/terza. Le esche si chiamano solo se accetti il rischio di prenderle al minimo.</span></div></div>`;
+  h+=`<div class="v58-card"><h3>Non entrare</h3><div class="v58-list">${avoid.map(avoidRow).join("")||'<div class="v58-row"><span class="mut">Nessuno skip evidente con i dati caricati.</span></div>'}</div><div class="v58-row"><span class="mut">Questi nomi possono anche essere buoni in assoluto: il punto è che non comprano abbastanza sopravvivenza/slot per Borrcellona.</span></div></div>`;
+  h+=`<div class="v58-card"><h3>Chiedi in scambio</h3><div class="v58-list">${swT.map(t=>`<div class="v58-row"><span><b>${t.p.name}</b> <span class="nat">${t.p.nat}</span> ${t.owner?`<span class="mut">(${t.owner.name})</span>`:""}<br><span class="why">utile se riduce rischio-nazione o copre un buco KO</span><br><span class="mut">${roleTxt[t.p.role]} · QF ${Math.round(t.ko.qf*100)}% · SF ${Math.round(t.ko.sf*100)}% · KO value ${t.ko.score}</span></span><span class="v58-badge" style="border-color:var(--blue);color:var(--blue)">scambio</span></div>`).join("")||'<div class="v58-row"><span class="mut">Nessun profilo avversario utile nei dati caricati.</span></div>'}</div><div class="v58-row"><span class="mut">Non cedere un titolare Francia/Inghilterra/Spagna solo per nome: lo scambio deve aumentare voti validi attesi ai quarti/semi.</span></div></div>`;
+  h+=`<div class="v58-card"><h3>Giocatori da spingere</h3><div class="v58-actions"><input id="v58FavInput" placeholder="Nome esatto"><button data-v58-addfav="1">Aggiungi</button></div><div class="v58-list">`;
+  h+=fav.length?fav.map(p=>`<div class="v58-row"><span><b>${p.name}</b> <span class="nat">${p.nat}</span><br><span class="mut">equo ${fairValue(p)} · max normale ${maxBid(p)||"—"} · puoi arrivare fino a ${specialMaxBid(p)||"—"} senza rompere la rosa</span></span><button class="v58-btn" data-v58-rmfav="${esc(p.name)}">×</button></div>`).join(""):`<div class="v58-row"><span class="mut">Aggiungi qui i nomi per cui accetti di strapagare, ma solo entro un tetto solvibile.</span></div>`;
+  h+=`</div></div>`;
+  h+=`<div class="v58-card"><h3>Affidabilità dei numeri</h3><div class="v58-kpis"><span class="v58-kpi"><b>${dqMine.real||0}</b>dato reale</span><span class="v58-kpi"><b>${(dqMine.legacy||0)+(dqMine.hybrid||0)}</b>stima modello</span><span class="v58-kpi"><b>${dqMine.proxy||0}</b>dato debole</span></div><div class="v58-list"><div class="v58-row"><span><b>Legenda</b><br><span class="mut">Dato reale = produzione bonus misurata. Stima modello = valore da quota/rating/ruolo. Dato debole = informazione incompleta.</span></span></div>${players.filter(p=>p.status===1&&(dataQuality(p).level!=="real")).slice(0,5).map(p=>`<div class="v58-row"><span><b>${p.name}</b> <span class="nat">${p.nat}</span><br><span class="mut">${dataQuality(p).note}</span></span><span class="${dataQuality(p).cls}">${dataQuality(p).label}</span></div>`).join("")}</div></div>`;
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+/* ===== V3.0 — modalità recupero: turno + stato vivo/eliminato + field-thinning ===== */
+// turno del torneo: guida l'esponente di fase (PHI) e la rinormalizzazione EG (LAMBDA).
+let turno="iniziale"; // iniziale | sedicesimi | ottavi | quarti | semi | finale
+const TURNI=leagueConfig.knockout.TURNI;
+const TURNO_LAB={iniziale:"Iniziale",sedicesimi:"Sedicesimi",ottavi:"Ottavi",quarti:"Quarti",semi:"Semifinali",finale:"Finale"};
+// elim[natCode]=true => nazione eliminata. Mai riassegnato il binding: si mutano le chiavi (ref stabile per test/persistenza).
+let elim={};
+// --- PARAMETRI TUNABILI DEL MODELLO (documentati, in cima così si toccano senza cercare) ---
+// BETA: forza dell'effetto-quota (softmax sulla forza=EG dei vivi). Piu' alto => i favoriti pesano di piu'.
+const BETA=3;
+// LAMBDA[turno]: intensita' del field-thinning, crescente Ottavi->Finale. 0 = nessuna rinormalizzazione (Iniziale).
+const LAMBDA=leagueConfig.knockout.LAMBDA;
+// PHI[turno]: esponente di fase di egMult. Iniziale=1.5 IDENTICO alla V2.2 (phase "init"); sale coi turni.
+const PHI=leagueConfig.knockout.PHI;
+// EG_FLOOR_ALIVE: clamp minimo dell'egEff di un sopravvissuto, cosi' un debole vivo non degenera (la morte e' gestita a parte).
+const EG_FLOOR_ALIVE=leagueConfig.knockout.egFloorAlive;
+// Gironi del sorteggio 2026 (verificati col sorteggio ufficiale). Partizione esatta delle 48 di NAT.
+const GIRONI={
+A:["mes","cor","sud","cec"],B:["can","svi","qat","bos"],C:["bra","mar","hai","sco"],
+D:["sta","aus","par","tur"],E:["ger","ecu","cos","cur"],F:["ola","gia","tun","sve"],
+G:["bel","egi","irn","nuo"],H:["spa","uru","ara","cap"],I:["fra","sen","irq","nor"],
+J:["arg","alg","unb","gio"],K:["por","col","uzb","con"],L:["ing","cro","gha","pan"]
+};
+function aliveNats(){return Object.keys(NAT).filter(n=>!elim[n]);}
+// natShare: % favorita = unica fonte di verita' (alimenta sia il pannello sia egEff). forza = NAT[nat][1] = EG.
+function natShare(nat){if(elim[nat])return 0;const A=aliveNats();if(!A.length)return 0;const Z=A.reduce((s,x)=>s+Math.pow(NAT[x][1],BETA),0);return Z>0?Math.pow(NAT[nat][1],BETA)/Z:0;}
+// egEff: EG rinormalizzato sul campo dei vivi. Iniziale => BYPASS esatto (egEff===EG, per costruzione).
+function egEff(nat){
+  if(turno==="iniziale")return NAT[nat][1];
+  const A=aliveNats(),n=A.length,lam=LAMBDA[turno]||0;
+  if(n<=1||lam===0)return NAT[nat][1];
+  const eff=NAT[nat][1]*(1+lam*(natShare(nat)*n-1));
+  return Math.max(EG_FLOOR_ALIVE,eff);
+}
+// bandierine emoji per il pannello nazioni (code->ISO2; Inghilterra/Scozia con tag-sequence)
+const NAT_ISO={spa:"ES",fra:"FR",arg:"AR",por:"PT",bra:"BR",ger:"DE",ola:"NL",mar:"MA",col:"CO",cro:"HR",bel:"BE",uru:"UY",svi:"CH",gia:"JP",mes:"MX",sta:"US",sen:"SN",ecu:"EC",cor:"KR",nor:"NO",cec:"CZ",unb:"AT",cos:"CI",can:"CA",tur:"TR",sve:"SE",alg:"DZ",aus:"AU",gha:"GH",egi:"EG",irn:"IR",tun:"TN",par:"PY",sud:"ZA",ara:"SA",qat:"QA",uzb:"UZ",bos:"BA",con:"CD",irq:"IQ",gio:"JO",pan:"PA",nuo:"NZ",hai:"HT",cap:"CV",cur:"CW"};
+function flag(nat){if(nat==="ing")return"\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}";if(nat==="sco")return"\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}";const iso=NAT_ISO[nat];if(!iso)return"\u{1F3F3}";return String.fromCodePoint(...[...iso].map(c=>0x1F1E6+c.charCodeAt(0)-65));}
+
+function ratingMult(p){ if(!p.rating) return 1; return Math.min(1.16,Math.max(0.86,1+(p.rating-7.0)*0.18)); }
+function egMult(nat){const eg=egEff(nat);let exp=PHI[turno]||1.5;let m=Math.pow(eg/4.3,exp);if(cfg.credit)m=1+(m-1)*0.45;if(cfg.repair)m=1+(m-1)*0.75;return Math.min(1.85,Math.max(0.5,m));}
+// ===== V5.6 — indicatori strutturali per la riparazione. EURISTICI e DICHIARATI (stima del nostro modello, non probabilità reali). =====
+const KO_ROUNDS=["sedicesimi","ottavi","quarti","semi","finale"];
+function turnoIdx(t){return TURNI.indexOf(t||turno);}
+function natStrength(nat){return Math.pow(NAT[nat][1],BETA);}        // stessa base di natShare (EG^BETA)
+function pAdvanceOneRound(nat){ // P(passa un turno) ~ Bradley-Terry vs forza media dei vivi. EURISTICO.
+  if(elim[nat])return 0; const A=aliveNats(); if(A.length<=1)return 1;
+  const s=natStrength(nat),opp=A.filter(x=>x!==nat).map(natStrength),mean=opp.reduce((a,b)=>a+b,0)/opp.length;
+  return mean>0?s/(s+mean):1;
+}
+function advancesToRound(target){ const entry=Math.max(turnoIdx(turno),TURNI.indexOf("sedicesimi")); return Math.max(0,turnoIdx(target)-entry); }
+function pNationAliveAt(nat,target){ if(elim[nat])return 0; return Math.pow(pAdvanceOneRound(nat),advancesToRound(target)); }
+function koProb(nat,stage){
+  const ko=liveData.koOdds||liveData.survival||{};
+  const rec=ko[nat]||{};
+  const keys={quarti:["qf","quarter","quarti"],semi:["sf","semi","semifinal"],finale:["final","finale"],campione:["winner","champion","campione"]}[stage]||[stage];
+  for(const k of keys){if(typeof rec[k]==="number")return Math.max(0,Math.min(1,rec[k]));}
+  return pNationAliveAt(nat,stage);
+}
+function koProbSource(){const ko=liveData.koOdds||liveData.survival;return ko&&Object.keys(ko).length?"quote/import":"stima modello";}
+function pathConflictFor(nat){
+  return (liveData.pathConflicts||[]).filter(x=>x&&((x.a===nat&&NAT[x.b])||(x.b===nat&&NAT[x.a]))).map(x=>({other:x.a===nat?x.b:x.a,round:x.round||"KO",note:x.note||""}));
+}
+function pathHedgeMultiplier(nat){
+  const conflicts=pathConflictFor(nat), owned=players.filter(p=>p.status===1&&!elim[p.nat]);
+  if(!conflicts.length||!owned.length)return {mul:1,label:""};
+  let best=1,label="";
+  for(const c of conflicts){
+    const cnt=owned.filter(p=>p.nat===c.other).length;
+    if(cnt>=2&&best<1.12){best=1.12;label=`copertura se ${nat}/${c.other} si incrociano (${c.round})`;}
+    else if(cnt===1&&best<1.06){best=1.06;label=`piccolo hedge vs ${c.other} (${c.round})`;}
+  }
+  return {mul:best,label};
+}
+function expectedRemainingMatches(nat){ // somma sopravvivenza sui round KO da R32 in poi. NB: ignora le partite dei gironi (limite dichiarato).
+  if(elim[nat])return 0; const entry=Math.max(turnoIdx(turno),TURNI.indexOf("sedicesimi")); let s=0;
+  for(const r of KO_ROUNDS){ if(turnoIdx(r)>=entry)s+=koProb(nat,r); } return Math.round(s*10)/10;
+}
+function nextTurno(){ return TURNI[Math.min(turnoIdx(turno)+1,TURNI.length-1)]; }
+function pStartVote(p){ const sc=scenarioOf(p); return sc.availability*sc.pStart; } // "titolare valido": parte e prende voto
+function isEligibleForAuction(p){ return p.status===0 && !p.owner && !elim[p.nat]; } // libero E nazione viva (vs isAvailableForAuction che è solo ownership)
+function keeperCoverageRisk(){
+  const gks=players.filter(p=>p.status===1&&p.role==="P");
+  const starters=gks.filter(p=>pStartVote(p)>=0.5);
+  const aliveStarters=starters.filter(p=>!elim[p.nat]);
+  const nations=[...new Set(aliveStarters.map(p=>p.nat))];
+  const live=gks.some(p=>scenarioOf(p).source==="live");
+  const cov=t=>Math.round(gks.reduce((s,p)=>s+pStartVote(p)*koProb(p.nat,t),0)*100)/100;
+  const covNext=cov(nextTurno()),covQ=cov("quarti"),covS=cov("semi");
+  let level,reason;
+  if(aliveStarters.length===0){ level="critico"; reason="nessun portiere titolare vivo: schieri SV in porta"; }
+  else if(aliveStarters.length===1){ level=covQ<0.45?"critico":"alto"; reason="un solo portiere titolare ("+aliveStarters[0].nat+"): se la sua nazionale esce resti senza"; }
+  else if(nations.length>=2){ level="basso"; reason=aliveStarters.length+" portieri titolari su "+nations.length+" nazioni diverse"; }
+  else { level="alto"; reason="più portieri della stessa nazionale: falsa copertura se il titolare non gioca o la nazionale esce"; }
+  return {nGK:gks.length,nStarter:starters.length,nationsCovered:nations.length,singlePoint:aliveStarters.length<=1,
+    coverage:{nextRound:covNext,quarter:covQ,semi:covS},
+    expRemainingMatches:Object.fromEntries(gks.map(p=>[p.name,expectedRemainingMatches(p.nat)])),
+    level,reason,confidence:live?"media (live)":"bassa (da titolarità di base)"};
+}
+function expectedValidStarters(who){ // who: undefined/'me' = io; oppure id avversario
+  const mine=(who==null||who==="me");
+  const own=players.filter(p=> mine ? p.status===1 : (p.status===2&&p.owner===who));
+  const evsAt=t=>Math.round(own.reduce((s,p)=>s+pStartVote(p)*koProb(p.nat,t),0)*10)/10;
+  const raw={nextRound:evsAt(nextTurno()),quarter:evsAt("quarti"),semi:evsAt("semi"),final:evsAt("finale")};
+  const XI=11,playableXI={},xiShortfall={};
+  for(const k in raw){ playableXI[k]=Math.min(XI,raw[k]); xiShortfall[k]=Math.max(0,Math.round((XI-raw[k])*10)/10); }
+  // raw = titolari-caliber validi ancora vivi (profondità, può superare 11). playableXI = slot dell'XI coperti. xiShortfall = quanto manca a 11.
+  // NB: raw conta SOLO i titolari (pStartVote=availability×pStart); NON include i sub forti che prendono voto da subentrati (→ V5.7/repairValue).
+  const rrHorizon=TURNI[Math.max(turnoIdx("quarti"),turnoIdx(nextTurno()))]; // orizzonte rischio-ruolo: quarti o oltre (dichiarato)
+  const STARTERS_BY_ROLE={P:1,D:4,C:4,A:2};
+  const roleRisks={};
+  for(const r of["P","D","C","A"]){
+    const have=own.filter(p=>p.role===r).reduce((s,p)=>s+pStartVote(p)*koProb(p.nat,rrHorizon),0);
+    const ratio=STARTERS_BY_ROLE[r]>0?have/STARTERS_BY_ROLE[r]:1;
+    roleRisks[r]=ratio>=1?"low":ratio>=0.7?"medium":ratio>=0.4?"high":"critical";
+  }
+  const exp={}; own.forEach(p=>{exp[p.nat]=(exp[p.nat]||0)+1;});
+  const nationExposure=Object.keys(exp).map(n=>({nat:n,count:exp[n],cap:softCap(n),over:exp[n]>softCap(n),alive:!elim[n]})).sort((a,b)=>b.count-a.count);
+  const live=own.some(p=>scenarioOf(p).source==="live");
+  return {who:mine?"me":who,horizon:rrHorizon,raw,playableXI,xiShortfall,roleRisks,nationExposure,
+    confidence: mine?(live?"media (live)":"bassa (da titolarità di base)"):"bassa (rose avversari spesso incomplete)"};
+}
+// ===== V5.7 — repairProfile: layer decisionale per la riparazione. Base = xPts×pStartCorr×availMul×partite-residue (sopravvivenza UNA volta, availability UNA volta). needBoost ordinale additivo. =====
+const NEED_POINTS={low:0,medium:2,high:5,critical:9};
+function pStartFromSecur(secur){ return USAGE_DEF[usageFromSecur(secur)].pStart; }
+function keeperNeedLevel(p){ // alto SOLO se p è portiere titolare vivo su nazione DIVERSA dai miei (diversificazione)
+  const kc=keeperCoverageRisk(); if(kc.level==='basso')return 'low';
+  const sc=scenarioOf(p);
+  if(elim[p.nat]||sc.availability<=0||sc.pStart<0.5)return 'low';
+  const myGKnats=new Set(players.filter(q=>q.status===1&&q.role==='P'&&!elim[q.nat]&&scenarioOf(q).pStart>=0.5).map(q=>q.nat));
+  if(myGKnats.has(p.nat))return 'low';
+  return kc.level==='critico'?'critical':kc.level==='alto'?'high':kc.level==='medio'?'medium':'low';
+}
+function repairBidBand(repairScore,status,level){
+  if(status==='trade_only'||status==='avoid'||status==='release_candidate'||status==='sell_candidate'||status==='keep') return {band:'—',note:status};
+  const credits=Math.max(0,effBudget()-spent()),slotsLeft=Math.max(1,rosterSlots()-totalOwned());
+  const hardCap=Math.max(0,credits-(slotsLeft-1));
+  let band = repairScore>=18?'all-in candidate':repairScore>=11?'high':repairScore>=5?'medium':'low';
+  const RANGE={low:[3,9],medium:[10,18],high:[20,32],'all-in candidate':[35,60]};
+  let lo=Math.min(RANGE[band][0],hardCap), hi=Math.min(RANGE[band][1],hardCap);
+  return {band, range:[lo,hi], solvencyCap:hardCap, note:'fascia (stima, non numero finto)'};
+}
+function repairProfile(p){
+  const sc=scenarioOf(p), elimNat=!!elim[p.nat];
+  // base value (formula corretta: availability UNA volta in availMul; pStartCorr usa sc.pStart NUDO)
+  const perMatch=xPts(p);
+  const pStartCorr=(sc.source!=='default')?Math.max(0,Math.min(1.3, sc.pStart/pStartFromSecur(p.secur))):1;
+  const availMul=sc.availability;
+  const matches=expectedRemainingMatches(p.nat);
+  const baseValue=Math.round(perMatch*pStartCorr*availMul*matches*10)/10;
+  // needBoost (ordinale, additivo, UN segnale per ruolo)
+  const level=(p.role==='P')?keeperNeedLevel(p):expectedValidStarters('me').roleRisks[p.role];
+  const coverFactor=Math.max(0,Math.min(1, sc.pStart*availMul)); // quanto QUESTO giocatore copre davvero lo slot (un cameo non riempie il buco)
+  const needBoost=(!elimNat)?Math.round((NEED_POINTS[level]||0)*coverFactor*10)/10:0;
+  const repairScore=Math.round((baseValue+needBoost)*10)/10;
+  // routing status (deterministico)
+  let status;
+  if(p.status===2) status='trade_only';
+  else if(p.status===1){ if(elimNat)status='release_candidate'; else { const roleTight=(p.role==='P')?(keeperCoverageRisk().level!=='basso'):['high','critical'].includes(expectedValidStarters('me').roleRisks[p.role]); status=(baseValue<3&&!roleTight)?'sell_candidate':'keep'; } }
+  else status = elimNat?'avoid':'auction_target';
+  const band=repairBidBand(repairScore,status,level);
+  const confidence=sc.source==='live'?'media (live)':sc.source==='manuale'?'media (override)':'bassa (da secur)';
+  // warnings
+  const w=[];
+  if(['deep_bench','late_cameo','impact_sub'].includes(sc.usageType)) w.push('uso da subentro/panchina ('+sc.usageType+'): valore da titolare sovrastimato');
+  if(sc.availability===0) w.push('indisponibile (infortunio/squalifica)');
+  else if(sc.availability<1) w.push('dubbio fisico (availMul '+sc.availability+')');
+  if(elimNat) w.push('nazione eliminata: 0 partite residue');
+  if(p.q>=18 && NAT[p.nat][1]<=4.0) w.push('hype/trappola: caro su nazione debole');
+  if(p.status===0 && !elimNat && p.role!=='P' && needBoost===0 && baseValue<4) w.push('riempitivo: né valore alto né buco da coprire');
+  if(sc.source!=='default' && pStartCorr<0.6) w.push('titolarità reale sotto quanto suggerisce la quotazione');
+  // explanation
+  let explanation;
+  if(status==='trade_only') explanation=`Di un avversario: solo target di SCAMBIO, mai asta.`;
+  else if(status==='avoid') explanation=`Nazione eliminata: nessuna partita residua. Evitare.`;
+  else if(status==='release_candidate') explanation=`Tuo ma nazione eliminata = peso morto: candidato a liberare lo slot.`;
+  else if(status==='sell_candidate') explanation=`Valore basso (${baseValue}) e ruolo coperto: valuta la cessione per liberare crediti/slot.`;
+  else if(status==='keep') explanation=`Tienilo: ~${matches} partite residue (${p.nat}), titolare ~${Math.round(sc.pStart*100)}%${needBoost>0?`, copre un buco ${p.role} (${level})`:''}.`;
+  else { const sexy=baseValue>=8?'target reale':needBoost>0?'utile soprattutto per coprire il buco':'riempitivo'; explanation=`Asta (${sexy}): ~${matches} partite residue, titolare ~${Math.round(sc.pStart*100)}%${needBoost>0?`, buco ${p.role} ${level}`:''}. Fascia ${band.band}.`; }
+  return {player:p.name,status,repairScore,repairValue:baseValue,needBoost,maxRepairBid:band,confidence,explanation,warnings:w,
+    diagnostics:{xPts:Math.round(perMatch*10)/10,pStartCorr:Math.round(pStartCorr*100)/100,availMul,expectedRemainingMatches:matches,survivalNext:Math.round(koProb(p.nat,nextTurno())*100)/100,usageType:sc.usageType,roleNeedLevel:level,fairValueRef:fairValue(p)}};
+}
+function defMult(p){if(p.role!=="P"&&p.role!=="D")return 1;const sol=NAT[p.nat][2];let m=1+sol*(cfg.defmod?0.22:0.05);if(p.role==="P"){m*=0.80;if(cfg.malus)m*=(0.92+sol*0.10);}return Math.max(0.55,m);}
+function effRoleAdv(p){return cfg.assist?p.roleAdv:1+(p.roleAdv-1)*0.4;}
+function spMult(p){return p.sp===2?1.20:p.sp===1?1.08:1;}
+function cohMult(p){return 1+(NAT[p.nat][3]-0.55)*0.15;}
+// ===== V4.1 — valore-asta sul modello corretto (bonus reali) per A/C estratti; legacy q-ancorato per il resto =====
+function fairValueLegacy(p){if(elim[p.nat])return 1;let v=p.q*ratingMult(p)*egMult(p.nat)*Math.pow(p.secur,1.25)*spMult(p)*effRoleAdv(p)*defMult(p)*cohMult(p)*(p.inj?0.78:1);return Math.max(1,Math.round(v));}
+function matchupTorneo(p){ // difficolta' MEDIA del girone: forza interna (NAT) vs i 3 avversari del gruppo
+  const grp=Object.values(GIRONI).find(g=>g.includes(p.nat)); if(!grp)return 1;
+  const opps=grp.filter(n=>n!==p.nat); if(!opps.length)return 1;
+  return opps.reduce((s,o)=>s+Math.max(0.85,Math.min(1.18,1+0.06*(NAT[p.nat][1]-NAT[o][1]))),0)/opps.length;
+}
+function indiceTorneo(p){ // valore-torneo in PUNTI: P(gioca) x (voto-base 6 + bonus REALE) x EG x Matchup. null se non valutabile col modello corretto.
+  if(elim[p.nat])return null; const br=bonusReale(p); if(br==null)return null;
+  return Math.pow(p.secur,1.25)*(6.0+br)*egEff(p.nat)*matchupTorneo(p)*(p.inj?0.85:1);
+}
+let SCALE_A=1,SCALE_B=0,CAL_DONE=false; // mappa affine punti->crediti; calibrata UNA VOLTA (stato iniziale) => fairValue = trasformazione monotona di indiceTorneo (eliminazioni non spostano la scala)
+function calibrate(){
+  if(CAL_DONE)return;
+  const xs=[],ys=[];
+  for(const p of players){ if(p.role!=="A"&&p.role!=="C")continue; const it=indiceTorneo(p); if(it!=null){xs.push(it);ys.push(fairValueLegacy(p));} }
+  const n=xs.length; if(n<2){SCALE_A=1;SCALE_B=0;return;}
+  const mx=xs.reduce((a,b)=>a+b,0)/n,my=ys.reduce((a,b)=>a+b,0)/n; let sxy=0,sxx=0;
+  for(let i=0;i<n;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)*(xs[i]-mx);}
+  SCALE_A=sxx>0?sxy/sxx:1; SCALE_B=my-SCALE_A*mx; if(!(SCALE_A>0)){SCALE_A=1;SCALE_B=0;}
+  CAL_DONE=true;
+}
+function fairValue(p){ // equo in CREDITI. Modello corretto per A/C estratti; legacy per GK/Dif e non-estratti.
+  if(elim[p.nat])return 1;
+  const it=(p.role==="A"||p.role==="C")?indiceTorneo(p):null;
+  if(it!=null)return Math.max(1,Math.round(SCALE_A*it+SCALE_B));
+  return fairValueLegacy(p);
+}
+// ===== V4-C — Ottimizzatore formazione (modulo+XI, modificatore difesa-aware) =====
+const MODULES=leagueConfig.formation.modules;
+const XB={A:1.45,C:0.85,D:0.34,P:0.12};
+function votoProxy(p){return p&&p.rating?p.rating:6.0;}
+function bonusReale(p){ // V4.0: bonus/partita REALE da produzione (npxG/xA/gol non-rigore). null se non nei dati estratti => fallback proxy.
+  const d=PROD[p.name]; if(!d)return null;
+  const xa=(d.xa!=null?d.xa:d.as);
+  const blend=0.65*(d.np*d.c)+0.35*(d.gn*d.c);
+  return 3*blend + 1*(xa*d.c) + (d.pen?0.12*0.80*3:0);
+}
+function xPts(p){ // punti fanta attesi prossima giornata (V4.0: bonus reali dove disponibili)
+  if(!p||elim[p.nat])return 0;
+  const play=Math.pow(p.secur,1.05);
+  const inj=p.inj?0.8:1;
+  const br=bonusReale(p);
+  const core=(br!=null)?(6.0+br):(votoProxy(p)+XB[p.role]*ratingMult(p)*(p.sp===2?1.35:p.sp===1?1.12:1)*effRoleAdv(p));
+  return play*(p.form||1)*cohMult(p)*inj*oppFactor(p)*core;
+}
+function defModProj(gk,defs){ // media voti (P + 3 migliori D) → +1/+3/+6, solo con >=4 difensori
+  if(!gk||!defs||defs.length<4)return 0;
+  const best3=defs.slice().sort((a,b)=>votoProxy(b)-votoProxy(a)).slice(0,3);
+  const avg=(votoProxy(gk)+best3.reduce((s,d)=>s+votoProxy(d),0))/4;
+  return avg>=7.0?6:avg>=6.5?3:avg>=6.0?1:0;
+}
+function formationFor(mod){if(!MODULES[mod])return null;const pool={P:[],D:[],C:[],A:[]};players.filter(p=>p.status===1).forEach(p=>{if(pool[p.role])pool[p.role].push(p);});for(const r in pool)pool[r].sort((a,b)=>xPts(b)-xPts(a));const gk=pool.P[0]||null;const[nd,nc,na]=MODULES[mod];if(!gk||pool.D.length<nd||pool.C.length<nc||pool.A.length<na)return null;const D=pool.D.slice(0,nd),C=pool.C.slice(0,nc),A=pool.A.slice(0,na);const xi=[gk,...D,...C,...A];const base=xi.reduce((s,p)=>s+xPts(p),0);const modifier=defModProj(gk,D);return{mod,gk,D,C,A,xi,base,modifier,total:base+modifier};}
+function bestFormation(){let best=null;for(const mod in MODULES){const fm=formationFor(mod);if(fm&&(!best||fm.total>best.total))best=fm;}return best;}
+// ===== V5.1 — Simulatore sostituzioni & cameo-trap (SOLO formazione; NON tocca fairValue/maxBid) =====
+const AVGMAG=2.2, SIM_BASEVOTE=6.0;
+function normalizeSecur(v){ // robusta a 3 scale: frazione 0-1, 0-10 (9->0.9), 0-100 (85->0.85). v>100 = spazzatura -> clamp.
+  if(v==null||typeof v!=='number'||isNaN(v))return 0;
+  let x=v;
+  if(x>1&&x<=10)x=x/10;            // 9->0.9, 9.5->0.95, 10->1.0, 1.2->0.12 (mai 0.012)
+  else if(x>10&&x<=100)x=x/100;    // 85->0.85, 95->0.95, 50->0.5, 100->1.0
+  else if(x>100)x=1;               // valori assurdi -> titolare pieno
+  return Math.max(0,Math.min(1,x));
+}
+function usageFromSecur(s){ return s>=0.95?'locked_starter':s>=0.80?'likely_starter':s>=0.55?'rotation_starter':s>=0.35?'regular_sub':s>=0.20?'impact_sub':s>=0.10?'late_cameo':'deep_bench'; }
+// default di scenario per usageType — ASSUNZIONI tunabili, NON probabilità reali
+const USAGE_DEF={
+  locked_starter:{pStart:0.97,pSub:0.30,subProfile:'standard_sub'},
+  likely_starter:{pStart:0.85,pSub:0.45,subProfile:'standard_sub'},
+  rotation_starter:{pStart:0.55,pSub:0.55,subProfile:'standard_sub'},
+  regular_sub:{pStart:0.25,pSub:0.75,subProfile:'standard_sub'},
+  impact_sub:{pStart:0.10,pSub:0.80,subProfile:'standard_sub'},
+  late_cameo:{pStart:0.05,pSub:0.55,subProfile:'late_cameo'},
+  deep_bench:{pStart:0.03,pSub:0.20,subProfile:'emergency_only'}
+};
+// profilo minuti-da-subentrato: mean=minuti medi se subentra; p15=P(>=soglia | subentra)
+const SUBPROF_DEF={ early_rotation:{mean:32,p15:0.95}, standard_sub:{mean:22,p15:0.70}, late_cameo:{mean:11,p15:0.38}, emergency_only:{mean:8,p15:0.20} };
+// override built-in per i wildcard noti (secur fuorviante). Nomi RAW esatti.
+const USAGE_OVERRIDE={
+  "G. Ramos":{u:'late_cameo'},            // bloccato da Ronaldo: rischio non-entrare/entrare tardi
+  "Barcola":{u:'impact_sub',s:'standard_sub'}, // più vicino al campo di Cherki
+  "Cherki":{u:'late_cameo'},              // più sepolto nella gerarchia Francia
+  "Rice":{u:'locked_starter'},            // titolare reale ING: copertura sicura
+  "Gakpo":{u:'locked_starter'}            // titolare reale OLA: copertura sicura (secur=1)
+};
+let scenarioOverrides={}; // runtime (UI live / test) — precedenza massima
+function setScenarioOverride(name,ov){scenarioOverrides[name]=ov;}
+function clearScenarioOverrides(){scenarioOverrides={};}
+function getScenarioOverrides(){return scenarioOverrides;}
+const subsCfg={voteThresholdMin:leagueConfig.formation.voteThresholdMin,maxSubs:leagueConfig.formation.maxSubs,benchSize:leagueConfig.formation.bench,sameRoleFirst:leagueConfig.formation.sameRoleFirst,fallbackAcrossRoles:leagueConfig.formation.fallbackAcrossRoles,gkFirst:leagueConfig.formation.gkFirst,staticFormation:leagueConfig.formation.staticFormation,substituteFullPoints:leagueConfig.formation.substituteFullPoints};
+function scenarioOf(p){
+  const liveOv=scenarioOverrides[p.name], ov=liveOv||USAGE_OVERRIDE[p.name]||{};
+  const sec=normalizeSecur(p.secur);
+  const ut=ov.u||usageFromSecur(sec);
+  const base=USAGE_DEF[ut]||USAGE_DEF.regular_sub;
+  const subProfile=ov.s||base.subProfile;
+  const pStart=(ov.pStart!=null)?ov.pStart:base.pStart;   // V5.5: startProbability live override
+  const pSub  =(ov.pSub!=null)?ov.pSub:base.pSub;          // V5.5: derivato da appearanceProbability se fornita
+  let availability=1, src=(liveOv&&(liveOv.u||liveOv.pStart!=null||liveOv.availability!=null))?'live':(ov.u?'manuale':'default');
+  if(ov.availability!=null)availability=ov.availability;   // V5.5: esplicito (squalifica=0, dubbio=0.x) — precedenza
+  else if(p.inj||ov.injuryDoubt)availability=0.5;
+  return {usageType:ut,pStart,pSub,subProfile,availability,source:src,confidence:(ov.meta&&ov.meta.confidence)||null};
+}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function simPoisson(lam,rng){ if(lam<=0)return 0; const L=Math.exp(-lam); let k=0,p=1; do{k++;p*=rng();}while(p>L); return k-1; }
+function pctl(sorted,p){ if(!sorted.length)return 0; const i=Math.min(sorted.length-1,Math.max(0,Math.floor(p/100*sorted.length))); return sorted[i]; }
+function simVoto(p){ return SIM_BASEVOTE*(p.form||1)*oppFactor(p)*cohMult(p); } // voto-base 6 se prende voto (no inj: la disponibilità è gestita a monte)
+function bonusExp90(p){ const br=bonusReale(p); if(br!=null)return Math.max(0,br); return Math.max(0,XB[p.role]*ratingMult(p)*(p.sp===2?1.35:p.sp===1?1.12:1)*effRoleAdv(p)); } // proxy se PROD assente (bassa confidenza)
+function sampleBonus(p,minutes,rng){ const lam=bonusExp90(p)*minutes/90/AVGMAG; return simPoisson(lam,rng)*AVGMAG; }
+function sampleOutcome(p,rng,cfg){
+  cfg=cfg||subsCfg;
+  if(elim[p.nat])return {tookVote:false,vote:0,bonus:0,points:0,minutes:0,started:false};
+  const sc=scenarioOf(p);
+  if(rng()>=sc.availability)return {tookVote:false,vote:0,bonus:0,points:0,minutes:0,started:false}; // indisponibile (infortunio)
+  let started=false,tookVote=false,minutes=0;
+  if(rng()<sc.pStart){ started=true;tookVote=true;minutes=70+Math.floor(rng()*26); } // titolare 70-95'
+  else if(rng()<sc.pSub){
+    const sp=SUBPROF_DEF[sc.subProfile]||SUBPROF_DEF.standard_sub;
+    if(rng()<sp.p15){ tookVote=true; minutes=Math.max(cfg.voteThresholdMin,Math.round(sp.mean+(rng()-0.5)*10)); }
+    else { tookVote=false; minutes=1+Math.floor(rng()*(cfg.voteThresholdMin-1)); } // cameo sotto soglia => SV (catena continua)
+  } else return {tookVote:false,vote:0,bonus:0,points:0,minutes:0,started:false}; // non gioca
+  if(!tookVote)return {tookVote:false,vote:0,bonus:0,points:0,minutes,started};
+  const vote=simVoto(p), bonus=sampleBonus(p,minutes,rng);
+  return {tookVote:true,vote,bonus,points:vote+bonus,minutes,started};
+}
+// sostituzioni DETERMINISTICHE multi-pass: P prima, stesso-ruolo prima del fallback, max cambi, riserva SV saltata
+function applySubs(xi,bench,outcomes,cfg){
+  cfg=cfg||subsCfg;
+  const gk=xi[0], oc=(p)=>outcomes.get(p.name)||{tookVote:false,vote:0,bonus:0,points:0};
+  const svStarters=xi.filter(s=>!oc(s).tookVote);
+  const covered=new Set(), usedSet=new Set(), usedReserves=[]; let used=0;
+  const uncoveredOfRole=(role)=>svStarters.filter(s=>!covered.has(s)&&s.role===role);
+  const uncoveredOutfield=()=>svStarters.filter(s=>!covered.has(s)&&s.role!=='P');
+  if(cfg.gkFirst&&svStarters.includes(gk)){ // Pass 0: portiere
+    const r=bench.find(b=>b.role==='P'&&!usedSet.has(b)&&oc(b).tookVote);
+    if(r){covered.add(gk);usedReserves.push(r);usedSet.add(r);used++;}
+  }
+  for(const r of bench){ // Pass 1: stesso ruolo (outfield), in ordine panchina
+    if(used>=cfg.maxSubs)break;
+    if(usedSet.has(r)||r.role==='P'||!oc(r).tookVote)continue;
+    const cand=uncoveredOfRole(r.role);
+    if(cand.length){cand.sort((a,b)=>xPts(b)-xPts(a));covered.add(cand[0]);usedReserves.push(r);usedSet.add(r);used++;}
+  }
+  if(cfg.fallbackAcrossRoles)for(const r of bench){ // Pass 2: fallback cross-role (outfield)
+    if(used>=cfg.maxSubs)break;
+    if(usedSet.has(r)||r.role==='P'||!oc(r).tookVote)continue;
+    const cand=uncoveredOutfield();
+    if(cand.length){cand.sort((a,b)=>xPts(b)-xPts(a));covered.add(cand[0]);usedReserves.push(r);usedSet.add(r);used++;}
+  }
+  const scoringPlayers=xi.filter(s=>oc(s).tookVote).concat(usedReserves);
+  return {scoringPlayers,subsUsed:used,uncovered:svStarters.filter(s=>!covered.has(s)),usedReserves};
+}
+function defModWorld(scoringPlayers,outcomes){ // modificatore sui VOTI campionati dei difensori in campo
+  const onGk=scoringPlayers.find(p=>p.role==='P'), defs=scoringPlayers.filter(p=>p.role==='D');
+  if(!onGk||defs.length<4)return 0;
+  const gv=(outcomes.get(onGk.name)||{vote:6}).vote;
+  const best3=defs.map(d=>(outcomes.get(d.name)||{vote:6}).vote).sort((a,b)=>b-a).slice(0,3);
+  const avg=(gv+best3.reduce((a,b)=>a+b,0))/4;
+  return avg>=7.0?6:avg>=6.5?3:avg>=6.0?1:0;
+}
+function coverValue(p){ // valore-di-copertura atteso di una riserva
+  const sc=scenarioOf(p), sp=SUBPROF_DEF[sc.subProfile]||SUBPROF_DEF.standard_sub;
+  const pVote=(sc.pStart+(1-sc.pStart)*sc.pSub*sp.p15)*sc.availability;
+  return pVote*(simVoto(p)+bonusExp90(p)*0.5);
+}
+function optimizeBench(bench){ return bench.slice().sort((a,b)=>coverValue(b)-coverValue(a)); } // euristica; applySubs garantisce stesso-ruolo
+function lineupFromOwned(fm){
+  if(!fm)return null;
+  const xiNames=new Set(fm.xi.map(p=>p.name));
+  const bench=players.filter(p=>p.status===1&&!xiNames.has(p.name)).sort((a,b)=>xPts(b)-xPts(a)).slice(0,subsCfg.benchSize);
+  return {xi:fm.xi.slice(),bench};
+}
+function simulate(xi,bench,cfg,N,seed){
+  cfg=cfg||subsCfg; N=N||5000; seed=(seed==null?12345:seed)>>>0;
+  const rng=mulberry32(seed), all=xi.concat(bench);
+  const wild=xi.filter(s=>['regular_sub','impact_sub','late_cameo','deep_bench'].includes(scenarioOf(s).usageType));
+  const dragAcc={}; wild.forEach(w=>dragAcc[w.name]=0);
+  const scores=[]; const subsCount=[0,0,0,0]; let uncoveredCount=0;
+  for(let i=0;i<N;i++){
+    const outcomes=new Map();
+    for(const p of all)outcomes.set(p.name,sampleOutcome(p,rng,cfg));
+    const res=applySubs(xi,bench,outcomes,cfg);
+    scores.push(res.scoringPlayers.reduce((a,p)=>a+outcomes.get(p.name).points,0)+defModWorld(res.scoringPlayers,outcomes));
+    subsCount[Math.min(3,res.subsUsed)]++;
+    if(res.uncovered.length>0)uncoveredCount++;
+    for(const w of wild){ // drag cameo: nei mondi dove il wildcard prende voto (blocca catena), quanto avrebbe reso la migliore riserva stesso-ruolo
+      const ow=outcomes.get(w.name); if(!ow.tookVote)continue;
+      let bestRes=0; for(const b of bench){ if(b.role!==w.role)continue; const ob=outcomes.get(b.name); if(ob&&ob.tookVote&&ob.points>bestRes)bestRes=ob.points; }
+      const drag=bestRes-ow.points; if(drag>0)dragAcc[w.name]+=drag;
+    }
+  }
+  scores.sort((a,b)=>a-b);
+  const mean=scores.reduce((a,b)=>a+b,0)/N;
+  const cameoTraps=wild.map(w=>({player:w.name,role:w.role,dragCameo:dragAcc[w.name]/N})).filter(x=>x.dragCameo>0.05).sort((a,b)=>b.dragCameo-a.dragCameo);
+  return {mean,p10:pctl(scores,10),p50:pctl(scores,50),p90:pctl(scores,90),subsUsedDist:{0:subsCount[0]/N,1:subsCount[1]/N,2:subsCount[2]/N,3:subsCount[3]/N},uncoveredStarterRisk:uncoveredCount/N,cameoTraps,N};
+}
+function confrontaLineup(A,B,N,seed){
+  N=N||3000; seed=(seed==null?777:seed);
+  const sA=simulate(A.xi,A.bench,subsCfg,N,seed), sB=simulate(B.xi,B.bench,subsCfg,N,seed);
+  return {A:sA,B:sB,delta:{mean:sA.mean-sB.mean,p10:sA.p10-sB.p10,p50:sA.p50-sB.p50,p90:sA.p90-sB.p90}};
+}
+function classOf(p){const fv=fairValue(p);if(p.q>=18&&NAT[p.nat][1]<=4.0)return"trap";if(fv>=PREM_THR[p.role])return"premium";if(fv>=VAL_THR[p.role])return"value";return"filler";}
+function ownedInRole(r){return players.filter(p=>p.status===1&&p.role===r);}
+function premOwned(r){return ownedInRole(r).filter(p=>p.price>=PREM_THR[r]).length;}
+function valOwned(r){return ownedInRole(r).filter(p=>p.price>=VAL_THR[r]&&p.price<PREM_THR[r]).length;}
+function nextNeeded(r){if(premOwned(r)<PREM_SLOTS[r])return"premium";if(valOwned(r)<VAL_SLOTS[r])return"value";return"filler";}
+function spent(){return players.filter(p=>p.status===1).reduce((s,p)=>s+p.price,0)+sunk;}
+function spentInRole(r){return ownedInRole(r).reduce((s,p)=>s+p.price,0);}
+function totalOwned(){return players.filter(p=>p.status===1).length;}
+function roleBudget(r){return Math.round(ROLES[r].bud*(BUDGET/300)*(cfg.repair?0.9:1));}
+function effBudget(){return BUDGET+(cfg.forfaitOn?(cfg.forfait||0):0);}
+function maxAffordable(){const rem=effBudget()-spent();const sl=rosterSlots()-totalOwned();return Math.max(0,rem-(sl-1));}
+function natOwned(nat){return players.filter(p=>p.status===1&&p.nat===nat).length;}
+function softCap(nat){const eg=NAT[nat][1];return Math.max(2,Math.min(6,Math.round(1.5+((eg-3.0)/3.1)*4.5)));}
+function natDivFactor(p){const o=natOwned(p.nat),c=softCap(p.nat);return o<c?1:Math.pow(0.55,o-c+1);}
+function scarcity(p){const cls=classOf(p);const alts=players.filter(x=>x.status===0&&x.role===p.role&&x.id!==p.id&&classOf(x)===cls&&Math.min(fairValue(x),maxAffordable())>0).length;return alts<=1?1.15:alts>=5?0.85:1.0;}
+function maxBid(p){if(p.status!==0)return 0;if(elim[p.nat])return 0;const rem=effBudget()-spent(),slotsLeft=rosterSlots()-totalOwned();const hard=Math.max(0,rem-(slotsLeft-1));if(liveNeed(p.role)<=0)return 0;if(classOf(p)==="trap")return 0;let scale=Math.max(0.7,Math.min(3.0,rem/MYT_FAIR));if(targetTier(p)==="none")scale=Math.min(scale,1);const nudge=1+0.04*Math.min(contenders(p).length,3);const nf=natOwned(p.nat)>=softCap(p.nat)?0.7:1;return Math.max(0,Math.round(Math.min(fairValue(p)*scale*nudge*nf,hard)));}
+function adjValue(p){return fairValue(p)*natDivFactor(p);}
+function priority(p){if(p.status!==0)return-100;if(elim[p.nat])return-100;const r=p.role;if(liveNeed(r)<=0)return-100;if(classOf(p)==="trap")return-10;if(maxBid(p)<1)return-50;const t=targetTier(p);let base=t==="star"?4:t==="target"?3:1;if(natOwned(p.nat)>=softCap(p.nat)+1)base=Math.min(base,1);return base;}
+function oppPlayers(oid){return players.filter(p=>p.status===2&&p.owner===oid);}
+function oppSpent(oid){return oppPlayers(oid).reduce((s,p)=>s+p.price,0)+extras.filter(x=>x.owner===oid).reduce((s,x)=>s+x.price,0);}
+function oppRem(oid){return effBudget()-oppSpent(oid);}
+function oppRole(oid,r){return oppPlayers(oid).filter(p=>p.role===r).length+extras.filter(x=>x.owner===oid&&x.role===r).length;}
+function projPoints(t){if(t==="me")return Math.round(players.filter(p=>p.status===1).reduce((s,p)=>s+fairValue(p),0));return Math.round(oppPlayers(t).reduce((s,p)=>s+fairValue(p),0)+extras.filter(x=>x.owner===t).reduce((s,x)=>s+x.price,0));}
+function contenders(p){return opps.filter(o=>oppRole(o.id,p.role)<ROLES[p.role].need&&oppRem(o.id)>=Math.max(2,Math.round(fairValue(p)*0.4)));}
+// ===== V3.3 — consigliere "prossimo da chiamare" (asta a chiamata). Stateless: dipende solo dallo stato vivo.
+// Valore alto + bassa concorrenza ATTUALE (pochi rivali che possono rilanciare) = il giocatore da chiamare ora.
+function callScore(p){
+  if(p.status!==0||elim[p.nat])return -1;
+  if(liveNeed(p.role)<=0)return -1;          // ruolo pieno: non puoi prenderlo
+  if(classOf(p)==="trap")return -1;          // non chiamare trappole per te
+  if(maxBid(p)<1)return -1;                  // non te lo puoi permettere
+  const c=contenders(p).length;
+  const compBonus=1+0.6*(1-Math.min(c,4)/4); // 1.6 (0 rivali) .. 1.0 (>=4 rivali)
+  return adjValue(p)*compBonus*roleRoomFactor(p.role);
+}
+function bestCall(){const cands=players.filter(p=>callScore(p)>0);if(!cands.length)return null;return cands.sort((a,b)=>callScore(b)-callScore(a))[0];}
+/* ===== V3.4 — assi budget-aware + Oracolo (advisory-only, agnostico al formato d'asta) ===== */
+// roleRoomFactor: 1.25 (ruolo con tutto il budget libero) .. 0.45 (ruolo sforato). Deprioritizza i ruoli gia' saturi di spesa.
+function roleRoomFactor(r){const rb=roleBudget(r);if(rb<=0)return 1;const room=rb-spentInRole(r);return Math.max(0.45,Math.min(1.25,0.75+0.55*(room/rb)));}
+// objectiveScore: il "miglior obiettivo" reso budget-aware. valore × urgenza-slot × spazio-budget-del-ruolo.
+function objectiveScore(p){if(p.status!==0||elim[p.nat])return -1;if(priority(p)<=0)return -1;const r=p.role;const slotUrg=(ROLES[r].need-ownedInRole(r).length)/ROLES[r].need;return adjValue(p)*(0.5+0.7*slotUrg)*roleRoomFactor(r);}
+function bestObjective(){const c=players.filter(p=>objectiveScore(p)>0);if(!c.length)return null;return c.sort((a,b)=>objectiveScore(b)-objectiveScore(a))[0];}
+// planLeft: surfacing del modello stelle-e-gregari gia' implicito (PREM_SLOTS/VAL_SLOTS). Quante stelle ancora permesse, quanti riempitivi, budget stelle.
+function planLeft(){let st=0,va=0;for(const r of["P","D","C","A"]){st+=Math.max(0,PREM_SLOTS[r]-premOwned(r));va+=Math.max(0,VAL_SLOTS[r]-valOwned(r));}const slotsLeft=rosterSlots()-totalOwned();const fillers=Math.max(0,slotsLeft-st-va);const rem=effBudget()-spent();const reserve=va*8+fillers*2;const starBudget=Math.max(0,rem-reserve);return{stars:st,value:va,fillers,starBudget,slotsLeft};}
+// affordableInRole: migliori liberi non-trap/non-eliminati del ruolo r col valore equo entro il tetto.
+function affordableInRole(r,ceiling){return players.filter(p=>p.status===0&&p.role===r&&!elim[p.nat]&&classOf(p)!=="trap"&&liveNeed(r)>0&&fairValue(p)<=Math.max(1,ceiling)).sort((a,b)=>adjValue(b)-adjValue(a));}
+// ORACOLO: consigliere salvavita, MAI vuoto. Ragiona sulla solvibilita' (devi poter riempire tutti gli slot), non sull'alfabeto.
+function oracolo(){
+  const rem=effBudget()-spent(),slotsLeft=rosterSlots()-totalOwned();
+  const pl=planLeft();
+  const planTxt=`stelle permesse <b>${pl.stars}</b> · slot valore <b>${pl.value}</b> · riempitivi ≤5cr <b>${pl.fillers}</b> · budget stelle ~<b>${pl.starBudget}</b> cr`;
+  if(slotsLeft<=0)return{level:"done",lab:"Rosa completa",msg:`31/31. Spesi <b>${spent()}</b> cr, rimasti <b>${rem}</b>. Da qui solo riparazioni post-eliminazioni.`,names:[],plan:planTxt};
+  const needs=["P","D","C","A"].filter(r=>liveNeed(r)>0);
+  const spendable=rem-(slotsLeft-1); // max sul PROSSIMO restando capace di riempire il resto a 1 cr
+  // CRISI: non puoi nemmeno riempire tutti gli slot a 1 cr
+  if(rem<slotsLeft){const short=slotsLeft-rem;return{level:"crisis",lab:"Crisi budget",msg:`<b>${rem}</b> cr per <b>${slotsLeft}</b> slot: <b>non completi la rosa</b>, ti mancano ~<b>${short}</b> crediti. Hai strapagato troppo presto. Da ora <b>solo 1 cr a giocatore</b> e finirai con ~${short} slot vuoti (= punti persi). Riempi i ruoli scoperti: ${needs.join(", ")}.`,names:[],plan:planTxt};}
+  // miglior bisogno disponibile e suo equo (per capire se puoi ancora vincerlo restando solvibile)
+  let bestEquo=0,bestRole=null;for(const r of needs){const a=players.filter(p=>p.status===0&&p.role===r&&!elim[p.nat]&&classOf(p)!=="trap").sort((x,y)=>adjValue(y)-adjValue(x))[0];if(a){const e=fairValue(a);if(e>bestEquo){bestEquo=e;bestRole=r;}}}
+  // STRETTO: non puoi pagare l'equo del tuo miglior obiettivo senza rompere la solvibilita'
+  if(spendable<bestEquo){
+    // scegli il ruolo dove resta piu' valore ANCORA acquistabile entro il tetto
+    let pick=null,pickVal=-1;for(const r of needs){const aff=affordableInRole(r,spendable);if(aff.length&&adjValue(aff[0])>pickVal){pickVal=adjValue(aff[0]);pick=r;}}
+    if(pick){const aff=affordableInRole(pick,spendable).slice(0,3);return{level:"tight",lab:"Budget stretto",msg:`Ti manca <b>${ROLES[pick].name}</b>: prendine uno a <b>≤ ${Math.max(1,spendable)} cr</b>. Oltre quel tetto non resti solvibile per gli altri ${slotsLeft-1} slot.`,names:aff.map(p=>({n:p.name,nat:p.nat,e:fairValue(p)})),plan:planTxt};}
+    return{level:"tight",lab:"Budget stretto",msg:`Ovunque restano solo riempitivi: prendi a <b>1 cr</b> nei ruoli ${needs.join(", ")} e non rilanciare. Tieni l'osso per un solo colpo se serve.`,names:[],plan:planTxt};
+  }
+  // ALLERTA ANTICIPATA: puoi ancora vincere il top, ma il cuscino e' sottile (gli altri ti snipano a poco)
+  if(spendable<bestEquo*1.5){const perSlot=Math.max(0,Math.floor(spendable/slotsLeft));const b=bestObjective();return{level:"warn",lab:"Potere d'acquisto in calo",msg:`<b>${rem}</b> cr per <b>${slotsLeft}</b> slot (~${perSlot}/slot oltre il minimo). Puoi ancora prendere ${b?`<b>${b.name}</b> (${ROLES[b.role].name})`:"i tuoi obiettivi"}, ma il margine è sottile: <b>non strapagare i prossimi</b> o ti sniperanno i target a basso prezzo.`,names:[],plan:planTxt};}
+  // SANO
+  const b=bestCall()||bestObjective();
+  return{level:"ok",lab:"Sotto controllo",msg:b?`Prossima mossa: <b>${b.name}</b> (${ROLES[b.role].name}) a <b>≤ ${maxBid(b)} cr</b>. ${contenders(b).length?`${contenders(b).length} rivali sul ruolo`:"nessun rivale ti contende → parti basso"}.`:`Margine ok: ${rem} cr per ${slotsLeft} slot.`,names:[],plan:planTxt};
+}
+function sortKey(name){return name.replace(/^[A-Z]\.\s+/,"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
+function liveNeed(r){return Math.max(0,ROLES[r].need-ownedInRole(r).length);}
+function computeRanks(){calibrate();RANK={};for(const r of["P","D","C","A"]){const arr=players.filter(x=>x.status===0&&x.role===r&&classOf(x)!=="trap").sort((a,b)=>adjValue(b)-adjValue(a));arr.forEach((p,i)=>RANK[p.id]=i+1);}}
+function computeTargets(){let f=0;for(const r of["P","D","C","A"]){const ln=liveNeed(r);if(ln<=0)continue;const arr=players.filter(x=>x.status===0&&x.role===r&&classOf(x)!=="trap").sort((a,b)=>adjValue(b)-adjValue(a)).slice(0,ln);f+=arr.reduce((s,x)=>s+fairValue(x),0);}MYT_FAIR=f||1;}
+function targetTier(p){if(p.status!==0)return"none";if(classOf(p)==="trap")return"trap";if(liveNeed(p.role)<=0)return"none";const rk=RANK[p.id]||999;if(rk===1)return"star";if(rk<=liveNeed(p.role))return"target";return"none";}
+function stars(p){if(elim[p.nat])return{n:0,full:false,skip:true};if(liveNeed(p.role)<=0)return{n:0,full:true,skip:false};if(classOf(p)==="trap")return{n:0,full:false,skip:true};if(maxBid(p)<1)return{n:0,full:false,skip:true};const rk=RANK[p.id]||999,ln=liveNeed(p.role);if(rk<=ln)return{n:3,full:false,skip:false};if(rk<=ln*2)return{n:2,full:false,skip:false};return{n:1,full:false,skip:false};}
+function starHTML(p){if(p.status!==0)return'';const s=stars(p);if(s.full)return'<span class="cls full2">AL COMPLETO</span>';if(s.skip)return'<span class="stars sk" title="trappola o non conveniente">☆☆☆</span>';const cl=s.n===3?'s3':s.n===2?'s2':'s1';return `<span class="stars ${cl}">${'★'.repeat(s.n)}${'☆'.repeat(3-s.n)}</span>`;}
+function callsBefore(p){const k=sortKey(p.name);return players.filter(x=>x.status===0&&x.id!==p.id&&sortKey(x.name)<k).length;}
+
+function render(){
+computeRanks();computeTargets();
+saveState();renderNations();renderSessionBar();renderV58Panel();
+const sp=spent(),rem=effBudget()-sp,tot=totalOwned();
+document.getElementById("spent").textContent=sp;
+const remEl=document.getElementById("rem");remEl.textContent=rem;remEl.className="val "+(rem<0?"red":"green");
+document.getElementById("filled").textContent=tot+"/"+rosterSlots();
+const sl=rosterSlots()-tot;document.getElementById("perslot").textContent=sl>0?Math.max(0,Math.floor(maxAffordable()/Math.max(1,sl))):"–";
+const sc=document.getElementById("slots");sc.innerHTML="";
+for(const r of["P","D","C","A"]){const f=ownedInRole(r).length,n=ROLES[r].need;const d=document.createElement("div");d.className="slot"+(f===n?" full":"")+(f>n?" over":"");d.innerHTML=`<div class="r">${r}</div><div class="c">${f}/${n}</div>`;sc.appendChild(d);}
+document.getElementById("ruleSummary").textContent=(cfg.credit?"Compressione EG legacy ON → profondità meno cruciale. ":"Svincolo 0 → profondità a pieno peso. ")+(turno!=="iniziale"?`Turno ${TURNO_LAB[turno]} (EG rinormalizzato sui vivi).`:"");
+
+// global next move (budget-aware: valore × urgenza-slot × spazio-budget-ruolo)
+const nm=document.getElementById("nextmove"),nmCap=document.getElementById("nmCap");
+const bo=bestObjective();
+if(bo){const p=bo,cn=contenders(p).length;const press=cn?`<span style="color:var(--amber)">${cn} avversari attivi sul ruolo</span>`:`<span style="color:var(--green)">nessuno ti contende → parti basso</span>`;nm.innerHTML=`<div><div class="nm-lab">Miglior obiettivo disponibile</div><div class="nm-name">${p.name} <span class="nat">${p.nat}</span></div><div class="nm-meta">${ROLES[p.role].name} · equo ${fairValue(p)}${p.rating?` · rating ${p.rating}`:""}${p.callNum?` · chiamata #${p.callNum}/~${LISTONE_N}`:""} · ${press}</div></div><div class="nm-bid">max ${maxBid(p)} cr</div>`;nm.style.display="flex";nmCap.style.display="block";}
+else{nm.style.display="none";nmCap.style.display="none";}
+
+// V3.3 — prossimo da chiamare (asta a chiamata)
+const cm=document.getElementById("callmove"),cmCap=document.getElementById("cmCap");
+const bc=bestCall();
+if(bc){const cc=contenders(bc).length;const comp=cc===0?`<span style="color:var(--green)">nessun rivale può rilanciare → chiamalo, lo prendi vicino al minimo</span>`:`<span style="color:var(--amber)">${cc} rivali possono ancora contenderlo</span>`;cm.innerHTML=`<div><div class="nm-lab" style="color:var(--blue)">📣 Prossimo da chiamare</div><div class="nm-name">${bc.name} <span class="nat">${bc.nat}</span></div><div class="nm-meta">${ROLES[bc.role].name} · equo ${fairValue(bc)} · ${comp}</div></div><div class="nm-bid">max ${maxBid(bc)} cr</div>`;cm.style.display="flex";cmCap.style.display="block";}
+else{cm.style.display="none";cmCap.style.display="none";}
+
+// V3.4 — ORACOLO: sempre visibile, mai vuoto. La mossa salvavita data la solvibilita'.
+const orc=oracolo(),orEl=document.getElementById("oracolo");
+orEl.className="oracolo "+orc.level;
+const orNames=orc.names&&orc.names.length?`<div class="or-names">${orc.names.map(x=>`<span class="onm">${x.n} <span class="nat">${x.nat}</span> <b>equo ${x.e}</b></span>`).join("")}</div>`:"";
+orEl.innerHTML=`<div class="or-lab">🔮 Oracolo · ${orc.lab}</div><div class="or-msg">${orc.msg}</div>${orNames}<div class="or-plan">${orc.plan}</div>`;
+
+const board=document.getElementById("board");board.innerHTML="";
+if(view==="queue"){renderQueue();renderOpps();renderRoster();return;}
+if(view==="formazione"){renderFormation();renderOpps();renderRoster();return;}
+const roles=curRole==="ALL"?["P","D","C","A"]:[curRole];
+for(const r of roles){
+let list=players.filter(p=>p.role===r);
+if(query)list=list.filter(p=>p.name.toLowerCase().includes(query)||NAT[p.nat][0].toLowerCase().includes(query));
+if(hideTaken)list=list.filter(p=>p.status!==2&&p.status!==3);
+if(onlyStars)list=list.filter(p=>p.status===0&&stars(p).n>=2);
+list.sort((a,b)=>{const g=x=>x.status===0?0:x.status===1?1:2;if(g(a)!==g(b))return g(a)-g(b);
+if(a.status===0&&b.status===0){
+if(sortMode==="stars"){const sa=stars(a).n,sb=stars(b).n;if(sa!==sb)return sb-sa;return adjValue(b)-adjValue(a);}
+if(sortMode==="equo")return fairValue(b)-fairValue(a);
+if(sortMode==="max"){const ma=maxBid(a),mb=maxBid(b);if(ma!==mb)return mb-ma;return adjValue(b)-adjValue(a);}
+if(priority(a)!==priority(b))return priority(b)-priority(a);}
+return adjValue(b)-adjValue(a);});
+if(!list.length)continue;
+const rec=list.find(p=>p.status===0&&priority(p)>0);
+const rb=roleBudget(r),sir=spentInRole(r),over=sir>rb;
+const block=document.createElement("div");block.className="role-block";
+block.innerHTML=`<div class="role-h"><h2>${ROLES[r].name}</h2><span class="need">servono ${ROLES[r].need} · presi ${ownedInRole(r).length}</span><span class="bud${over?' over':''}">budget ruolo: ${sir}/${rb}</span></div>`;
+const tbl=document.createElement("table");
+tbl.innerHTML=`<thead><tr><th class="pr">#</th><th>Giocatore</th><th>Naz</th><th class="n">EG</th><th class="n">Rating</th><th class="n">Quot.</th><th class="n">Equo</th><th class="n">Max</th><th>Stelle</th><th></th></tr></thead>`;
+const tb=document.createElement("tbody");
+list.forEach((p,idx)=>{
+const fv=fairValue(p),cls=classOf(p),tier=TIER_BY_EG(NAT[p.nat][1]),mb=maxBid(p),isRec=rec&&p.id===rec.id;
+const stacked=p.status===0&&natOwned(p.nat)>=softCap(p.nat);
+let acts;
+if(p.status===0)acts=`<button class="ab mine" data-take="${p.id}">Preso io</button><button class="ab other" data-other="${p.id}">Altri</button><button class="ab skip" data-skip="${p.id}" title="Nessuno / non rilevante">Skip</button>`;
+else if(p.status===1){const good=p.price<=fv;acts=`<span class="paid" style="color:${good?'var(--green)':'var(--red)'}">${p.price}</span> <button class="ab undo" data-undo="${p.id}">↺</button>`;}
+else if(p.status===3)acts=`<span style="color:var(--muted2);font-size:10px">skippato</span> <button class="ab undo" data-undo="${p.id}">↺</button>`;
+else acts=`<button class="ab undo" data-undo="${p.id}">↺</button>`;
+const delta=fv>=p.q?`<span class="delta" style="color:var(--green)">+${fv-p.q}</span>`:`<span class="delta" style="color:var(--red)">${fv-p.q}</span>`;
+const tr=document.createElement("tr");tr.className=(p.status===1?"mine":p.status===2?"other":p.status===3?"other":"")+(isRec?" rec":"")+((p.status===0&&liveNeed(p.role)<=0)?" done":"");
+const dq=dataQuality(p);
+tr.innerHTML=`<td class="pr n">${idx+1}</td>
+<td><div class="pname">${p.name}${favNames.has(p.name)?' <span style="color:var(--gold)" title="giocatore da spingere">◆</span>':''}${p.inj?' <span style="color:var(--amber)">⚠</span>':''}${availBadge(p)}</div><div class="pnote">${p.note}${dq.level!=="real"?` <span class="${dq.cls}">· ${dq.label}</span>`:""}</div>${isRec?'<span class="recflag">★ CONSIGLIATO ORA</span>':''}</td>
+<td><span class="nat${stacked?' stack':''}">${p.nat}${stacked?'•':''}</span></td>
+<td class="n"><span class="tier ${tier}">${tier}</span></td>
+<td class="n rt">${p.rating?p.rating.toFixed(1):'–'}</td>
+<td class="n q">${p.q}</td>
+<td class="n"><span class="fair">${fv}</span> ${delta}</td>
+<td class="n"><span class="max">${mb>0?mb:'–'}</span></td>
+<td>${starHTML(p)}</td>
+<td><div class="acts">${acts}</div></td>`;
+tb.appendChild(tr);});
+tbl.appendChild(tb);block.appendChild(tbl);board.appendChild(block);}
+renderOpps();renderRoster();
+}
+function currentLineup(){ const best=bestFormation(); if(!best)return null; const chosen=(selMod!=="auto"&&MODULES[selMod]&&formationFor(selMod))?selMod:best.mod; const f=formationFor(chosen)||best; return lineupFromOwned(f); }
+function buildSwap(lu,outName,inName){ const out=lu.xi.find(p=>p.name===outName); const inP=players.find(p=>p.status===1&&p.name===inName); if(!out||!inP||out.name===inP.name)return null; const xiB=lu.xi.map(p=>p.name===outName?inP:p); let benchB=lu.bench.filter(p=>p.name!==inName); benchB=[out].concat(benchB).slice(0,subsCfg.benchSize); return {xi:xiB,bench:benchB}; }
+function _simRisk(s){ return {cameo:s.cameoTraps.reduce((a,c)=>a+c.dragCameo,0), unc:s.uncoveredStarterRisk}; }
+function renderABTable(labelA,labelB,cmp){
+  const ra=_simRisk(cmp.A), rb=_simRisk(cmp.B), d=cmp.delta;
+  let h=`<table class="opptbl"><thead><tr><th>Opzione</th><th class="n">Media</th><th class="n">P10</th><th class="n">P50</th><th class="n">P90</th><th class="n">cameo</th><th class="n">scoperto</th></tr></thead><tbody>`;
+  h+=`<tr><td>A · ${labelA}</td><td class="n">${cmp.A.mean.toFixed(1)}</td><td class="n">${cmp.A.p10.toFixed(1)}</td><td class="n">${cmp.A.p50.toFixed(1)}</td><td class="n" style="color:var(--green)">${cmp.A.p90.toFixed(1)}</td><td class="n">${ra.cameo.toFixed(1)}</td><td class="n">${Math.round(ra.unc*100)}%</td></tr>`;
+  h+=`<tr><td>B · ${labelB}</td><td class="n">${cmp.B.mean.toFixed(1)}</td><td class="n">${cmp.B.p10.toFixed(1)}</td><td class="n">${cmp.B.p50.toFixed(1)}</td><td class="n" style="color:var(--green)">${cmp.B.p90.toFixed(1)}</td><td class="n">${rb.cameo.toFixed(1)}</td><td class="n">${Math.round(rb.unc*100)}%</td></tr>`;
+  h+=`<tr style="border-top:1px solid var(--line2)"><td><b>Δ (A−B)</b></td><td class="n"><b style="color:${d.mean>=0?'var(--green)':'var(--red)'}">${d.mean>=0?'+':''}${d.mean.toFixed(1)}</b></td><td class="n">${d.p10>=0?'+':''}${d.p10.toFixed(1)}</td><td class="n">${d.p50>=0?'+':''}${d.p50.toFixed(1)}</td><td class="n">${d.p90>=0?'+':''}${d.p90.toFixed(1)}</td><td class="n">—</td><td class="n">—</td></tr></tbody></table>`;
+  return h;
+}
+function simInteractionHandler(e){
+  const t=e.target.closest&&e.target.closest('[data-sim-quick],[data-sim-swap]'); if(!t)return;
+  const out=document.getElementById('simSwapResult'); if(!out)return;
+  const lu=currentLineup(); if(!lu){out.innerHTML='<div class="ffnote">Rosa insufficiente.</div>';return;}
+  try{
+    if(t.dataset.simSwap!=null){
+      const oName=document.getElementById('simSwapOut').value, iName=document.getElementById('simSwapIn').value;
+      const B=buildSwap(lu,oName,iName);
+      if(!B){out.innerHTML='<div class="ffnote" style="color:var(--amber)">Scegli uno starter e un giocatore diverso fuori dall\u0027XI.</div>';return;}
+      const cmp=confrontaLineup({xi:lu.xi,bench:lu.bench},B,2500,20260624);
+      out.innerHTML=renderABTable('attuale',`${iName} ↔ ${oName}`,cmp);
+    } else if(t.dataset.simQuick!=null){
+      const parts=t.dataset.simQuick.split('::'), name=parts[0], mode=parts[1];
+      const player=players.find(p=>p.status===1&&p.name===name);
+      if(!player){out.innerHTML='<div class="ffnote">Giocatore non in rosa.</div>';return;}
+      if(mode==='starter'){
+        if(lu.xi.some(p=>p.name===name)){ const s=simulate(lu.xi,lu.bench,subsCfg,2500,20260625); out.innerHTML=`<div class="ffnote" style="color:var(--green)">${name} è già titolare nell'XI ottimale · Media ${s.mean.toFixed(1)} · P10 ${s.p10.toFixed(1)} · P90 ${s.p90.toFixed(1)}.</div>`; return; }
+        const sameRole=lu.xi.filter(p=>p.role===player.role&&p.role!=='P');
+        if(!sameRole.length){out.innerHTML=`<div class="ffnote" style="color:var(--amber)">Nessun titolare di ruolo ${player.role} da scambiare.</div>`;return;}
+        const weakest=sameRole.slice().sort((a,b)=>xPts(a)-xPts(b))[0];
+        const cmp=confrontaLineup({xi:lu.xi,bench:lu.bench},buildSwap(lu,weakest.name,name),2500,20260625);
+        out.innerHTML=`<div class="rt2" style="color:var(--blue);font-size:11px;margin-top:6px">B = ${name} titolare al posto di ${weakest.name}</div>`+renderABTable('attuale',`${name} titolare`,cmp);
+      } else if(mode==='firstbench'){
+        if(lu.xi.some(p=>p.name===name)){out.innerHTML=`<div class="ffnote" style="color:var(--muted)">${name} è titolare: il test "prima riserva" non si applica.</div>`;return;}
+        const benchB=[player].concat(lu.bench.filter(p=>p.name!==name)).slice(0,subsCfg.benchSize);
+        const cmp=confrontaLineup({xi:lu.xi,bench:benchB},{xi:lu.xi,bench:lu.bench},2500,20260626);
+        out.innerHTML=`<div class="rt2" style="color:var(--blue);font-size:11px;margin-top:6px">A = ${name} 1ª riserva · B = panchina attuale</div>`+renderABTable(`${name} 1ª riserva`,'attuale',cmp);
+      }
+    }
+  }catch(err){ out.innerHTML='<div class="ffnote" style="color:var(--amber)">Errore nel calcolo del confronto.</div>'; }
+}
+let _simCache={key:null,val:null};
+function renderSimPanel(f){
+  if(!f||!f.xi)return'';
+  let html='';
+  try{
+    const lu=lineupFromOwned(f); if(!lu)return'';
+    const key=JSON.stringify({xi:lu.xi.map(p=>p.name),bn:lu.bench.map(p=>p.name),ov:scenarioOverrides,gd:gameday,el:Object.keys(elim).filter(k=>elim[k]).sort(),tn:turno});
+    let sim; if(_simCache.key===key){sim=_simCache.val;}else{sim=simulate(lu.xi,lu.bench,subsCfg,3000,20260621);_simCache={key,val:sim};}
+    html+=`<div class="rt2" style="color:var(--gold);margin-top:16px">🎲 Simulazione subentri & cameo-trap (Monte Carlo, regole reali)</div>`;
+    html+=`<div class="rsub">Media attesa <b style="color:var(--gold);font-size:14px">${sim.mean.toFixed(1)}</b> · P10 negativo <b>${sim.p10.toFixed(1)}</b> · P50 centrale <b>${sim.p50.toFixed(1)}</b> · P90 ceiling <b style="color:var(--green)">${sim.p90.toFixed(1)}</b></div>`;
+    const sd=sim.subsUsedDist;
+    html+=`<div class="rsub">Cambi usati — 0:${Math.round(sd[0]*100)}% · 1:${Math.round(sd[1]*100)}% · 2:${Math.round(sd[2]*100)}% · 3:${Math.round(sd[3]*100)}% · rischio titolare scoperto <b style="color:${sim.uncoveredStarterRisk>0.12?'var(--amber)':'var(--muted)'}">${Math.round(sim.uncoveredStarterRisk*100)}%</b></div>`;
+    if(sim.cameoTraps.length)html+=sim.cameoTraps.map(c=>`<div class="ffnote" style="color:var(--amber)">⚠ <b>Cameo-trap: ${c.player}</b> — profilo a rischio (può prendere voto in cameo senza bonus e bloccare la catena). Costo medio stimato ~${c.dragCameo.toFixed(1)} pt/giornata.</div>`).join('');
+    const chains=['P','D','C','A'].map(r=>{const res=lu.bench.filter(b=>b.role===r);if(!res.length)return'';const lab={P:'PORT',D:'DIF',C:'CEN',A:'ATT'}[r];return `<div class="ritem"><span style="font-size:11px"><b>${lab}</b> ← riserve: ${res.map(p=>p.name).join(' → ')}</span></div>`;}).filter(Boolean).join('');
+    if(chains)html+=`<div class="rt2" style="color:var(--green);margin-top:8px;font-size:11px">Catene di subentro (stesso ruolo, in ordine panchina)</div>${chains}`;
+    const ob=optimizeBench(lu.bench);
+    if(ob.some((p,i)=>!lu.bench[i]||lu.bench[i].name!==p.name)){
+      const cmp=confrontaLineup({xi:lu.xi,bench:ob},{xi:lu.xi,bench:lu.bench},2000,20260622);
+      if(cmp.delta.mean>0.3)html+=`<div class="ffnote" style="color:var(--green)">↻ <b>Panchina suggerita</b> (per copertura): ${ob.map(p=>p.name).join(' → ')} · ΔMedia <b>+${cmp.delta.mean.toFixed(1)}</b> (ΔP10 ${cmp.delta.p10>=0?'+':''}${cmp.delta.p10.toFixed(1)} · ΔP90 ${cmp.delta.p90>=0?'+':''}${cmp.delta.p90.toFixed(1)}). Non applicata: riordina tu se vuoi.</div>`;
+    }
+    if(sim.cameoTraps.length){
+      const c=sim.cameoTraps[0], S=lu.xi.find(p=>p.name===c.player), R=lu.bench.find(b=>S&&b.role===S.role);
+      if(S&&R){
+        const xiB=lu.xi.map(p=>p.name===S.name?R:p), benchB=lu.bench.map(b=>b.name===R.name?S:b);
+        const cmp=confrontaLineup({xi:lu.xi,bench:lu.bench},{xi:xiB,bench:benchB},2000,20260623);
+        html+=`<div class="rt2" style="color:var(--blue);margin-top:10px;font-size:11px">A/B — ${S.name} titolare vs ${R.name} titolare</div>`;
+        html+=`<table class="opptbl"><thead><tr><th>Opzione</th><th class="n">Media</th><th class="n">P10</th><th class="n">P50</th><th class="n">P90</th></tr></thead><tbody>`;
+        html+=`<tr><td>A · ${S.name} (wildcard)</td><td class="n">${cmp.A.mean.toFixed(1)}</td><td class="n">${cmp.A.p10.toFixed(1)}</td><td class="n">${cmp.A.p50.toFixed(1)}</td><td class="n" style="color:var(--green)">${cmp.A.p90.toFixed(1)}</td></tr>`;
+        html+=`<tr><td>B · ${R.name} (sicuro)</td><td class="n">${cmp.B.mean.toFixed(1)}</td><td class="n">${cmp.B.p10.toFixed(1)}</td><td class="n">${cmp.B.p50.toFixed(1)}</td><td class="n" style="color:var(--green)">${cmp.B.p90.toFixed(1)}</td></tr>`;
+        html+=`</tbody></table><div class="ffnote">A = più ceiling (P90) e varianza · B = più floor (P10). Scegli secondo strategia.</div>`;
+      }
+    }
+    // Task 5 — profili scenario dei giocatori in gioco
+    const prof=lu.xi.concat(lu.bench);
+    html+=`<div class="rt2" style="color:var(--muted);margin-top:12px;font-size:11px">Profili scenario (usageType · subProfile · fonte)</div>`;
+    html+=`<div class="ffgrid">`+prof.map(p=>{const s=scenarioOf(p);const col=s.source==='default'?'var(--muted2)':(s.source==='manuale'?'var(--gold)':'var(--green)');return `<div class="ffrow" style="font-size:10px"><span>${p.name}</span><span style="color:${col}">${s.usageType} · ${s.subProfile} · ${s.source}</span></div>`;}).join('')+`</div>`;
+    // Task 4 — quick test (solo per i wildcard in rosa)
+    const quicks=[['G. Ramos','starter','Ramos titolare'],['Cherki','starter','Cherki titolare'],['Gakpo','starter','Gakpo titolare'],['Barcola','firstbench','Barcola 1ª riserva']];
+    const avail=quicks.filter(q=>players.some(p=>p.status===1&&p.name===q[0]));
+    if(avail.length)html+=`<div class="rt2" style="color:var(--gold);margin-top:12px;font-size:11px">Quick test (rosa)</div><div class="exf">`+avail.map(q=>`<button class="add" data-sim-quick="${q[0]}::${q[1]}">${q[2]}</button>`).join('')+`</div>`;
+    // Task 3 — confronta scenario manuale (swap)
+    const starterOpts=lu.xi.map(p=>`<option value="${p.name}">${p.name} (${p.role})</option>`).join('');
+    const nonXI=players.filter(p=>p.status===1&&!lu.xi.some(x=>x.name===p.name));
+    const inOpts=nonXI.map(p=>`<option value="${p.name}">${p.name} (${p.role})</option>`).join('');
+    html+=`<div class="rt2" style="color:var(--blue);margin-top:12px;font-size:11px">Confronta scenario manuale (swap titolare ↔ fuori XI)</div>`;
+    html+=`<div class="exf" style="margin-bottom:4px"><select id="simSwapOut" title="titolare da togliere">${starterOpts}</select><span style="color:var(--muted)">↔</span><select id="simSwapIn" title="giocatore da inserire">${inOpts||'<option>—</option>'}</select><button class="add" data-sim-swap="1">Simula swap</button></div>`;
+    html+=`<div id="simSwapResult"></div>`;
+    html+=`<div class="ffnote" style="color:var(--muted2)">${sim.N} simulazioni · profili d'uso (usageType/subProfile) auto-derivati dalla titolarità, overrideabili · numeri = stime di modello, non probabilità reali · bonus aggregato (gol/assist separati = V6).</div>`;
+  }catch(e){ return `<div class="ffnote" style="color:var(--amber)">Simulazione non disponibile per questa rosa.</div>`; }
+  return html;
+}
+function renderFormation(){
+  const board=document.getElementById("board");
+  const owned=players.filter(p=>p.status===1);
+  if(!owned.length){board.innerHTML=`<div class="roster"><h3>🎯 Formazione</h3><div class="rsub">Segna prima la tua rosa (bottone “Preso io”): scegli un modulo e calcolo l'XI + 7 riserve che massimizzano i punti attesi, <b>modificatore difesa incluso</b>.</div></div>`;return;}
+  const best=bestFormation();
+  let h=`<div class="roster"><h3>🎯 Suggeritore formazione</h3>`;
+  if(!best){h+=`<div class="rsub">Rosa insufficiente per qualunque modulo legale (serve 1 portiere + abbastanza D/C/A). Continua a comprare.</div></div>`;board.innerHTML=h;return;}
+  const chosen=(selMod!=="auto"&&MODULES[selMod]&&formationFor(selMod))?selMod:best.mod;
+  const f=formationFor(chosen)||best;
+  const opts=`<option value="auto"${selMod==="auto"?' selected':''}>Auto — consigliato ${best.mod}</option>`+Object.keys(MODULES).map(m=>{const ff=formationFor(m);const lab=m+(ff?` · ${ff.total.toFixed(1)} pt${m===best.mod?' ★':''}`:" · rosa incompleta");return `<option value="${m}"${selMod===m?' selected':''}${ff?'':' disabled'}>${lab}</option>`;}).join("");
+  const lp=(liveData.prossime||[]).length,lr=(liveData.risultati||[]).length;
+  const liveTxt=(lp||lr)?`<span style="color:var(--green)">dati live: ${lr} risultati · ${lp} prossime${(liveData.meta&&liveData.meta.aggiornato)?' · agg. '+liveData.meta.aggiornato:''}</span>`:`<span style="color:var(--muted2)">nessun dato live: carica il JSON dalla barra sessione per pesare avversari e forma</span>`;
+  const gdOpts=["auto","g1","g2","g3"].map(k=>`<option value="${k}"${gameday===k?' selected':''}>${({auto:"Auto (da dati live)",g1:"Gironi \u00b7 Giornata 1",g2:"Gironi \u00b7 Giornata 2",g3:"Gironi \u00b7 Giornata 3"})[k]}</option>`).join("");
+  h+=`<div class="fmodbar"><label>Modulo <select id="fmod">${opts}</select></label><label>Giornata <select id="fgameday">${gdOpts}</select></label><span class="fmtot">XI <b style="color:var(--gold)">${f.total.toFixed(1)}</b> = ${f.base.toFixed(1)} + mod. <b>${f.modifier>0?'+'+f.modifier:'0'}</b></span></div>`;
+  if(gameday!=="auto")h+=`<div class="rsub" style="margin-top:2px;color:var(--blue)">XI ottimizzato per gli avversari di quella giornata (rotazione round-robin sui gironi) \u2014 cambia giornata e cambia l'XI. Non tocca i valori d'asta.</div>`;
+  h+=`<div class="rsub" style="margin-top:4px">${liveTxt}</div>`;
+  const defLegacy=f.D.filter(p=>dataQuality(p).level==="legacy");
+  if(defLegacy.length)h+=`<div class="ffnote" style="color:var(--amber)">Attenzione difensori: ${defLegacy.map(p=>p.name).join(", ")} sono stimati con modello indiretto. Se un C/A ha più bonus atteso, non farti comandare dal modificatore.</div>`;
+  const dead=owned.filter(p=>elim[p.nat]);
+  if(dead.length)h+=`<div class="fwarn">⚠ ${dead.length} con nazione eliminata (0 punti): ${dead.map(p=>p.name).join(", ")} → liberali o sostituiscili.</div>`;
+  const tag=p=>`${p.inj?' <span style="color:var(--amber)">⚠</span>':''}${(p.form&&p.form!==1)?` <span style="color:${p.form>1?'var(--green)':'var(--amber)'};font-size:10px">f.${p.form>1?'↑':'↓'}</span>`:''}${(()=>{const o=nextOpp(p.nat);return o?` <span style="color:var(--muted2);font-size:10px">vs ${o}</span>`:'';})()}`;
+  const line=(lab,arr)=>`<div class="rrole"><div class="rt2">${lab}</div>`+arr.map(p=>`<div class="ritem${elim[p.nat]?' dead':''}"><span>${p.name} <span class="nat">${p.nat}</span>${tag(p)}</span><span class="rp">${xPts(p).toFixed(1)}</span></div>`).join("")+`</div>`;
+  h+=`<div class="rt2" style="color:var(--gold);margin-top:10px">Titolari · ${f.mod}</div>`;
+  h+=line("Portiere",[f.gk]);
+  h+=line(`Difesa (${f.D.length})${f.D.length>=4?` · modificatore +${f.modifier}`:` · a 3 → niente modificatore`}`,f.D);
+  h+=line(`Centrocampo (${f.C.length})`,f.C);
+  h+=line(`Attacco (${f.A.length})`,f.A);
+  const inXI=new Set(f.xi.map(p=>p.id));
+  const restOrdered=owned.filter(p=>!inXI.has(p.id)).sort((a,b)=>xPts(b)-xPts(a));
+  const bench=restOrdered.slice(0,7),excl=restOrdered.slice(7);
+  h+=`<div class="rt2" style="color:var(--green);margin-top:12px">Panchina — ordinata per valore atteso (xPts)</div>`;
+  h+=`<div class="ffnote" style="color:var(--muted2)">Ordine per punti attesi (xPts). La regola reale di subentro (stesso ruolo, salta SV, max 3) è simulata nel pannello 🎲 qui sotto.</div>`;
+  h+=bench.length?bench.map((p,i)=>`<div class="ritem${elim[p.nat]?' dead':''}"><span><b style="color:var(--muted2)">${i+1}.</b> ${p.name} <span class="nat">${p.nat}</span>${tag(p)}</span><span class="rp" style="color:var(--muted)">${xPts(p).toFixed(1)}</span></div>`).join(""):`<div class="empty">—</div>`;
+  if(bench.length<7)h+=`<div class="ffnote">Solo ${bench.length}/7 riserve: ti mancano ${7-bench.length} giocatori per la panchina piena.</div>`;
+  if(excl.length)h+=`<div class="ffnote">${excl.length} fuori dai 18: ${excl.map(p=>p.name).join(", ")}.</div>`;
+  h+=`<div class="fform"><div class="rt2">Forma recente (moltiplicatore, editabile)</div><div class="ffgrid">`+owned.slice().sort((a,b)=>"PDCA".indexOf(a.role)-"PDCA".indexOf(b.role)).map(p=>`<label class="ffrow"><span>${p.name}</span><input type="number" step="0.05" min="0.5" max="1.5" value="${(p.form||1).toFixed(2)}" data-form="${p.id}"></label>`).join("")+`</div><div class="ffnote">1.00 = neutro. Il JSON live aggiorna forma/infortuni/avversari; qui ritocchi a mano.</div></div>`;
+  h+=renderSimPanel(f);
+  h+=`</div>`;board.innerHTML=h;
+}
+function renderRoster(){
+const el=document.getElementById("roster");const mine=players.filter(p=>p.status===1);
+let h=`<h3>La mia rosa</h3><div class="rsub">${mine.length}/${rosterSlots()} · ${spent()} spesi · ${effBudget()-spent()} rimasti${effBudget()-spent()<0?' ⚠ SFORATO':''}</div>`;
+const rec=recoverable();
+const deadOwned=players.filter(p=>p.status===1&&elim[p.nat]).length;
+if(deadOwned>0)h+=`<div class="recbar">Peso morto da nazioni eliminate: <b>${deadOwned}</b> giocatori — ${cfg.svincolo==='zero'?'liberali per aprire slot (0 cr recuperati)':`<b>${rec} cr</b> recuperabili`} <button class="rfree" data-freeall="1">Libera tutti i morti</button></div>`;
+// nation exposure
+const nats={};mine.forEach(p=>{nats[p.nat]=(nats[p.nat]||0)+1;});
+const ek=Object.keys(nats).sort((a,b)=>nats[b]-nats[a]);
+if(ek.length){h+=`<div class="expo">`+ek.map(n=>{const c=softCap(n),o=nats[n];const cl=o>c?'bad':o>=c?'warn':'';return `<span class="ec ${cl}">${n} ×${o}${o>=c?` (cap ${c})`:''}</span>`;}).join("")+`</div>`;}
+if(mine.length){const kc=keeperCoverageRisk(),ev=expectedValidStarters("me");
+const LV={basso:['var(--green)','BASSO'],medio:['var(--gold)','MEDIO'],alto:['var(--amber)','ALTO'],critico:['var(--red)','CRITICO']}[kc.level]||['var(--muted)',kc.level];
+const RR={low:'var(--green)',medium:'var(--gold)',high:'var(--amber)',critical:'var(--red)'};
+const riskLabel={low:"ok",medium:"da monitorare",high:"rischio alto",critical:"buco critico"};
+const shortTxt=ev.xiShortfall.quarter>0?`Ai quarti il modello vede rischio di restare sotto 11 voti: mancano circa ${ev.xiShortfall.quarter}.`:"Ai quarti il modello vede 11 voti coperti, se le nazioni forti reggono.";
+const defRisk=ev.roleRisks.D==="high"||ev.roleRisks.D==="critical"?"Difesa fragile: compra un difensore titolare vivo.":"Difesa numericamente coperta, ma resta da pesare la qualità.";
+const gkAction=kc.level==="basso"?"Portiere coperto.":"Portiere fragile: cerca un titolare libero o uno scambio senza rinforzare un rivale.";
+h+=`<div class="ind">
+<div class="ind-row"><span class="ind-lab">Portiere</span><span class="ind-badge" style="border-color:${LV[0]};color:${LV[0]}">${LV[1]}</span><span class="ind-note">${gkAction}</span></div>
+<div class="ind-row"><span class="ind-lab">Difesa</span><span class="ind-note">${defRisk}</span></div>
+<div class="ind-row"><span class="ind-lab">XI nei knockout</span><span class="ind-evs">${ev.playableXI.nextRound} / ${ev.playableXI.quarter} / ${ev.playableXI.semi} / ${ev.playableXI.final}</span><span class="ind-note">sedicesimi, quarti, semi, finale. ${shortTxt}</span></div>
+<div class="ind-row"><span class="ind-lab">Ruoli da non ignorare</span>${["P","D","C","A"].map(r=>`<span class="ind-rr" style="color:${RR[ev.roleRisks[r]]||'var(--muted)'}">${r}: ${riskLabel[ev.roleRisks[r]]||ev.roleRisks[r]}</span>`).join(" · ")}</div>
+</div>`;}
+for(const r of["P","D","C","A"]){const rp=mine.filter(p=>p.role===r).sort((a,b)=>b.price-a.price);
+h+=`<div class="rrole"><div class="rt2">${ROLES[r].name} (${rp.length}/${ROLES[r].need})</div>`;
+h+=rp.length?rp.map(p=>{const dead=!!elim[p.nat];return `<div class="ritem${dead?' dead':''}"><span>${p.name} <span class="nat">${p.nat}</span></span><span>${(dead||cfg.liberaAttivi)?`<button class="ab free" data-free="${p.id}" style="margin-right:6px">Libera${cfg.svincolo==='zero'?'':' '+p.price}</button>`:''}<span class="rp">${p.price}</span></span></div>`;}).join(""):`<div class="empty">—</div>`;
+h+=`</div>`;}
+el.innerHTML=h;
+}
+/* ===== V3.0 azioni & persistenza ===== */
+function release(id){const p=players.find(x=>x.id===id);if(!p)return;if(cfg.svincolo==='zero')sunk+=p.price;p.status=0;p.price=0;p.owner=null;}
+function recoverable(){if(cfg.svincolo==='zero')return 0;return players.filter(p=>p.status===1&&elim[p.nat]).reduce((s,p)=>s+p.price,0);}
+function syncTurnoButtons(){document.querySelectorAll("#turnoSel button,#turnoSel2 button").forEach(b=>b.classList.toggle("on",b.dataset.t===turno));}
+// ===== V4-B — Tabellone knockout (shell che si popola a gironi finiti 27/6) =====
+const BR_SEQ=["R32","R16","QF","SF","F","W"];
+const BR_SIZE={R32:32,R16:16,QF:8,SF:4,F:2,W:1};
+const BR_LAB={R32:"Round of 32",R16:"Ottavi",QF:"Quarti",SF:"Semifinali",F:"Finale",W:"Campione"};
+let bracket={};for(const k of BR_SEQ)bracket[k]=Array(BR_SIZE[k]).fill(null);
+let liveData={meta:{},risultati:[],prossime:[],classifiche:{},infortuni:[],forma:[],players:[],freePlayers:[],pathConflicts:[],koOdds:{}};
+let selMod="auto";
+let gameday="auto"; // giornata per la FORMAZIONE (auto=usa dati live; g1/g2/g3=giornate gironi). Scollegata dal Turno.
+const GFIX=[[1,0,3,2],[2,3,0,1],[3,2,1,0]]; // rotazione round-robin (gironi a 4): partner della posizione i alla giornata m
+function gamedayOpp(nat){ // avversario di 'nat' nella giornata-girone selezionata; null se 'auto'
+  if(gameday==="auto")return null; const m={g1:0,g2:1,g3:2}[gameday]; if(m==null)return null;
+  for(const g of Object.values(GIRONI)){const i=g.indexOf(nat);if(i>=0){const o=g[GFIX[m][i]];return (o&&NAT[o])?o:null;}}
+  return null;
+}
+function nextOpp(nat){const gd=gamedayOpp(nat);if(gd)return gd;for(const fx of (liveData.prossime||[])){if(fx.casa===nat&&NAT[fx.ospite])return fx.ospite;if(fx.ospite===nat&&NAT[fx.casa])return fx.casa;}return null;}
+function oppFactor(p){if(!p)return 1;const o=nextOpp(p.nat);if(!o)return 1;const d=NAT[p.nat][1]-NAT[o][1];return Math.max(0.85,Math.min(1.18,1+0.06*d));}
+/* V5.5 — SCHEMA JSON LIVE (lite). Tutte le sezioni opzionali; ciò che manca resta default (mai inventato).
+{ "meta":{"updatedAt":"ISO","source":"manual|predicted_lineup|...","confidence":"low|medium|high"},
+  "eliminate":["sve"], "infortuni":[{"giocatore":"X","stato":"out|doubt|ok"}], "forma":[{"giocatore":"X","mult":1.05}],
+  "players":[ { "name":"Barcola",
+     "usageType":"locked_starter|likely_starter|rotation_starter|regular_sub|impact_sub|late_cameo|deep_bench",   // validato; ignoto => ignorato
+     "subProfile":"early_rotation|standard_sub|late_cameo|emergency_only",                                         // validato
+     "startProbability":0.55,            // => pStart (lever simulatore)
+     "appearanceProbability":0.85,       // => pSub SOLO se c'è anche startProbability; da SOLO non altera la simulazione (memorizzato in meta)
+     "injuryStatus":"out|doubt|ok", "suspensionStatus":"suspended",                                                // => availability
+     "projectedMinutes":62, "validScoreProbability":0.75, "expectedStarter":true,                                  // MEMORIZZATI (provenienza/confidence), NON ancora cablati nel campionamento — V5.6
+     "source":"predicted_lineup", "confidence":"medium", "note":"vs Iraq" } ],
+  "freePlayers":[ { "name":"Kounde", "role":"D", "nat":"fra", "q":13, "marker":"T", "source":"screenshot Fantaclub 2026-06-21", "confidence":"media" } ],
+  "pathConflicts":[ { "a":"fra", "b":"ger", "round":"ottavi/quarti", "note":"collisione da fonte tabellone/supercomputer" } ] }
+Lettura: usageType/subProfile/startProbability/availability => scenarioOverrides (scenarioOf li usa => il simulatore li legge). freePlayers resta separato dal motore curato. */
+function applyLive(obj){if(!obj||typeof obj!=="object")return{ok:false,msg:"JSON non valido"};const log=[];if(obj.meta)liveData.meta=obj.meta;if(Array.isArray(obj.eliminate)){Object.keys(elim).forEach(k=>delete elim[k]);obj.eliminate.forEach(c=>{if(NAT[c])elim[c]=true;});log.push(obj.eliminate.filter(c=>NAT[c]).length+" eliminate");}if(obj.koOdds&&typeof obj.koOdds==="object"){liveData.koOdds=obj.koOdds;log.push(Object.keys(obj.koOdds).filter(c=>NAT[c]).length+" quote KO");}if(obj.survival&&typeof obj.survival==="object"){liveData.koOdds=obj.survival;log.push(Object.keys(obj.survival).filter(c=>NAT[c]).length+" survival KO");}if(obj.classifiche&&typeof obj.classifiche==="object"){liveData.classifiche=obj.classifiche;log.push("classifiche");}if(Array.isArray(obj.risultati)){liveData.risultati=obj.risultati;log.push(obj.risultati.length+" risultati");}if(Array.isArray(obj.prossime)){liveData.prossime=obj.prossime;log.push(obj.prossime.length+" prossime");}if(Array.isArray(obj.sedicesimi)){brReset();for(let m=0;m<16&&m<obj.sedicesimi.length;m++){const pr=obj.sedicesimi[m];if(pr){bracket.R32[2*m]=(pr.a&&NAT[pr.a])?pr.a:null;bracket.R32[2*m+1]=(pr.b&&NAT[pr.b])?pr.b:null;}}log.push(obj.sedicesimi.length+" sedicesimi");}if(Array.isArray(obj.infortuni)){liveData.infortuni=obj.infortuni;let n=0;obj.infortuni.forEach(it=>{const p=players.find(x=>x.name===it.giocatore);if(p){const st=(it.stato||"").toLowerCase();p.inj=!(st==="ok"||st==="recuperato"||st==="disponibile");n++;}});log.push(n+" infortuni");}if(Array.isArray(obj.forma)){liveData.forma=obj.forma;let n=0;obj.forma.forEach(it=>{const p=players.find(x=>x.name===it.giocatore);if(p&&typeof it.mult==="number"){p.form=Math.max(0.5,Math.min(1.5,it.mult));n++;}});log.push(n+" forma");}
+if(Array.isArray(obj.freePlayers)){const valid=obj.freePlayers.map(normalizeFreePlayer).filter(Boolean);liveData.freePlayers=valid;log.push(valid.length+" liberi esterni");}
+if(Array.isArray(obj.pathConflicts)){const valid=obj.pathConflicts.filter(x=>x&&NAT[x.a]&&NAT[x.b]).map(x=>({a:x.a,b:x.b,round:x.round||"KO",note:x.note||""}));liveData.pathConflicts=valid;log.push(valid.length+" collisioni tabellone");}
+if(Array.isArray(obj.players)){const VU=Object.keys(USAGE_DEF),VS=Object.keys(SUBPROF_DEF);let n=0,warn=0;liveData.players=obj.players;obj.players.forEach(it=>{const nm=it.name||it.giocatore;const p=players.find(x=>x.name===nm);if(!p){warn++;log.push("? "+nm+" non in rosa dati");return;}const ov=Object.assign({},getScenarioOverrides()[nm]||{});
+// usageType / subProfile: validati sui profili REALI. Sconosciuto => NON inventato (skip + warning).
+if(it.usageType!=null){if(VU.includes(it.usageType))ov.u=it.usageType;else{warn++;log.push("usageType ignoto: "+it.usageType);}}
+if(it.subProfile!=null){if(VS.includes(it.subProfile))ov.s=it.subProfile;else{warn++;log.push("subProfile ignoto: "+it.subProfile);}}
+// startProbability => pStart (lever reale). appearanceProbability => pSub coerente, solo se ho anche start.
+if(typeof it.startProbability==="number")ov.pStart=Math.max(0,Math.min(1,it.startProbability));
+if(typeof it.appearanceProbability==="number"&&ov.pStart!=null){const app=Math.max(0,Math.min(1,it.appearanceProbability)),den=1-ov.pStart;ov.pSub=den>0?Math.max(0,Math.min(1,(app-ov.pStart)/den)):0;}
+// disponibilità: squalifica / infortunio (mai inventata: agisce solo se il campo c'è)
+const inj=(it.injuryStatus||"").toLowerCase(),susp=(it.suspensionStatus||"").toLowerCase();
+if(susp==="suspended"||susp==="out"||susp==="squalificato")ov.availability=0;
+if(inj==="out"||inj==="injured"){p.inj=true;ov.availability=0;}
+else if(inj==="doubt"||inj==="dubbio"){p.inj=true;ov.injuryDoubt=true;if(ov.availability==null)ov.availability=0.5;}
+else if(inj==="ok"||inj==="fit"||inj==="disponibile"){p.inj=false;ov.injuryDoubt=false;if(susp!=="suspended"&&(ov.availability===0||ov.availability===0.5))delete ov.availability;}
+// provenienza + campi NON cablati nel campionamento (memorizzati per display/confidence, mai inventati) — limite noto V5.6
+ov.meta=Object.assign({},ov.meta,{source:it.source||(obj.meta&&obj.meta.source)||null,confidence:it.confidence||(obj.meta&&obj.meta.confidence)||null,updatedAt:it.updatedAt||(obj.meta&&obj.meta.updatedAt)||null,note:it.note||null,projectedMinutes:(typeof it.projectedMinutes==="number")?it.projectedMinutes:null,validScoreProbability:(typeof it.validScoreProbability==="number")?it.validScoreProbability:null,appearanceProbability:(typeof it.appearanceProbability==="number")?it.appearanceProbability:null,expectedStarter:(typeof it.expectedStarter==="boolean")?it.expectedStarter:null});
+setScenarioOverride(nm,ov);n++;});log.push(n+" scenari live"+(warn?(" ("+warn+" warn)"):""));}return{ok:true,msg:(log.join(", ")||"nessuna sezione")};}
+function brReset(){for(const k of BR_SEQ)bracket[k]=Array(BR_SIZE[k]).fill(null);}
+function brAdvance(round,m,side){const ri=BR_SEQ.indexOf(round);if(ri<0||ri>=BR_SEQ.length-1)return;bracket[BR_SEQ[ri+1]][m]=bracket[round][m*2+side];}
+function brSet(slot,nat){if(slot<0||slot>=32)return;const v=(nat&&NAT[nat])?nat:null;if(v){for(let i=0;i<32;i++)if(i!==slot&&bracket.R32[i]===v)bracket.R32[i]=null;}bracket.R32[slot]=v;}
+function brSeed(){brReset();const gs=Object.keys(GIRONI);const firsts=[],seconds=[],thirds=[];for(const g of gs){const r=GIRONI[g].slice().sort((a,b)=>natShare(b)-natShare(a));firsts.push(r[0]);seconds.push(r[1]);thirds.push(r[2]);}const bestThirds=thirds.slice().sort((a,b)=>natShare(b)-natShare(a)).slice(0,8);const strong=firsts.concat(bestThirds.slice(0,4));const weak=seconds.concat(bestThirds.slice(4));for(let m=0;m<16;m++){bracket.R32[2*m]=strong[m]||null;bracket.R32[2*m+1]=weak[m]||null;}}
+function brClear(slot){if(slot>=0&&slot<32)bracket.R32[slot]=null;}
+function brOwnedNats(){const s=new Set();players.forEach(p=>{if(p.status===1)s.add(p.nat);});return s;}
+function brOwnedCount(nat){return players.filter(p=>p.status===1&&p.nat===nat).length;}
+function brCollisions(){const own=brOwnedNats(),out=[];for(const k of BR_SEQ){if(k==="W")continue;for(let m=0;m<BR_SIZE[k]/2;m++){const a=bracket[k][2*m],b=bracket[k][2*m+1];if(a&&b&&own.has(a)&&own.has(b))out.push({round:k,a,b});}}return out;}
+function brSnapshot(){const o={};for(const k of BR_SEQ)o[k]=[...bracket[k]];return o;}
+function brApply(o){brReset();if(!o)return;for(const k of BR_SEQ)if(Array.isArray(o[k]))for(let i=0;i<BR_SIZE[k]&&i<o[k].length;i++)bracket[k][i]=(o[k][i]&&NAT[o[k][i]])?o[k][i]:null;}
+function brOpts(v){const placed=new Set(bracket.R32.filter(Boolean));const codes=Object.keys(NAT).sort((a,b)=>NAT[a][0].localeCompare(NAT[b][0]));return `<option value="">＋ scegli…</option>`+codes.filter(c=>!placed.has(c)||c===v).map(c=>`<option value="${c}"${c===v?' selected':''}>${flag(c)} ${NAT[c][0]}</option>`).join("");}
+function brChip(team,attrs,slot){const own=brOwnedNats();if(!team)return slot!=null?`<select class="brsel" data-brset="${slot}">${brOpts(null)}</select>`:`<span class="brteam empty">—</span>`;const cl=`brteam${own.has(team)?' own':''}${elim[team]?' dead':''}`;const x=slot!=null?`<i class="brx" data-brclear="${slot}" title="libera">×</i>`:'';return `<span class="${cl}" ${attrs||''} title="clic = avanza">${flag(team)}<span class="brnm">${NAT[team]?NAT[team][0]:team}</span>${own.has(team)?`<b class="brc">${brOwnedCount(team)}</b>`:''}${x}</span>`;}
+function sediciHTML(){
+  const filled=bracket.R32.filter(Boolean).length;
+  let h=`<div class="brbar"><button class="brbtn seed" data-brseed="1">🎲 Semina dai gironi</button><button class="brbtn" data-brclearall="1">Azzera</button><span class="brcount">${filled}/32 squadre</span></div>`;
+  h+=`<div class="brnote">I <b>sedicesimi</b> (Round of 32): 12 prime + 12 seconde + 8 migliori terze = 32. Compila le 16 partite (o carica il JSON), poi <b>clicca chi passa</b>: il vincente sale agli Ottavi nella scheda <b>Tabellone</b>. <span style="color:var(--green)">Tue nazioni</span> evidenziate.</div>`;
+  const col=brCollisions().filter(c=>c.round==="R32");
+  if(col.length)h+=`<div class="brcoll">⚠ Collisione sedicesimi: `+col.map(c=>`<b>${NAT[c.a][0]}–${NAT[c.b][0]}</b>`).join(" · ")+`</div>`;
+  h+=`<div class="sedgrid">`;
+  for(let m=0;m<16;m++){const a=bracket.R32[2*m],b=bracket.R32[2*m+1];
+    h+=`<div class="brmatch"><div class="sedhd">Match ${m+1} → Ottavo ${m+1}</div><div class="brrow">${brChip(a,`data-bradv="R32,${m},0"`,2*m)}</div><div class="brvs">vs</div><div class="brrow">${brChip(b,`data-bradv="R32,${m},1"`,2*m+1)}</div></div>`;}
+  h+=`</div>`;return h;
+}
+function brHTML(){
+  const own=brOwnedNats();
+  let h=`<div class="brnote">Albero dagli <b>Ottavi</b> alla Finale, a due metà che convergono al centro. I sedicesimi stanno nella scheda dedicata e alimentano questa griglia. Clic su una squadra = avanza.</div>`;
+  const col=brCollisions().filter(c=>c.round!=="R32");
+  if(col.length)h+=`<div class="brcoll">⚠ Collisioni: `+col.map(c=>`<b>${NAT[c.a][0]}–${NAT[c.b][0]}</b> (${BR_LAB[c.round]})`).join(" · ")+`</div>`;
+  const card=(round,m)=>{const a=bracket[round][2*m],b=bracket[round][2*m+1];return `<div class="brmatch"><div class="brrow">${brChip(a,`data-bradv="${round},${m},0"`)}</div><div class="brvs">vs</div><div class="brrow">${brChip(b,`data-bradv="${round},${m},1"`)}</div></div>`;};
+  const colH=(lab,round,ms)=>`<div class="brcol"><div class="brhd">${lab}</div>${ms.map(m=>card(round,m)).join("")}</div>`;
+  const w=bracket.W[0];
+  const center=`<div class="brcol brcenter"><div class="brhd">Finale</div>${card("F",0)}<div class="brchamp">${w?`<span class="brteam champ${own.has(w)?' own':''}">🏆 ${flag(w)} <span class="brnm">${NAT[w][0]}</span></span>`:`<span class="brteam empty">🏆 campione</span>`}</div></div>`;
+  h+=`<div class="brwrap tree">`+colH("Ottavi","R16",[0,1,2,3])+colH("Quarti","QF",[0,1])+colH("Semi","SF",[0])+center+colH("Semi","SF",[1])+colH("Quarti","QF",[2,3])+colH("Ottavi","R16",[4,5,6,7])+`</div>`;
+  return h;
+}
+function renderNations(){
+  const ts2=document.getElementById("turnoSel2");if(ts2)ts2.innerHTML=TURNI.map(t=>`<button data-t="${t}" class="${t===turno?'on':''}">${TURNO_LAB[t]}</button>`).join("");
+  syncTurnoButtons();
+  document.querySelectorAll("#natViewToggle .tab").forEach(b=>b.classList.toggle("active",b.dataset.nv===natView));
+  const panel=document.getElementById("natPanel");if(!panel)return;
+  if(natView==="sedicesimi"){panel.innerHTML=sediciHTML();return;}
+  if(natView==="bracket"){panel.innerHTML=brHTML();return;}
+  if(natView==="groups"){
+    let h=`<div class="girgrid">`;
+    for(const g of Object.keys(GIRONI)){
+      h+=`<div class="gircard"><div class="girhd">Girone ${g}</div>`;
+      for(const c of GIRONI[g]){const dead=!!elim[c],sh=natShare(c);
+        h+=`<div class="girnat${dead?' dead':''}" data-nat="${c}" title="${dead?'eliminata — clic per riportarla viva':'clic = marca eliminata'}"><span class="nfl">${flag(c)}</span><span class="nnm">${NAT[c][0]}</span><span class="npc">${dead?'OUT':(sh*100).toFixed(1)+'%'}</span></div>`;}
+      h+=`</div>`;
+    }
+    h+=`</div>`;panel.innerHTML=h;return;
+  }
+  const codes=Object.keys(NAT).sort((a,b)=>{const da=elim[a]?1:0,db=elim[b]?1:0;if(da!==db)return da-db;return natShare(b)-natShare(a);});
+  const maxShare=Math.max(...aliveNats().map(natShare),0.0001);
+  let h=`<div class="natgrid">`;
+  for(const c of codes){const dead=!!elim[c],sh=natShare(c),heatW=dead?100:Math.round((sh/maxShare)*100);
+    h+=`<div class="natchip${dead?' dead':''}" data-nat="${c}" title="${dead?'eliminata — clic per riportarla viva':'clic = marca eliminata'}"><div class="nrow"><span class="nfl">${flag(c)}</span><span class="nnm">${NAT[c][0]}</span><span class="npc">${dead?'OUT':(sh*100).toFixed(1)+'%'}</span></div><div class="nmeta">EG ${NAT[c][1].toFixed(1)}${dead?'':' · eff '+egEff(c).toFixed(2)}</div><div class="heat" style="width:${heatW}%"></div></div>`;}
+  h+=`</div>`;panel.innerHTML=h;
+}
+function renderSessionBar(){const el=document.getElementById("sessionBar");if(!el)return;const rec=recoverable();const sh=storageHealthy();const shTxt=sh?`<span style="color:var(--green)">💾 salvataggio attivo</span>`:`<span style="color:var(--amber)">⚠ salvataggio automatico non disponibile in questa vista — esporta il JSON</span>`;
+  el.innerHTML=`<button class="sb-btn" id="sb_export">⤓ Esporta JSON</button><button class="sb-btn" id="sb_import">⤒ Importa JSON</button><input type="file" id="sb_file" accept="application/json" style="display:none"><button class="sb-btn" id="sb_live">⬆ Dati live</button><input type="file" id="sb_livefile" accept="application/json" style="display:none"><button class="sb-btn danger" id="sb_new">✦ Nuova asta</button><span class="sb-info">turno <b>${TURNO_LAB[turno]}</b> · eliminate ${Object.keys(elim).length}${rec>0?` · <b style="color:var(--amber)">${rec} cr recuperabili</b>`:''} · ${shTxt}</span>`;
+}
+const LS_KEY="fantamondiale2026_warroom_v3";
+function sessionSnapshot(){return{v:4,turno,elim:{...elim},budget:BUDGET,sunk,favorites:[...favNames],opps:opps.map(o=>({id:o.id,name:o.name})),extras:extras.map(x=>({...x})),players:players.filter(p=>p.status!==0).map(p=>({name:p.name,status:p.status,price:p.price,owner:p.owner,form:p.form})),bracket:brSnapshot(),live:liveData};}
+function applySession(s){if(!s)return;
+  if(s.turno&&TURNI.includes(s.turno))turno=s.turno;
+  Object.keys(elim).forEach(k=>delete elim[k]);if(s.elim)Object.assign(elim,s.elim);
+  if(typeof s.budget==="number"&&s.budget>0){BUDGET=s.budget;const b=document.getElementById("budget");if(b)b.value=s.budget;}
+  if(Array.isArray(s.opps)&&s.opps.length){opps.length=0;s.opps.forEach(o=>opps.push({id:o.id,name:o.name}));}
+  extras.length=0;if(Array.isArray(s.extras))s.extras.forEach(x=>extras.push({...x}));EXID=extras.reduce((m,x)=>Math.max(m,x.id+1),1);
+  sunk=(typeof s.sunk==="number"&&s.sunk>=0)?s.sunk:0;
+  if(Array.isArray(s.favorites)){favNames.clear();s.favorites.forEach(n=>{if(players.some(p=>p.name===n))favNames.add(n);});}
+  brApply(s.bracket);
+  if(s.live&&typeof s.live==="object")liveData={meta:s.live.meta||{},risultati:s.live.risultati||[],prossime:s.live.prossime||[],classifiche:s.live.classifiche||{},infortuni:s.live.infortuni||[],forma:s.live.forma||[],players:s.live.players||[],freePlayers:s.live.freePlayers||[],pathConflicts:s.live.pathConflicts||[],koOdds:s.live.koOdds||s.live.survival||{}};
+  players.forEach(p=>{p.status=0;p.price=0;p.owner=null;});
+  const byName={};players.forEach(p=>byName[p.name]=p);
+  if(Array.isArray(s.players))s.players.forEach(sp=>{const p=byName[sp.name];if(p){p.status=sp.status;p.price=sp.price;p.owner=sp.owner;if(typeof sp.form==="number")p.form=sp.form;}});
+}
+function storageHealthy(){if(typeof localStorage==="undefined")return false;try{const k="__wr_probe__";localStorage.setItem(k,"1");const ok=localStorage.getItem(k)==="1";localStorage.removeItem(k);return ok;}catch(e){return false;}}
+function saveState(){if(typeof localStorage==="undefined")return;try{localStorage.setItem(LS_KEY,JSON.stringify(sessionSnapshot()));}catch(e){}}
+function loadState(){if(typeof localStorage==="undefined")return;try{const raw=localStorage.getItem(LS_KEY);if(raw)applySession(JSON.parse(raw));}catch(e){}}
+function exportJSON(){try{const blob=new Blob([JSON.stringify(sessionSnapshot(),null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="fantamondiale2026-"+turno+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){alert("Export fallito");}}
+function importJSON(file){const r=new FileReader();r.onload=()=>{try{applySession(JSON.parse(r.result));render();}catch(e){alert("Import non valido");}};r.readAsText(file);}
+function importLive(file){const r=new FileReader();r.onload=()=>{try{const obj=JSON.parse(r.result);const msg="Anteprima dati live: "+livePreview(obj)+". Applicare?";askConfirm(msg,()=>{const res=applyLive(obj);render();alert(res.ok?("Dati live — "+res.msg):("Errore: "+res.msg));});}catch(e){alert("JSON live non valido");}};r.readAsText(file);}
+function resetAuction(){CAL_DONE=false;players.forEach(p=>{p.status=0;p.price=0;p.owner=null;});extras.length=0;sunk=0;}
+let _cfYes=null;
+function askConfirm(msg,onYes){const ov=document.getElementById("confirmOv"),m=document.getElementById("cf_msg");if(!ov||!m){if(typeof onYes==="function")onYes();return;}m.textContent=msg;_cfYes=onYes;ov.classList.add("on");}
+function _cfClose(){const ov=document.getElementById("confirmOv");if(ov)ov.classList.remove("on");_cfYes=null;}
+function nuovaAsta(){askConfirm("Nuova asta: azzero acquisti, eliminazioni, turno e tabellone (i dati di riferimento restano). Confermi?",()=>{players.forEach(p=>{p.status=0;p.price=0;p.owner=null;});extras.length=0;Object.keys(elim).forEach(k=>delete elim[k]);turno="iniziale";sunk=0;brReset();liveData={meta:{},risultati:[],prossime:[],classifiche:{},infortuni:[],forma:[],players:[],freePlayers:[],pathConflicts:[],koOdds:{}};selMod="auto";gameday="auto";if(typeof localStorage!=="undefined"){try{localStorage.removeItem(LS_KEY);}catch(e){}}render();});}
+let pendingId=null;
+function openModal(id,isOther){const p=players.find(x=>x.id===id);const fv=fairValue(p),mb=maxBid(p),cn=contenders(p).length;pendingId=id;
+document.getElementById("m_name").textContent=p.name;
+document.getElementById("m_info").textContent=`${NAT[p.nat][0]} · base ${p.q} · valore equo ${fv}${p.rating?` · rating ${p.rating}`:""}`;
+{const rp=repairProfile(p);const STC={auction_target:["var(--green)","COMPRA SE IL PREZZO REGGE"],trade_only:["var(--blue)","SOLO SCAMBIO"],keep:["var(--green)","TIENI"],sell_candidate:["var(--amber)","CEDIBILE"],release_candidate:["var(--amber)","SVINCOLA"],avoid:["var(--red)","EVITA"]}[rp.status]||["var(--muted)",rp.status];const BT={low:"bassa",medium:"media",high:"alta","all-in candidate":"molto alta"};const band=rp.maxRepairBid&&rp.maxRepairBid.band&&rp.maxRepairBid.band!=="—"?` · fascia <b>${BT[rp.maxRepairBid.band]||rp.maxRepairBid.band}</b>${rp.maxRepairBid.range?` (~${rp.maxRepairBid.range[0]}–${rp.maxRepairBid.range[1]})`:""}`:"";document.getElementById("m_repair").innerHTML=`<div><span class="rs-badge" style="border-color:${STC[0]};color:${STC[0]}">${STC[1]}</span>${band}</div><div style="color:var(--muted);margin-top:3px">${rp.explanation}</div>${rp.warnings.length?`<span class="rs-warn">⚠ ${rp.warnings.join(" · ")}</span>`:""}`;}
+const sel=document.getElementById("m_buyer");sel.innerHTML=`<option value="me">Io</option>`+opps.map(o=>`<option value="${o.id}">${o.name}</option>`).join("");sel.value=isOther?String(opps[0].id):"me";
+const pin=document.getElementById("m_price");pin.value=mb>0?mb:p.q;
+document.getElementById("m_hint").textContent=isOther?`Chi se l'è aggiudicato e a quanto · ${cn} avversari attivi sul ruolo`:`Max consigliato ora: ${mb} cr · ${cn} avversari possono rilanciare`;
+document.getElementById("overlay").classList.add("on");pin.focus();pin.select();}
+function closeModal(){document.getElementById("overlay").classList.remove("on");pendingId=null;}
+function confirmModal(){if(pendingId===null)return;const p=players.find(x=>x.id===pendingId);const v=parseInt(document.getElementById("m_price").value,10);if(isNaN(v)||v<0)return;const b=document.getElementById("m_buyer").value;if(b==="me"){p.status=1;p.owner=null;}else{p.status=2;p.owner=parseInt(b,10);}p.price=v;closeModal();render();}
+document.getElementById("board").addEventListener("click",e=>{const t=e.target;if(t.dataset.take!=null)openModal(+t.dataset.take,false);else if(t.dataset.other!=null){openModal(+t.dataset.other,true);}else if(t.dataset.skip!=null){const p=players.find(x=>x.id==+t.dataset.skip);p.status=3;p.price=0;p.owner=null;render();}else if(t.dataset.undo!=null){const p=players.find(x=>x.id==+t.dataset.undo);p.status=0;p.price=0;p.owner=null;render();}});
+document.getElementById("v58Panel").addEventListener("click",e=>{
+  const t=e.target;
+  if(t.dataset.v58Forfait!=null){cfg.forfaitOn=true;const fo=document.getElementById("cfgForfaitOn");if(fo)fo.checked=true;render();return;}
+  if(t.dataset.v58Addfav!=null){const inp=document.getElementById("v58FavInput");const raw=(inp&&inp.value||"").trim();const p=players.find(x=>x.name.toLowerCase()===raw.toLowerCase());if(p){favNames.add(p.name);if(inp)inp.value="";render();}else alert("Giocatore non trovato nel listone.");return;}
+  if(t.dataset.v58Rmfav!=null){favNames.delete(t.dataset.v58Rmfav);render();return;}
+});
+document.getElementById("m_confirm").addEventListener("click",confirmModal);
+document.getElementById("m_cancel").addEventListener("click",closeModal);
+document.getElementById("overlay").addEventListener("click",e=>{if(e.target.id==="overlay")closeModal();});
+document.getElementById("m_price").addEventListener("keydown",e=>{if(e.key==="Enter")confirmModal();if(e.key==="Escape")closeModal();});
+document.getElementById("tabs").addEventListener("click",e=>{if(!e.target.dataset.r)return;document.querySelectorAll("#tabs .tab").forEach(t=>t.classList.remove("active"));e.target.classList.add("active");curRole=e.target.dataset.r;render();});
+document.getElementById("turnoSel").addEventListener("click",e=>{if(!e.target.dataset.t)return;document.querySelectorAll("#turnoSel button").forEach(b=>b.classList.remove("on"));e.target.classList.add("on");turno=e.target.dataset.t;syncTurnoButtons();render();});
+function syncTurnoButtons(){document.querySelectorAll("#turnoSel button").forEach(b=>b.classList.toggle("on",b.dataset.t===turno));}
+document.getElementById("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();render();});
+document.getElementById("hideTaken").addEventListener("change",e=>{hideTaken=e.target.checked;render();});
+document.getElementById("sortSel").addEventListener("change",e=>{sortMode=e.target.value;render();});
+document.getElementById("onlyStars").addEventListener("change",e=>{onlyStars=e.target.checked;render();});
+document.getElementById("budget").addEventListener("input",e=>{BUDGET=parseInt(e.target.value,10)||0;render();});
+["credit","repair","assist","cs","malus","defmod"].forEach(k=>{document.getElementById("t_"+k).addEventListener("change",e=>{cfg[k]=e.target.checked;render();});});
+(function(){const sv=document.getElementById("cfgSvincolo");if(sv){sv.value=cfg.svincolo;sv.addEventListener("change",e=>{cfg.svincolo=e.target.value;render();});}
+const fo=document.getElementById("cfgForfaitOn");if(fo){fo.checked=cfg.forfaitOn;fo.addEventListener("change",e=>{cfg.forfaitOn=e.target.checked;render();});}
+const fa=document.getElementById("cfgForfait");if(fa){fa.value=cfg.forfait;fa.addEventListener("input",e=>{cfg.forfait=parseInt(e.target.value,10)||0;render();});}
+const la=document.getElementById("cfgLiberaAttivi");if(la){la.checked=cfg.liberaAttivi;la.addEventListener("change",e=>{cfg.liberaAttivi=e.target.checked;render();});}})();
+function renderQueue(){
+const board=document.getElementById("board");
+let list=players.filter(p=>p.status===0);
+if(query)list=list.filter(p=>p.name.toLowerCase().includes(query)||NAT[p.nat][0].toLowerCase().includes(query));
+list.sort((a,b)=>{const ca=a.callNum??99999,cb=b.callNum??99999;if(ca!==cb)return ca-cb;return sortKey(a.name).localeCompare(sortKey(b.name),"it");});
+const targets=list.filter(p=>{const t=targetTier(p);return t==="star"||t==="target";});
+const reserve=targets.reduce((s,p)=>s+maxBid(p),0);
+let h=`<div class="qhead">Coda del banditore: i liberi escono in <b>ordine alfabetico</b> col loro numero reale di chiamata sul listone (~${LISTONE_N} nomi totali), una passata sola. Le righe grigie dicono quanti giocatori non monitorati passano tra un tuo nome e l'altro → quanto puoi rilassarti.<br><b>${list.length}</b> tuoi nomi ancora liberi · obiettivi in coda: <b>${targets.length}</b> · crediti da tenere da parte ~ <b style="color:var(--gold)">${reserve}</b> (hai ${effBudget()-spent()})</div>`;
+h+=`<table><thead><tr><th class="pr">#</th><th>Giocatore</th><th>Naz</th><th class="n">Ruolo</th><th class="n">EG</th><th class="n">Rating</th><th class="n">Quot.</th><th class="n">Equo</th><th class="n">Max</th><th>Stelle</th><th></th></tr></thead><tbody>`;
+let prev=0;
+list.forEach((p)=>{const fv=fairValue(p),mb=maxBid(p),t=targetTier(p),tgt=t==="star"||t==="target",done=liveNeed(p.role)<=0,tier=TIER_BY_EG(NAT[p.nat][1]);
+if(p.callNum!=null){const gap=p.callNum-prev-1;if(gap>0)h+=`<tr class="qgap"><td colspan="11">▸ ${gap} giocatori non monitorati</td></tr>`;prev=p.callNum;}
+h+=`<tr class="${tgt?'rec':''}${done?' done':''}"><td class="pr n">${p.callNum!=null?'#'+p.callNum:'–'}</td><td><div class="pname">${p.name}${p.inj?' <span style="color:var(--amber)">⚠</span>':''}${availBadge(p)}</div></td><td><span class="nat">${p.nat}</span></td><td class="n">${p.role}</td><td class="n"><span class="tier ${tier}">${tier}</span></td><td class="n rt">${p.rating?p.rating.toFixed(1):'–'}</td><td class="n q">${p.q}</td><td class="n"><span class="fair">${fv}</span></td><td class="n"><span class="max">${mb>0?mb:'–'}</span></td><td>${starHTML(p)}</td><td><div class="acts"><button class="ab mine" data-take="${p.id}">Io</button><button class="ab other" data-other="${p.id}">Altri</button><button class="ab skip" data-skip="${p.id}">Skip</button></div></td></tr>`;});
+h+=`</tbody></table>`;board.innerHTML=h;
+}
+function renderOpps(){const el=document.getElementById("oppPanel");if(!el)return;
+const exrows=extras.map(x=>{const o=opps.find(q=>q.id===x.owner);return `<div class="exitem"><span>${o?o.name:'?'} · ${x.role} · <b style="color:var(--gold)">${x.price}</b> cr</span><button data-exdel="${x.id}" title="Rimuovi">✕</button></div>`;}).join("");
+el.innerHTML=`<div class="opp-setup">N° avversari: <input type="number" id="nOpp" class="num-in" value="${opps.length}" min="1" max="11" style="width:52px"> &nbsp; `+opps.map(o=>`<input class="opp-name" data-oid="${o.id}" value="${o.name}">`).join("")+`</div><div id="oppBoard"></div>`
++`<div class="exbox"><div class="lab">Acquisto avversario · fuori lista (giocatore non monitorato)</div><div class="exf"><select id="ex_owner">${opps.map(o=>`<option value="${o.id}">${o.name}</option>`).join("")}</select><select id="ex_role"><option value="P">P (portiere)</option><option value="D">D (difensore)</option><option value="C">C (centroc.)</option><option value="A">A (attacc.)</option></select><input type="number" id="ex_price" min="0" value="1" title="prezzo pagato"><button class="add" id="ex_add">+ Aggiungi</button></div>${exrows?`<div class="exlist">${exrows}</div>`:''}</div>`;
+renderLeaderboard();}
+function renderLeaderboard(){const el=document.getElementById("oppBoard");if(!el)return;
+const rows=[{name:"Io (tu)",rem:effBudget()-spent(),pts:projPoints("me"),me:true,c:["P","D","C","A"].map(r=>ownedInRole(r).length)}].concat(opps.map(o=>({name:o.name,rem:oppRem(o.id),pts:projPoints(o.id),c:["P","D","C","A"].map(r=>oppRole(o.id,r))})));
+rows.sort((a,b)=>b.pts-a.pts);
+let h=`<table class="opptbl"><thead><tr><th class="n">#</th><th>Squadra</th><th class="n">Crediti</th><th class="n">P/D/C/A</th><th class="n">Forza rosa</th></tr></thead><tbody>`;
+rows.forEach((rw,i)=>{h+=`<tr class="${rw.me?'mine':''}"><td class="n">${i+1}</td><td class="pname">${rw.name}</td><td class="n" style="color:${rw.rem<0?'var(--red)':'var(--gold)'}">${rw.rem}</td><td class="n">${rw.c.join("/")}</td><td class="n"><span class="fair">${rw.pts}</span></td></tr>`;});
+h+=`</tbody></table>`;
+let f=`<div style="margin-top:10px">`;
+opps.forEach(o=>{const ps=["P","D","C","A"].flatMap(r=>oppPlayers(o.id).filter(p=>p.role===r));const ex=extras.filter(x=>x.owner===o.id);
+const chips=ps.map(p=>{const dead=!!elim[p.nat];return `<span class="opc${dead?' dead':''}">${p.name} <b>${p.price}</b></span>`;}).join("")+ex.map(x=>`<span class="opc">${x.role} fuori-lista <b>${x.price}</b></span>`).join("");
+const deadCr=ps.filter(p=>elim[p.nat]).reduce((s,p)=>s+p.price,0);
+f+=`<details class="oppdet"><summary>${o.name} — ${ps.length+ex.length} giocatori · ${oppRem(o.id)} cr${deadCr>0?` · <span style="color:var(--red)">${deadCr} cr morti</span>`:''}</summary><div class="oppform">${chips||'<span class="opc">— vuota —</span>'}</div></details>`;});
+f+=`</div>`;
+el.innerHTML=h+f;}
+document.getElementById("board").addEventListener("click",simInteractionHandler);
+document.getElementById("board").addEventListener("change",e=>{const t=e.target;if(t&&t.id==="fmod"){selMod=t.value;render();return;}if(t&&t.id==="fgameday"){gameday=t.value;render();return;}if(t&&t.dataset&&t.dataset.form!=null){const p=players.find(x=>x.id===+t.dataset.form);if(p){let v=parseFloat(t.value);if(!isNaN(v)){p.form=Math.max(0.5,Math.min(1.5,v));render();}}}});
+document.getElementById("viewToggle").addEventListener("click",e=>{if(!e.target.dataset.v)return;view=e.target.dataset.v;document.querySelectorAll("#viewToggle .tab").forEach(t=>t.classList.toggle("active",t.dataset.v===view));render();});
+document.getElementById("oppPanel").addEventListener("input",e=>{
+if(e.target.id==="nOpp"){let n=Math.max(1,Math.min(11,parseInt(e.target.value,10)||1));const old=opps;opps=[];for(let i=1;i<=n;i++){opps.push(old.find(o=>o.id===i)||{id:i,name:"Avv "+i});}players.forEach(p=>{if(p.status===2&&p.owner>n){p.status=0;p.owner=null;p.price=0;}});render();}
+else if(e.target.classList.contains("opp-name")){const oid=+e.target.dataset.oid;const o=opps.find(x=>x.id===oid);if(o)o.name=e.target.value;renderLeaderboard();}});
+document.getElementById("oppPanel").addEventListener("click",e=>{const t=e.target;
+if(t.id==="ex_add"){const owner=+document.getElementById("ex_owner").value,role=document.getElementById("ex_role").value,price=Math.max(0,parseInt(document.getElementById("ex_price").value,10)||0);extras.push({id:EXID++,owner,role,price});render();}
+else if(t.dataset.exdel!=null){extras=extras.filter(x=>x.id!==+t.dataset.exdel);render();}});
+document.getElementById("reset").addEventListener("click",()=>{askConfirm("Azzerare tutti gli acquisti (tua rosa + avversari + fuori-lista) e i crediti recuperati? Eliminazioni e tabellone restano — per azzerare tutto usa “Nuova asta”.",()=>{resetAuction();render();});});
+document.getElementById("cf_yes").addEventListener("click",()=>{const fn=_cfYes;_cfClose();if(typeof fn==="function")fn();});
+document.getElementById("cf_no").addEventListener("click",_cfClose);
+document.getElementById("confirmOv").addEventListener("click",e=>{if(e.target.id==="confirmOv")_cfClose();});
+document.getElementById("turnoSel2").addEventListener("click",e=>{if(!e.target.dataset.t)return;turno=e.target.dataset.t;syncTurnoButtons();render();});
+document.getElementById("natPanel").addEventListener("click",e=>{const t=e.target;if(t.dataset&&t.dataset.brseed!=null){brSeed();render();return;}if(t.dataset&&t.dataset.brclearall!=null){askConfirm("Azzero il tabellone?",()=>{brReset();render();});return;}const xc=t.closest?t.closest("[data-brclear]"):null;if(xc&&xc.dataset.brclear!=null){brClear(+xc.dataset.brclear);render();return;}const adv=t.closest?t.closest("[data-bradv]"):null;if(adv&&adv.dataset.bradv){const p=adv.dataset.bradv.split(",");brAdvance(p[0],+p[1],+p[2]);render();return;}const chip=t.closest?t.closest("[data-nat]"):null;if(!chip||!chip.dataset.nat)return;const c=chip.dataset.nat;if(elim[c])delete elim[c];else elim[c]=true;render();});
+document.getElementById("natPanel").addEventListener("change",e=>{if(e.target&&e.target.dataset&&e.target.dataset.brset!=null){brSet(+e.target.dataset.brset,e.target.value);render();}});
+document.getElementById("natViewToggle").addEventListener("click",e=>{if(!e.target.dataset.nv)return;natView=e.target.dataset.nv;render();});
+document.getElementById("roster").addEventListener("click",e=>{const t=e.target;if(t.dataset.free!=null){release(+t.dataset.free);render();}else if(t.dataset.freeall!=null){players.filter(p=>p.status===1&&elim[p.nat]).forEach(p=>release(p.id));render();}});
+document.getElementById("sessionBar").addEventListener("click",e=>{const id=e.target.id;if(id==="sb_export")exportJSON();else if(id==="sb_import"){const f=document.getElementById("sb_file");if(f)f.click();}else if(id==="sb_live"){const fl=document.getElementById("sb_livefile");if(fl)fl.click();}else if(id==="sb_new")nuovaAsta();});
+document.getElementById("sessionBar").addEventListener("change",e=>{if(e.target.id==="sb_file"&&e.target.files&&e.target.files[0])importJSON(e.target.files[0]);else if(e.target.id==="sb_livefile"&&e.target.files&&e.target.files[0])importLive(e.target.files[0]);});
+loadState();
+render();
+</script></body></html>
